@@ -10,11 +10,20 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
     generated.getSession().setMode("ace/mode/javascript");
     generated.$blockScrolling = Infinity;
 
+    $scope.error = null;
     $scope.Generate = function(){
-      var input = editor.getSession().getValue();
-      var output = jsyaml.safeLoad(input);
-      output = JSON.stringify(output, null, 4);
-      generated.setValue(output, 1);
+      try {
+        var input = editor.getSession().getValue();
+        var output = jsyaml.safeLoad(input);
+        output = JSON.stringify(output, null, 4);
+        generated.setValue(output, 1);
+        $scope.error = null;
+      }
+      catch(e){
+        scroll(0,0);
+        generated.setValue('',1);
+        $scope.error = e.message;
+      }
     }
 }]);
 
