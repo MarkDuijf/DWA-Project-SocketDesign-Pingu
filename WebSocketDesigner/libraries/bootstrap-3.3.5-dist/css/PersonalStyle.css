@@ -88,3 +88,26 @@
     height: 90vh;
 }
 
+
+.lobbylist{
+    height: 500px;
+
+}
+
+.noResize{
+    resize: none;
+}
+
+.chatArea{
+    width: 100%;
+    height: 100%;
+    column-span: 40;
+}
+
+.chatfield{
+    height: 500px;
+}
+
+#inputChat{
+    width: 90%;
+}
