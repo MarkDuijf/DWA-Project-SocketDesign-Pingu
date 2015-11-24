@@ -8,5 +8,9 @@ Socket designer is an online tool for making websocket connections by using YAML
 # Demo
 [link]
 
+# Usage
+[Uitleg over wat de YAML code doet]
+Enter YAML code, press generate, get [Socket.IO](http://socket.io/) code.
+
 # Getting started
 [Hello World code]
