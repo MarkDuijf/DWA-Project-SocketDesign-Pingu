@@ -1,14 +1,14 @@
 <div class="col-lg-12 jumbotron jumbotron-background-header homeText">
-    <div class="col-lg-push-4 col-lg-9"><label class="homepageTitle">SOCKET</label></div>
-    <div class="col-lg-push-5 col-lg-8"><label class="homepageTitle">GENERATOR</label></div>
-    <blockquote class="center-block col-lg-5 col-lg-push-4 quoteText"><p>WANT TO USE OUR SUPER AWESOME TOOL?</p></blockquote>
+    <div class="col-lg-push-4 col-lg-8"><label class="homepageTitle">SOCKET</label></div>
+    <div class="col-lg-push-5 col-lg-7"><label class="homepageTitle">GENERATOR</label></div>
+    <blockquote class="center-block col-lg-6 col-lg-push-4 quoteText"><p>WANT TO USE OUR SUPER AWESOME TOOL?</p></blockquote>
 
     <div class="col-lg-12"></div>
 
     <div class="col-lg-12">
         <center>
-            <a class="btn btn-validate btn-info">Log in</a>
-            <a class="btn btn-validate btn-info">register</a>
+            <a class="btn btn-validate btn-info" data-toggle="modal" data-target="#loginModal">Log in</a>
+            <a class="btn btn-validate btn-info" data-toggle="modal" data-target="#registerModal">Register</a>
         </center>
     </div>
 
@@ -71,5 +71,71 @@
     </div>
     <div class="col-lg-12">
         <center>© Socket Designer EU 2015</center>
+    </div>
+</div>
+
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Register
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="firstName">First name:</label>
+                        <input type="text" class="form-control" id="firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last name:</label>
+                        <input type="text" class="form-control" id="lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Register</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                Login
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="usernameLogin">First name:</label>
+                        <input type="text" class="form-control" id="usernameLogin">
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordLogin">Password:</label>
+                        <input type="password" class="form-control" id="passwordLogin">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
+                <button type="button" class="btn btn-primary">Login</button>
+            </div>
+        </div>
     </div>
 </div>

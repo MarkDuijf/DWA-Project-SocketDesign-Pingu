@@ -1,18 +1,25 @@
-<div ng-show="error != null">
-  Something went wrong!<br/>
-  {{error}}
-</div>
-<pre id="editor" class="col-lg-5">
-    Insert your yaml code here
-</pre>
+<div class="generatorPage col-lg-12">
 
-<div class="col-lg-2">
-    <center><a class="btn btn-menu" ng-click="Generate()">Generate code</a></center>
-</div>
+    <div ng-show="error != null">
+      Something went wrong!<br/>
+      {{error}}
+    </div>
+    <pre id="editor" class="col-lg-5">
+        Insert your yaml code here
+    </pre>
 
-<pre id="generated" class="col-lg-5">
-    This will be the generated code
-</pre>
+    <div class="col-lg-2">
+        <br>
+        <br>
+        <center><a class="btn btn-validate btn-default" ng-click="Generate()">Generate code</a></center>
+        <center><a class="btn btn-validate btn-default" ng-click="saveInput()">Save input</a></center>
+    </div>
+
+    <pre id="generated" class="col-lg-5">
+        This will be the generated code
+    </pre>
+
+</div>
 
 
 

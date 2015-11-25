@@ -76,38 +76,20 @@
 
 #editor {
     position: relative;
-    top: 0;
-    left: 0;
-    height: 90vh;
+    top: 50px;
+    left: 20px;
+    height: 85vh;
 }
 
 #generated {
     position: relative;
-    top: 0;
-    right: 0;
-    height: 90vh;
+    top: 50px;
+    right: 20px;
+    height: 85vh;
 }
 
-
-.lobbylist{
-    height: 500px;
-
-}
-
-.noResize{
-    resize: none;
-}
-
-.chatArea{
-    width: 100%;
-    height: 100%;
-    column-span: 40;
-}
-
-.chatfield{
-    height: 500px;
-}
-
-#inputChat{
-    width: 90%;
+.generatorPage{
+    background-image: url("https://wallpaperscraft.com/image/skin_joints_texture_dark_50436_3840x2160.jpg");
+    background-size: cover;
+    height: 100vh;
 }
