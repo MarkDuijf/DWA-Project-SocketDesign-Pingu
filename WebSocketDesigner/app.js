@@ -54,10 +54,6 @@ app.post('/email',function(req,res){
 });
 
 mongoose.connect('mongodb://localhost/' + dbName, function(){
-    User.find(function(err, resultArray){
-        console.log(resultArray);
-    });
-
     app.post('/login', function(req, res) {
         User.findOne({username: req.body.username, password: req.body.password}, function(err, user) {
             console.log(user);
@@ -83,24 +79,6 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
         });
     });
 });
-
-/*
-app.post('/login', function(req, res) {
-    if(req.body.username === "us" && req.body.password === "ww") {
-        console.log("Correct");
-        req.session.loggedin = true;
-        req.session.username = req.body.username;
-        res.status(200);
-        res.send("Succes!");
-    } else {
-        console.log("Faal!");
-        req.session.loggedin = false;
-        req.session.username = "";
-        res.status(500);
-        res.send("Wrong username/password");
-    }
-});
-*/
 
 // All socket.io code
 
