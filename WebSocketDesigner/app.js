@@ -10,6 +10,9 @@ var io          = require('socket.io')(server);
 var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
 
+//This inserts the testdata
+var exec  = require('./clientside/models/test/insertData');
+
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
 app.use(bodyParser.json());
