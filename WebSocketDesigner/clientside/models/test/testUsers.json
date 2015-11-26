@@ -1,0 +1,20 @@
+[
+  { "username": "test",
+    "password": "test",
+    "email": "DWASDEU@gmail.com",
+    "firstname": "socketDesigner",
+    "lastname": "EUDevision"
+  },
+  { "username": "demo",
+    "password": "demo",
+    "email": "DWASDEU@gmail.com",
+    "firstname": "demoFirst",
+    "lastname": "demoLast"
+  },
+  { "username": "MarkD",
+    "password": "test",
+    "email": "DWASDEU@gmail.com",
+    "firstname": "Mark",
+    "lastname": "Duijf"
+  }
+]

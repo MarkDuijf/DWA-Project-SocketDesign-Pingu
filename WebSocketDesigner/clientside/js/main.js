@@ -5,7 +5,8 @@ theApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.
             when('/home', {
-                templateUrl: 'partials/homePage.html'
+                templateUrl: 'partials/homePage.html',
+                controller: 'homeController'
             }).
             when('/codeGenerator', {
                 templateUrl: 'partials/codeGenerator.html',
@@ -19,6 +20,33 @@ theApp.config(['$routeProvider',
                 redirectTo: '/home'
             });
     }]);
+
+theApp.controller('homeController', function($scope, $http) {
+    $scope.registerData = {};
+    $scope.registerData.firstName = "";
+    $scope.registerData.lastName = "";
+    $scope.registerData.username = "";
+    $scope.registerData.password = "";
+    $scope.registerData.email = "";
+
+    $scope.sendConfirmationMail = function() {
+        var emailData = {
+            email: $scope.registerData.email,
+            firstName: $scope.registerData.firstName,
+            lastName: $scope.registerData.lastName,
+            username: $scope.registerData.username,
+            password: $scope.registerData.password
+        };
+
+        $http.post("/email", emailData).
+        success( function(data) {
+            console.log("Succes! " + data);
+        }).
+        error( function(data,status) {
+            console.log("ERROR:", data, status);
+        });
+    }
+});
 
 theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
 
