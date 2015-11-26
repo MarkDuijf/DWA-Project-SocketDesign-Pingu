@@ -11,6 +11,10 @@ var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
 var session = require("express-session");
 
+var mongoose = require('mongoose');
+var dbName = "socketDesignerDB";
+var User = require('./clientside/models/user');
+
 //This inserts the testdata
 var exec  = require('./clientside/models/test/insertData');
 
@@ -49,6 +53,38 @@ app.post('/email',function(req,res){
     });
 });
 
+mongoose.connect('mongodb://localhost/' + dbName, function(){
+    User.find(function(err, resultArray){
+        console.log(resultArray);
+    });
+
+    app.post('/login', function(req, res) {
+        User.findOne({username: req.body.username, password: req.body.password}, function(err, user) {
+            console.log(user);
+            if(err) {
+                console.log(err);
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Server error")
+            } else if(user === null) {
+                console.log("Incorrect!");
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Wrong username/password");
+            } else {
+                console.log("Correct");
+                req.session.loggedin = true;
+                req.session.username = req.body.username;
+                res.status(200);
+                res.send("Succes!");
+            }
+        });
+    });
+});
+
+/*
 app.post('/login', function(req, res) {
     if(req.body.username === "us" && req.body.password === "ww") {
         console.log("Correct");
@@ -64,27 +100,9 @@ app.post('/login', function(req, res) {
         res.send("Wrong username/password");
     }
 });
-
-/*
-var mailOptions = {
-    from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
-    to: 'pluisam@gmail.com', // list of receivers
-    subject: 'Hello', // Subject line
-    text: "Is it me you're looking for?", // plaintext body
-    html: "<b>Is it me you're looking for?</b>" // html body
-};
-
- /*Code hieronder is voor het verzenden van de mail weg gecomment anders wordt Sam gespamt
-transporter.sendMail(mailOptions, function(error, info){
-    if(error){
-        return console.log(error);
-    }
-    console.log('Message sent: ' + info.response);
-
-});
 */
 
-//                     All socket.io code
+// All socket.io code
 
 io.on('connection', function(socket){
     console.log('a user connected');
