@@ -29,6 +29,8 @@ describe("project", function () {
         it('should create a project', function (done) {
             var p = new Project({
                 username: "SebastiaanVonk",
+                projectname: "Project X",
+                code_id: 4,
                 code: "Dit is allemaal code",
                 date: "2015-26-11"
             });
@@ -40,6 +42,8 @@ describe("project", function () {
                     expect(project._id).to.exist;
                     expect(project.__v).to.exist;
                     expect(project.username).to.equal("SebastiaanVonk");
+                    expect(project.projectname).to.equal("Project X");
+                    expect(project.code_id).to.equal(4);
                     expect(project.code).to.equal("Dit is allemaal code");
                     expect(project.date).to.equal("2015-26-11");
                     done();
