@@ -9,10 +9,12 @@ var server      = require('http').Server(app);
 var io          = require('socket.io')(server);
 var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
+var session = require("express-session");
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
 app.use(bodyParser.json());
+app.use(session({resave: true, saveUninitialized: true, secret: "sassas"}));
 
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -42,6 +44,22 @@ app.post('/email',function(req,res){
         res.status(200);
         res.send("Succes!");
     });
+});
+
+app.post('/login', function(req, res) {
+    if(req.body.username === "us" && req.body.password === "ww") {
+        console.log("Correct");
+        req.session.loggedin = true;
+        req.session.username = req.body.username;
+        res.status(200);
+        res.send("Succes!");
+    } else {
+        console.log("Faal!");
+        req.session.loggedin = false;
+        req.session.username = "";
+        res.status(500);
+        res.send("Wrong username/password");
+    }
 });
 
 /*
