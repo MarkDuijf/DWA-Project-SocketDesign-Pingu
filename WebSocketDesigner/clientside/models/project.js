@@ -17,14 +17,13 @@ var projectSchema = new mongoose.Schema({
         required: true
     },
     code: {
-        type: BSON,
+        type: String,
         required: true
     },
     date: {
-        type: date,
+        type: Date,
         required: true
     }
 });
 
 module.exports = mongoose.model("Project",projectSchema);
-

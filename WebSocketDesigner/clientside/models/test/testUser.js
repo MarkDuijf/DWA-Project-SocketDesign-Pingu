@@ -32,13 +32,13 @@ describe("user", function () {
                 password: "testtest",
                 email: "LHA.Vonk@student.han.nl",
                 firstname: "Sebastiaan",
-                lastname: "Vonk",
+                lastname: "Vonk"
             });
 
             u.save(function (err) {
                 expect(err).to.be.null;
 
-                User.findOne({}, function (err, product) {
+                User.findOne({}, function (err, user) {
                     expect(user._id).to.exist;
                     expect(user.__v).to.exist;
                     expect(user.username).to.equal("SebastiaanVonk");
@@ -46,6 +46,7 @@ describe("user", function () {
                     expect(user.email).to.equal("LHA.Vonk@student.han.nl");
                     expect(user.firstname).to.equal("Sebastiaan");
                     expect(user.lastname).to.equal("Vonk");
+                    console.log(user);
                     done();
                 });
             });

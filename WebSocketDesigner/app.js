@@ -11,6 +11,9 @@ var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
 var session = require("express-session");
 
+//This inserts the testdata
+var exec  = require('./clientside/models/test/insertData');
+
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
 app.use(bodyParser.json());
