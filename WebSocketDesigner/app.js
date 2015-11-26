@@ -6,8 +6,8 @@ var path        = require('path');
 var express     = require('express');
 var app         = express();
 var server      = require('http').Server(app);
-//var io          = require('socket.io')(server);
-var nodemailer = require('nodemailer');
+var io          = require('socket.io')(server);
+var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
 
 // Express
@@ -20,10 +20,6 @@ var transporter = nodemailer.createTransport({
         user: 'dwasdeu@gmail.com',
         pass: 'pingusdeu'
     }
-});
-
-server.listen(13000, function() {
-    console.log('Server is running on port 13000')
 });
 
 app.post('/email',function(req,res){
@@ -58,7 +54,7 @@ var mailOptions = {
     html: "<b>Is it me you're looking for?</b>" // html body
 };
 
- Code hieronder is voor het verzenden van de mail weg gecomment anders wordt Sam gespamt
+ /*Code hieronder is voor het verzenden van de mail weg gecomment anders wordt Sam gespamt
 transporter.sendMail(mailOptions, function(error, info){
     if(error){
         return console.log(error);
@@ -67,3 +63,20 @@ transporter.sendMail(mailOptions, function(error, info){
 
 });
 */
+
+//                     All socket.io code
+
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+
+    socket.on('chat message', function(msg) {
+        console.log('Ik heb een message binnen gekregen: '+msg);
+    })
+});
+
+server.listen(13000, function() {
+    console.log('Server is running on port 13000')
+});

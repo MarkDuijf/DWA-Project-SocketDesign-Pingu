@@ -1,13 +1,13 @@
-.homepageTitle{
+.homepageTitle {
     font-family: "Lucida Sans Typewriter";
     font-size: 5em;
 }
 
-.homeText{
+.homeText {
     color: #ddd;
 }
 
-.btn-validate{
+.btn-validate {
     width: 200px;
     text-align: center;
     font-size: 1em;
@@ -21,58 +21,56 @@
     -o-transition: background .2s ease-in-out, border .2s ease-in-out;
     transition: background .2s ease-in-out, border .2s ease-in-out;
     -webkit-border-radius: 0;
-    -moz-border-radius:    0;
+    -moz-border-radius: 0;
     border-radius: 0;
     margin: 40px;
 }
 
-.menu-bottom{
+.menu-bottom {
     position: fixed;
     bottom: 0;
     left: 0;
 }
 
-.jumbotron-background-header{
+.jumbotron-background-header {
     background-image: url("http://img10.deviantart.net/0f82/i/2005/103/e/e/background_by_gixor.jpg");
     background-size: cover;
 }
 
-.jumbotron-background-aboutUs{
+.jumbotron-background-aboutUs {
     background-image: url("http://www.archdaily.com/wp-content/uploads/2009/01/1749648057_24.jpg");
     background-size: cover;
 }
 
-.jumbotron-background-gitHub{
+.jumbotron-background-gitHub {
     background-image: url("http://www.itclips.net/wp-content/plugins/RSSPoster_PRO/cache/3da16_GithubTutorial_part2.jpg");
     background-position: right;
     color: #dddddd;
 }
 
-.jumbotron-background-helloWorld{
+.jumbotron-background-helloWorld {
     background-image: url("http://blackgeoscientists.files.wordpress.com/2014/06/helloworld.jpg");
     background-position: left;
     color: #ddd;
 }
 
-.jumbotron-footer{
+.jumbotron-footer {
     background-color: #111;
-    margin-bottom:46px;
+    margin-bottom: 46px;
     color: #ddd;
 }
 
-.btn-menu{
+.btn-menu {
     -webkit-border-radius: 0;
-    -moz-border-radius:    0;
+    -moz-border-radius: 0;
     border-radius: 0;
     margin: 40px;
     background-color: darkslategrey;
 }
 
-
-.align-right{
+.align-right {
     text-align: right;
 }
-
 
 #editor {
     position: relative;
@@ -88,8 +86,52 @@
     height: 85vh;
 }
 
-.generatorPage{
+.generatorPage {
     background-image: url("https://wallpaperscraft.com/image/skin_joints_texture_dark_50436_3840x2160.jpg");
     background-size: cover;
     height: 100vh;
+}
+
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#messages li {
+    padding: 5px 10px;
+}
+
+#messages li:nth-child(odd) {
+    background: #eee;
+}
+
+.chatPage {
+    /*background-image: url("http://img10.deviantart.net/0f82/i/2005/103/e/e/background_by_gixor.jpg");*/
+    /*background-size: cover;*/
+    /*opacity: 100;*/
+
+}
+
+.chatPageForm {
+    background: #000;
+    padding: 3px;
+    position: fixed;
+    bottom: 46px;
+    width: 100%;
+
+}
+
+.chatPageForm > input {
+    border: 0;
+    padding: 10px;
+    width: 90%;
+    margin-right: .5%;
+}
+
+.chatPageForm > button {
+    width: 9%;
+    background: rgb(130, 224, 255);
+    border: none;
+    padding: 10px;
 }
