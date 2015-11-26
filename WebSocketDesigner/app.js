@@ -23,7 +23,6 @@ var transporter = nodemailer.createTransport({
 });
 
 app.post('/email',function(req,res){
-    console.log(req.body);
     var mailOptions = {
         from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
         to: req.body.email, // list of receivers
