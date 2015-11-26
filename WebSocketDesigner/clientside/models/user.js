@@ -25,10 +25,6 @@ var userSchema = new mongoose.Schema({
     lastname: {
         type: String,
         required: true
-    },
-    code: {
-        type: String,
-        ref: [projectSchema]
     }
 });
 

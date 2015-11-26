@@ -8,6 +8,10 @@ var projectSchema = new mongoose.Schema({
        type: String,
        required: true
    },
+    code_id: {
+        type: Number,
+        required: true
+    },
     code: {
         type: BSON,
         required: true

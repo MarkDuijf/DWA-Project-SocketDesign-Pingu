@@ -33,7 +33,6 @@ describe("user", function () {
                 email: "LHA.Vonk@student.han.nl",
                 firstname: "Sebastiaan",
                 lastname: "Vonk",
-                code: "Dit is allemaal code"
             });
 
             u.save(function (err) {
@@ -47,7 +46,6 @@ describe("user", function () {
                     expect(user.email).to.equal("LHA.Vonk@student.han.nl");
                     expect(user.firstname).to.equal("Sebastiaan");
                     expect(user.lastname).to.equal("Vonk");
-                    expect(user.code).to.equal("Dit is allemaal code");
                     done();
                 });
             });
