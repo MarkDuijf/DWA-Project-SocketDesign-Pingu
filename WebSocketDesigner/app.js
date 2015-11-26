@@ -22,10 +22,6 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-server.listen(13000, function() {
-    console.log('Server is running on port 13000')
-});
-
 app.post('/email',function(req,res){
     console.log(req.body);
     var mailOptions = {
@@ -58,7 +54,7 @@ var mailOptions = {
     html: "<b>Is it me you're looking for?</b>" // html body
 };
 
-/* Code hieronder is voor het verzenden van de mail weg gecomment anders wordt Sam gespamt
+ /*Code hieronder is voor het verzenden van de mail weg gecomment anders wordt Sam gespamt
 transporter.sendMail(mailOptions, function(error, info){
     if(error){
         return console.log(error);
