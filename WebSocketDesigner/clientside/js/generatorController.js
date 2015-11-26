@@ -17,7 +17,7 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
       var input = editor.getSession().getValue();
       input = jsyaml.safeLoad(input);
       if (input.paths != undefined) {
-        var pathArray = Object.keys(input.paths);
+        var pathArray = Object.keys(input.paths); //duwt de paths in de variable( /messages, /user bijvoorbeeld)
         for (var i = 0; i < Object.keys(input.paths).length; i++) {
           var actionArray = [input.paths[pathArray[i]].POST, input.paths[pathArray[i]].GET, input.paths[pathArray[i]].PUT];
           for (var x = 0; x < Object.keys(input.paths[pathArray[i]]).length; x++) {
@@ -25,6 +25,7 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
               switch (x) {
                 case 0:
                   console.log(actionArray[x]);
+                  //output.push(input.paths[pathArray[i]]);
                   break;
                 case 1:
                   console.log(actionArray[x]);
