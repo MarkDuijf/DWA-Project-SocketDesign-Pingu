@@ -22,8 +22,6 @@ theApp.config(['$routeProvider',
     }]);
 
 theApp.controller('homeController', function($scope, $http) {
-    console.log("Home controller");
-
     $scope.registerData = {};
     $scope.registerData.firstName = "";
     $scope.registerData.lastName = "";
@@ -32,7 +30,6 @@ theApp.controller('homeController', function($scope, $http) {
     $scope.registerData.email = "";
 
     $scope.sendConfirmationMail = function() {
-        console.log($scope.registerData.email);
         var emailData = {
             email: $scope.registerData.email,
             firstName: $scope.registerData.firstName,
@@ -48,8 +45,6 @@ theApp.controller('homeController', function($scope, $http) {
         error( function(data,status) {
             console.log("ERROR:", data, status);
         });
-
-
     }
 });
 
