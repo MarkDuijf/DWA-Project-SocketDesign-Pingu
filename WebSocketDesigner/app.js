@@ -6,15 +6,13 @@ var path        = require('path');
 var express     = require('express');
 var app         = express();
 var server      = require('http').Server(app);
-//var io          = require('socket.io')(server);
-var nodemailer = require('nodemailer');
+var io          = require('socket.io')(server);
+var nodemailer  = require('nodemailer');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
 
-server.listen(13000, function() {
-    console.log('Server is running on port 13000')
-});
+
 
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -41,3 +39,20 @@ transporter.sendMail(mailOptions, function(error, info){
 
 });
 */
+
+//                     All socket.io code
+
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+
+    socket.on('chat message', function(msg) {
+        console.log('Ik heb een message binnen gekregen: '+msg);
+    })
+});
+
+server.listen(13000, function() {
+    console.log('Server is running on port 13000')
+});
