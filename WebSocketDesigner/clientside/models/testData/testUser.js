@@ -32,7 +32,9 @@ describe("user", function () {
                 password: "testtest",
                 email: "LHA.Vonk@student.han.nl",
                 firstname: "Sebastiaan",
-                lastname: "Vonk"
+                lastname: "Vonk",
+                confirmationLink: "ABC123",
+                activated: true
             });
 
             u.save(function (err) {
@@ -46,6 +48,8 @@ describe("user", function () {
                     expect(user.email).to.equal("LHA.Vonk@student.han.nl");
                     expect(user.firstname).to.equal("Sebastiaan");
                     expect(user.lastname).to.equal("Vonk");
+                    expect(user.confirmationLink).to.equal("ABC123");
+                    expect(user.activated).to.equal(true);
                     console.log(user);
                     done();
                 });

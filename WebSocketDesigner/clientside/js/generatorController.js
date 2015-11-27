@@ -1,4 +1,4 @@
-theApp.controller('generatorController', ['$scope', '$location', function ($scope) {
+theApp.controller('generatorController', ['$scope', '$http', '$location', function ($scope, $http) {
 
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
@@ -17,10 +17,33 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
     alert('Work in Progress');
   };
 
+  $scope.getTest = function() {
+    $http.get('/projectTest').
+    success(function(data) {
+      console.log("Succes! " + data);
+      editor.getSession().setValue(data);
+    }).
+    error(function(data, status) {
+      console.log("ERROR:", data, status);
+    })
+  };
+
   $scope.Generate = function () {
     try {
       var output = [];
       var input = editor.getSession().getValue();
+
+      var data = {
+        code: editor.getSession().getValue()
+      };
+      $http.post("/projectTest", data).
+      success( function(data) {
+        console.log("Succes! " + data);
+      }).
+      error( function(data,status) {
+        console.log("ERROR:", data, status);
+      });
+
       input = jsyaml.safeLoad(input);
 
       if (input.paths != undefined) {

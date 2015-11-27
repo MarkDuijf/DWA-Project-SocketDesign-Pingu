@@ -24,6 +24,14 @@ var userSchema = new mongoose.Schema({
     lastname: {
         type: String,
         required: true
+    },
+    confirmationLink: {
+        type: String,
+        required: true
+    },
+    activated: {
+        type: Boolean,
+        required: true
     }
 });
 

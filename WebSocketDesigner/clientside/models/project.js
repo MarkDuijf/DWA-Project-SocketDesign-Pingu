@@ -17,11 +17,11 @@ var projectSchema = new mongoose.Schema({
         required: true
     },
     code: {
-        type: String,
+        type: JSON,
         required: true
     },
     date: {
-        type: Date,
+        type: String,
         required: true
     }
 });
