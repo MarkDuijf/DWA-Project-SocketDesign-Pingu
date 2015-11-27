@@ -69,7 +69,13 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                 req.session.username = "";
                 res.status(500);
                 res.send("Wrong username/password");
-            } else {
+            } else if(req.body.password != user.password) {
+                console.log("Incorrect!");
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Wrong password!");
+            }else {
                 console.log("Correct");
                 req.session.loggedin = true;
                 req.session.username = req.body.username;
