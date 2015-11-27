@@ -13,7 +13,7 @@ var session = require("express-session");
 
 var mongoose = require('mongoose');
 var dbName = "socketDesignerDB";
-var User = require('./Tests/user');
+var User = require('./clientside/models/user');
 
 //This inserts the testdata
 var exec  = require('./clientside/models/testData/insertData');
@@ -64,11 +64,13 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                 res.status(500);
                 res.send("Server error")
             } else if(user === null) {
+                console.log("Incorrect!");
                 req.session.loggedin = false;
                 req.session.username = "";
                 res.status(500);
                 res.send("Wrong username/password");
-            } else if(user.activated === true) {
+            } else {
+                console.log("Correct");
                 req.session.loggedin = true;
                 req.session.username = req.body.username;
                 res.status(200);
