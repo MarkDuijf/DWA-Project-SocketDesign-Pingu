@@ -72,6 +72,14 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
         }).
         error( function(data,status) {
             console.log("ERROR:", data, status);
+            if(data === "Email already exists") {
+                $scope.registerData.email = "";
+            }
+
+            if(data === "Username already exists") {
+                $scope.registerData.username = "";
+            }
+            $scope.registerData.password = "";
         });
     };
 
@@ -98,7 +106,6 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             username: $scope.loginData.username,
             password: $scope.loginData.password
         };
-        console.log("login");
         $http.post("/login", loginData).
         success( function(data) {
             console.log("Succes! " + data);
@@ -106,6 +113,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
         }).
         error( function(data,status) {
             console.log("ERROR:", data, status);
+            $scope.loginData.password = "";
         });
     };
 });

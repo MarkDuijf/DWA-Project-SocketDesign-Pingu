@@ -4,8 +4,8 @@ var dbName = "socketDesignerDB";
 var users = require('./testUsers');
 var projects = require('./testProjects');
 
-var User = require('../../../Tests/user');
-var Project = require('../../../Tests/project');
+var User = require('../user');
+var Project = require('../project');
 
 mongoose.connect('mongodb://localhost/' + dbName, function(){
     User.remove({}, function(){
