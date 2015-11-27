@@ -1,6 +1,3 @@
-/**
- * Created by vince on 24-11-2015.
- */
 var path        = require('path');
 //var mongoose    = require('mongoose');
 var express     = require('express');
@@ -14,6 +11,7 @@ var session = require("express-session");
 var mongoose = require('mongoose');
 var dbName = "socketDesignerDB";
 var User = require('./clientside/models/user');
+var Project = require('./clientside/models/project');
 
 //This inserts the testdata
 var exec  = require('./clientside/models/testData/insertData');
@@ -168,10 +166,34 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
             }
         });
     });
+
+    app.post('/projectTest', function(req, res) {
+        var project = new Project({
+            code_id: 4,
+            projectname: "test",
+            username: "test",
+            code: req.body.code,
+            date: "2015-5-5"
+        });
+
+        project.save(function(err) {
+            if(err) {
+               return console.log(error);
+            }
+            res.status(200);
+            res.send("Toegevoegd");
+        });
+    });
+
+    app.get('/projectTest', function(req, res) {
+        Project.findOne({code_id: 4}, function(err, project) {
+            res.status(200);
+            res.send(project.code);
+        });
+    })
 });
 
 // All socket.io code
-
 io.on('connection', function(socket){
     console.log('a user connected');
     socket.on('disconnect', function(){

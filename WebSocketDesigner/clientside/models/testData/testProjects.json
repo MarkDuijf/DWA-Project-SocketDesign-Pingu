@@ -14,7 +14,7 @@
   { "code_id": 3,
     "projectname": "testCode",
     "username": "test",
-    "code": "Hoi",
+    "code": "info:\n title: Sockettester\n description: Sockettester test generator\nHost:\n title: localhost\n posrt: 3000\nbasepath: /",
     "date": "2001-12-12"
   }
 ]
