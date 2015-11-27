@@ -114,73 +114,57 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
     });
 
     app.post('/register', function(req, res) {
-        console.log(req.body.email + " " + req.body.firstName + " " + req.body.lastName + " " + req.body.username + " " + req.body.password + " " + req.body.confirmationLink);
+        //TODO Dit moet makkelijker kunnen dan 2 findOne's in elkaar, weet even niet hoe
+        User.findOne({email: req.body.email}, function(err, user) {
+            if(user === null || user === undefined) {
+                User.findOne({username: req.body.username}, function(err, user) {
+                    if(user === null || user === undefined) {
+                        var user = new User({
+                            username: req.body.username,
+                            password: req.body.password,
+                            email: req.body.email,
+                            firstname: req.body.firstName,
+                            lastname: req.body.lastName,
+                            confirmationLink: req.body.confirmationLink,
+                            activated: false
+                        });
 
-        var user = new User({
-            username: req.body.username,
-            password: req.body.password,
-            email: req.body.email,
-            firstname: req.body.firstName,
-            lastname: req.body.lastName,
-            confirmationLink: req.body.confirmationLink,
-            activated: false
-        });
+                        user.save(function(err) {
+                            if(err) {
+                                console.log(err);
+                                res.status(500);
+                                res.send("Error registering");
+                            } else {
+                                res.status(200);
+                                res.send("Account registered");
 
-        user.save(function(err) {
-            if(err) {
-                console.log(err);
-                res.status(500);
-                res.send("Error registering");
-            } else {
-                res.status(200);
-                res.send("Account registered");
+                                //Email user
+                                var mailOptions = {
+                                    from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
+                                    to: req.body.email, // list of receivers
+                                    subject: 'Hello ' + req.body.firstName, // Subject line
+                                    text: "Is it me you're looking for?", // plaintext body
+                                    html: "<a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
+                                };
 
-                //Email user
-                var mailOptions = {
-                    from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
-                    to: req.body.email, // list of receivers
-                    subject: 'Hello ' + req.body.firstName, // Subject line
-                    text: "Is it me you're looking for?", // plaintext body
-                    html: "<a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
-                };
-
-                transporter.sendMail(mailOptions, function(error, info){
-                    if(error){
-                        return console.log(error);
+                                transporter.sendMail(mailOptions, function(error, info){
+                                    if(error){
+                                        return console.log(error);
+                                    }
+                                    console.log('Message sent: ' + info.response);
+                                });
+                            }
+                        });
+                    } else {
+                        res.status(500);
+                        res.send("Username already exists");
                     }
-                    console.log('Message sent: ' + info.response);
                 });
-            }
-        });
-
-        /*
-        User.insert( { username: req.body.username, password: req.body.password, email: req.body.email, firstname: req.body.firstName, lastname: req.body.lastName, confirmationLink: req.body.confirmationLink, activated: false }, function(err, result) {
-            if(err) {
-                console.log(err);
+            } else {
                 res.status(500);
-                res.send("Error registering");
+                res.send("Email already exists");
             }
-            console.log(result);
-            res.status(200);
-            res.send("Account registered");
-
-            //Email user
-            var mailOptions = {
-                from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
-                to: req.body.email, // list of receivers
-                subject: 'Hello ' + req.body.firstName, // Subject line
-                text: "Is it me you're looking for?", // plaintext body
-                html: "<a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
-            };
-
-            transporter.sendMail(mailOptions, function(error, info){
-                if(error){
-                    return console.log(error);
-                }
-                console.log('Message sent: ' + info.response);
-            });
         });
-        */
     });
 });
 
