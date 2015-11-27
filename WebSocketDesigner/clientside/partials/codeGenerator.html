@@ -1,11 +1,85 @@
 <div class="generatorPage col-lg-12">
 
     <div ng-show="error != null">
-      Something went wrong!<br/>
-      {{error}}
+      <div style="color:white">Something went wrong!<br/>
+      {{error}}</div>
     </div>
     <pre id="editor" class="col-lg-5">
-        Insert your yaml code here
+info:
+    title: Sockettester
+    description: Sockettester test generator
+Host:
+    title: localhost
+    port: 3000
+basepath: /
+paths:
+    /user:
+        POST:
+            messageName: New User POST
+            description: a new user has been created
+            parameters:
+                -   username: Leo
+                    require: true
+                    description: a new user with the name Leo has joined
+        GET:
+            messageName: New User GET
+            description: a new user has been created
+            parameters:
+                -   username: Leo
+                    require: true
+                    description: a new user with the name Leo has joined
+        PUT:
+            messageName: New User PUT
+            description: replacing a user
+            parameters:
+                -   username: Leo
+                    require: true
+                    description: User whose name will be changed
+                    newusername: Patrick
+
+    /message:
+        POST:
+            messageName: New Message POST
+            description: when a user sends a message....
+            parameters:
+                -   name: message
+                    require: true
+                    description: a new message has been sent
+                    content: message content comes here
+
+                -   username: Leo
+                    require: true
+                    description: user from whom the message comes
+        GET:
+            messageName: New Message GET
+            description: a new message has been received....
+            parameters:
+                -   name: message
+                    require: true
+                    description: a new message has been received
+                    content: message content comes here
+
+                -   username: Leo
+                    require: true
+                    description: user from whom the message comes
+
+    /data:
+        POST:
+            messageName: New Data POST
+            description: New Data has been sent
+            parameters:
+                -   name: data
+                    require: false
+                    description: new data has been sent
+        GET:
+            messageName: New Data GET
+            description: New Data has been received
+            parameters:
+                -   name: data
+                    require: false
+                    description: new data has been received
+
+
     </pre>
 
     <div class="col-lg-2">
@@ -15,10 +89,9 @@
         <center><a class="btn btn-validate btn-default" ng-click="saveInput()">Save input</a></center>
     </div>
 
-    <pre id="generated" class="col-lg-5">
-        This will be the generated code
-    </pre>
 
+    <pre id="generated" class="col-lg-5">
+    </pre>
 </div>
 
 
