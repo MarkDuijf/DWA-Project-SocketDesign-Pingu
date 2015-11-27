@@ -13,10 +13,21 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.savedData = {};
   $scope.error = null;
 
-  $scope.saveInput = function () {
-    alert('Work in Progress');
+  $scope.saveInput = function(){
+    //Code uit generator opslaan, als account systeem er is bij het goede account opslaan
+    var data = {
+      code: editor.getSession().getValue()
+    };
+    $http.post("/projectTest", data).
+    success( function(data) {
+      console.log("Succes! " + data);
+    }).
+    error( function(data,status) {
+      console.log("ERROR:", data, status);
+    });
   };
 
+  //Code van ID 4 opvragen
   $scope.getTest = function() {
     $http.get('/projectTest').
     success(function(data) {
@@ -32,17 +43,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     try {
 
       var input = editor.getSession().getValue();
-
-      var data = {
-        code: editor.getSession().getValue()
-      };
-      $http.post("/projectTest", data).
-      success( function(data) {
-        console.log("Succes! " + data);
-      }).
-      error( function(data,status) {
-        console.log("ERROR:", data, status);
-      });
 
       input = jsyaml.safeLoad(input);
 
