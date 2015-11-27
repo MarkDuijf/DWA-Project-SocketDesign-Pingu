@@ -12,7 +12,7 @@ var Project = require('../project');
 
 var testDbName = 'testDatabase';
 
-describe("project", function () {
+describe('project', function () {
 
     before(function (done) {
         if (mongoose.connection.readyState === 0) {
@@ -38,7 +38,7 @@ describe("project", function () {
             p.save(function (err) {
                 expect(err).to.be.null;
 
-                Project.findOne({}, function (err, product) {
+                Project.findOne({}, function (err, project) {
                     expect(project._id).to.exist;
                     expect(project.__v).to.exist;
                     expect(project.username).to.equal("SebastiaanVonk");
@@ -46,6 +46,7 @@ describe("project", function () {
                     expect(project.code_id).to.equal(4);
                     expect(project.code).to.equal("Dit is allemaal code");
                     expect(project.date).to.equal("2015-26-11");
+                    console.log(project);
                     done();
                 });
             });

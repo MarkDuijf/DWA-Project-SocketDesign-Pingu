@@ -1,8 +1,20 @@
 [
-  { "codeid": "abcd",
+  { "code_id": 1,
     "projectname": "testCode",
     "username": "demo",
-    "code": "",
+    "code": "Hoi",
+    "date": "12-12-2001"
+  },
+  { "code_id": 2,
+    "projectname": "randomCode",
+    "username": "demo",
+    "code": "Hoi",
+    "date": "12-12-2001"
+  },
+  { "code_id": 3,
+    "projectname": "testCode",
+    "username": "test",
+    "code": "Hoi",
     "date": "12-12-2001"
   }
 ]
