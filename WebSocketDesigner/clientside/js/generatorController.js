@@ -10,7 +10,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   generated.getSession().setMode("ace/mode/javascript");
   generated.$blockScrolling = Infinity;
 
-  $scope.savedData = [];
+  $scope.savedData = {};
   $scope.error = null;
 
   $scope.saveInput = function(){
@@ -45,13 +45,19 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var input = editor.getSession().getValue();
 
       input = jsyaml.safeLoad(input);
+
       if (input.paths != undefined) {
         var pathArray = Object.keys(input.paths); //duwt de paths in de variable( /messages, /user bijvoorbeeld)
         for (var i = 0; i < Object.keys(input.paths).length; i++) {
           var actionArray = [input.paths[pathArray[i]].POST, input.paths[pathArray[i]].GET, input.paths[pathArray[i]].PUT];
+          $scope.savedData[pathArray[i]] = {};//opslaan van paths
           for (var x = 0; x < Object.keys(input.paths[pathArray[i]]).length; x++) {
-            if (actionArray[x] != undefined) {
-                $scope.savedData.push(actionArray[x]);
+            $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]] = {};
+            for (var z = 0; z < Object.keys(actionArray[x]).length; z++) {
+              if (Object.keys(input.paths[pathArray[i]])[z] != undefined) {
+                $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]] = {};
+                  //input.paths[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][actionArray[x][z]]
+              }
             }
           }
         }
@@ -63,12 +69,15 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       generated.setValue(input, 1);
       $scope.error = null;
     }
-    catch (e) {
+    catch
+      (e) {
       console.log(e);
       scroll(0, 0);
       generated.setValue('', 1);
       $scope.error = e.message;
     }
     console.log($scope.savedData);
-  }
-}]);
+  };
+
+}])
+;
