@@ -7,13 +7,13 @@
   },
   { "username": "demo",
     "password": "demo",
-    "email": "DWASDEU@gmail.com",
+    "email": "dwasdeu@gmail.com",
     "firstname": "demoFirst",
     "lastname": "demoLast"
   },
   { "username": "MarkD",
     "password": "test",
-    "email": "DWASDEU@gmail.com",
+    "email": "dwaSDEU@gmail.com",
     "firstname": "Mark",
     "lastname": "Duijf"
   }
