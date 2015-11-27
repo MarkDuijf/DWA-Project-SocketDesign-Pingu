@@ -17,7 +17,7 @@ var projectSchema = new mongoose.Schema({
         required: true
     },
     code: {
-        type: JSON,
+        type: String,
         required: true
     },
     date: {
