@@ -10,7 +10,13 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
   generated.getSession().setMode("ace/mode/javascript");
   generated.$blockScrolling = Infinity;
 
+  $scope.savedData = [];
   $scope.error = null;
+
+  $scope.saveInput = function(){
+      alert('Work in Progress');
+  };
+
   $scope.Generate = function () {
     try {
       var output = [];
@@ -22,25 +28,17 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
           var actionArray = [input.paths[pathArray[i]].POST, input.paths[pathArray[i]].GET, input.paths[pathArray[i]].PUT];
           for (var x = 0; x < Object.keys(input.paths[pathArray[i]]).length; x++) {
             if (actionArray[x] != undefined) {
-              switch (x) {
-                case 0:
-                  console.log(actionArray[x]);
-                  //output.push(input.paths[pathArray[i]]);
-                  break;
-                case 1:
-                  console.log(actionArray[x]);
-                  break;
-                case 2:
-                  console.log(actionArray[x]);
-                  break;
-              }
+                $scope.savedData.push(actionArray[x]);
             }
           }
         }
-        input = JSON.stringify(input, null, 4);
-        generated.setValue(input, 1);
+        output = JSON.stringify(output, null, 4);
+        generated.setValue(output, 1);
         $scope.error = null;
       }
+      input = JSON.stringify(input, null, 4);
+      generated.setValue(input, 1);
+      $scope.error = null;
     }
     catch (e) {
       console.log(e);
@@ -48,5 +46,6 @@ theApp.controller('generatorController', ['$scope', '$location', function ($scop
       generated.setValue('', 1);
       $scope.error = e.message;
     }
+    console.log($scope.savedData);
   }
 }]);

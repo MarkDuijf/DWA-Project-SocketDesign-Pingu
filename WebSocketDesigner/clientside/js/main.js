@@ -29,6 +29,12 @@ theApp.controller('homeController', function($scope, $http) {
     $scope.registerData.password = "";
     $scope.registerData.email = "";
 
+    $scope.loginData = {};
+    $scope.loginData.username = "";
+    $scope.loginData.password = "";
+
+    $scope.loggedIn = false;
+
     $scope.sendConfirmationMail = function() {
         var emailData = {
             email: $scope.registerData.email,
@@ -45,7 +51,23 @@ theApp.controller('homeController', function($scope, $http) {
         error( function(data,status) {
             console.log("ERROR:", data, status);
         });
-    }
+    };
+
+    $scope.login = function() {
+        var loginData = {
+            username: $scope.loginData.username,
+            password: $scope.loginData.password
+        };
+
+        $http.post("/login", loginData).
+        success( function(data) {
+            console.log("Succes! " + data);
+            $scope.loggedIn = true;
+        }).
+        error( function(data,status) {
+            console.log("ERROR:", data, status);
+        });
+    };
 });
 
 theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
