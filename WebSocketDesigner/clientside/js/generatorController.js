@@ -30,7 +30,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
 
   $scope.Generate = function () {
     try {
-      var output = [];
+
       var input = editor.getSession().getValue();
 
       var data = {
@@ -47,26 +47,26 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       input = jsyaml.safeLoad(input);
 
       if (input.paths != undefined) {
-        var pathArray = Object.keys(input.paths); //duwt de paths in de variable( /messages, /user bijvoorbeeld)
+        var pathArray = Object.keys(input.paths);
         for (var i = 0; i < Object.keys(input.paths).length; i++) {
           var actionArray = [input.paths[pathArray[i]].POST, input.paths[pathArray[i]].GET, input.paths[pathArray[i]].PUT];
-          $scope.savedData[pathArray[i]] = {};//opslaan van paths
+          $scope.savedData[pathArray[i]] = {};
           for (var x = 0; x < Object.keys(input.paths[pathArray[i]]).length; x++) {
             $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]] = {};
             for (var z = 0; z < Object.keys(actionArray[x]).length; z++) {
-              if (Object.keys(input.paths[pathArray[i]])[z] != undefined) {
-                $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]] = {};
-                  //input.paths[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][actionArray[x][z]]
-              }
+              var actionData = input.paths[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]];
+                $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]] = actionData;
             }
           }
         }
-        output = JSON.stringify(output, null, 4);
-        generated.setValue(output, 1);
+        input = JSON.stringify(input, null, 4);
+        generated.setValue(input, 1);
+        alert($scope.savedData);
         $scope.error = null;
       }
       input = JSON.stringify(input, null, 4);
       generated.setValue(input, 1);
+      console.log($scope.savedData);
       $scope.error = null;
     }
     catch
@@ -76,7 +76,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       generated.setValue('', 1);
       $scope.error = e.message;
     }
-    console.log($scope.savedData);
   };
 
 }])
