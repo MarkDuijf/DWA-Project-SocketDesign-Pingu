@@ -64,19 +64,56 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                 res.status(500);
                 res.send("Server error")
             } else if(user === null) {
-                console.log("Incorrect!");
                 req.session.loggedin = false;
                 req.session.username = "";
                 res.status(500);
                 res.send("Wrong username/password");
-            } else {
-                console.log("Correct");
+            } else if(user.activated === true) {
                 req.session.loggedin = true;
                 req.session.username = req.body.username;
                 res.status(200);
                 res.send("Succes!");
+            } else if(user.activated === false) {
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Not yet activated");
+            } else {
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Other reason");
             }
         });
+    });
+
+    app.post('/confirm', function(req, res) {
+        User.findOne({email: req.body.email, confirmationLink: req.body.confirmation}, function(err, user) {
+            if(user === null || user === undefined) {
+                res.status(500);
+                res.send("Confirmation failed, account doesn't exist");
+            } else {
+                if(user.activated === false) {
+                    User.update({email: req.body.email, confirmationLink: req.body.confirmation}, { $set: { activated: true } }, function(err, result) {
+                        if(err) {
+                            console.log(err);
+                            res.status(500);
+                            res.send("Couldn't set activated to true");
+                        }
+                        console.log(result);
+                        res.status(200);
+                        res.send("The account has been activated")
+                    });
+                } else if(user.activated === true) {
+                    res.status(500);
+                    res.send("Account is already activated");
+                }
+            }
+        });
+    });
+
+    app.post('/register', function(req, res) {
+
     });
 });
 
