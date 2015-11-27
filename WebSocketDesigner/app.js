@@ -144,9 +144,9 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                                 var mailOptions = {
                                     from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
                                     to: req.body.email, // list of receivers
-                                    subject: 'Hello ' + req.body.firstName, // Subject line
-                                    text: "Is it me you're looking for?", // plaintext body
-                                    html: "<a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
+                                    subject: 'Confirm your account ' + req.body.firstName, // Subject line
+                                    text: "Please confirm your Socket Designer account", // plaintext body
+                                    html: "<p>Please confirm your Socket Designer account</p> </p><a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
                                 };
 
                                 transporter.sendMail(mailOptions, function(error, info){

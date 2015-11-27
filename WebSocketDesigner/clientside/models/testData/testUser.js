@@ -8,7 +8,7 @@ var chai = require('chai');
 
 var expect = chai.expect;
 
-var User = require('../../../Tests/user');
+var User = require('../user');
 
 var testDbName = 'testDatabase';
 
