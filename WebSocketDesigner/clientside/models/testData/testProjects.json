@@ -1,20 +1,20 @@
 [
   { "code_id": 1,
-    "projectname": "testCode",
+    "projectname": "demoCode",
     "username": "demo",
     "code": "Hoi",
-    "date": "12-12-2001"
+    "date": "2001-12-12"
   },
   { "code_id": 2,
     "projectname": "randomCode",
     "username": "demo",
     "code": "Hoi",
-    "date": "12-12-2001"
+    "date": "2001-12-12"
   },
   { "code_id": 3,
     "projectname": "testCode",
     "username": "test",
     "code": "Hoi",
-    "date": "12-12-2001"
+    "date": "2001-12-12"
   }
 ]

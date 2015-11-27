@@ -13,10 +13,10 @@ var session = require("express-session");
 
 var mongoose = require('mongoose');
 var dbName = "socketDesignerDB";
-var User = require('./clientside/models/user');
+var User = require('./Tests/user');
 
 //This inserts the testdata
-var exec  = require('./clientside/models/test/insertData');
+var exec  = require('./clientside/models/testData/insertData');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
