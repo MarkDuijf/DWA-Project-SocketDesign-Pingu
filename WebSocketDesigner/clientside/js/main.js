@@ -62,10 +62,11 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             firstName: $scope.registerData.firstName,
             lastName: $scope.registerData.lastName,
             username: $scope.registerData.username,
-            password: $scope.registerData.password
+            password: $scope.registerData.password,
+            confirmationLink: Math.random().toString(36).slice(2)
         };
 
-        $http.post("/register", emailData).
+        $http.post("/register", registerData).
         success( function(data) {
             console.log("Succes! " + data);
         }).
