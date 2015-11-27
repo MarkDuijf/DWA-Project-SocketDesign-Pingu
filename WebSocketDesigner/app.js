@@ -81,8 +81,114 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                 req.session.username = req.body.username;
                 res.status(200);
                 res.send("Succes!");
+            } else if(user.activated === false) {
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Not yet activated");
+            } else {
+                req.session.loggedin = false;
+                req.session.username = "";
+                res.status(500);
+                res.send("Other reason");
             }
         });
+    });
+
+    app.post('/confirm', function(req, res) {
+        User.findOne({email: req.body.email, confirmationLink: req.body.confirmation}, function(err, user) {
+            if(user === null || user === undefined) {
+                res.status(500);
+                res.send("Confirmation failed, account doesn't exist");
+            } else {
+                if(user.activated === false) {
+                    User.update({email: req.body.email, confirmationLink: req.body.confirmation}, { $set: { activated: true } }, function(err, result) {
+                        if(err) {
+                            console.log(err);
+                            res.status(500);
+                            res.send("Couldn't set activated to true");
+                        } else {
+                            console.log(result);
+                            res.status(200);
+                            res.send("The account has been activated")
+                        }
+                    });
+                } else if(user.activated === true) {
+                    res.status(500);
+                    res.send("Account is already activated");
+                }
+            }
+        });
+    });
+
+    app.post('/register', function(req, res) {
+        console.log(req.body.email + " " + req.body.firstName + " " + req.body.lastName + " " + req.body.username + " " + req.body.password + " " + req.body.confirmationLink);
+
+        var user = new User({
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            firstname: req.body.firstName,
+            lastname: req.body.lastName,
+            confirmationLink: req.body.confirmationLink,
+            activated: false
+        });
+
+        user.save(function(err) {
+            if(err) {
+                console.log(err);
+                res.status(500);
+                res.send("Error registering");
+            } else {
+                res.status(200);
+                res.send("Account registered");
+
+                //Email user
+                var mailOptions = {
+                    from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
+                    to: req.body.email, // list of receivers
+                    subject: 'Hello ' + req.body.firstName, // Subject line
+                    text: "Is it me you're looking for?", // plaintext body
+                    html: "<a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
+                };
+
+                transporter.sendMail(mailOptions, function(error, info){
+                    if(error){
+                        return console.log(error);
+                    }
+                    console.log('Message sent: ' + info.response);
+                });
+            }
+        });
+
+        /*
+        User.insert( { username: req.body.username, password: req.body.password, email: req.body.email, firstname: req.body.firstName, lastname: req.body.lastName, confirmationLink: req.body.confirmationLink, activated: false }, function(err, result) {
+            if(err) {
+                console.log(err);
+                res.status(500);
+                res.send("Error registering");
+            }
+            console.log(result);
+            res.status(200);
+            res.send("Account registered");
+
+            //Email user
+            var mailOptions = {
+                from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
+                to: req.body.email, // list of receivers
+                subject: 'Hello ' + req.body.firstName, // Subject line
+                text: "Is it me you're looking for?", // plaintext body
+                html: "<a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    return console.log(error);
+                }
+                console.log('Message sent: ' + info.response);
+            });
+        });
+        */
     });
 });
 
