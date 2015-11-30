@@ -14,7 +14,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.error = null;
 
   $scope.saveInput = function(){
-    //Code uit generator opslaan, als account systeem er is bij het goede account opslaan
+    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan
     var data = {
       code: editor.getSession().getValue()
     };
@@ -27,7 +27,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     });
   };
 
-  //Code van ID 4 opvragen
+  //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
     $http.get('/projectTest').
     success(function(data) {
