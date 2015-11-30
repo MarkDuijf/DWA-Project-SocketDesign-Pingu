@@ -167,6 +167,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
         });
     });
 
+    //TODO Dit is voor het testen van de projecten op de code generator pagina, moet later vervanngen worden
     app.post('/projectTest', function(req, res) {
         var project = new Project({
             code_id: 4,
