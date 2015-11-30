@@ -13,7 +13,7 @@ mongoose.connect('mongodb://localhost/' + testDbName, function(){
    describe('Als een gebruiker wil registreren moet', function(){
 
        it('een fout e-mailadres geweigerd worden', function(done){
-           var registreer = {
+           var register = {
                email: 'asdfg'
            };
 
