@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
-var User = require('../clientside/models/user');
+//var User = require('../clientside/models/user');
 var mongoose = require('mongoose');
 
 var testDbName = 'socketDesignerDB';

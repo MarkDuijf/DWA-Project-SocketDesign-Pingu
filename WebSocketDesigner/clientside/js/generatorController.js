@@ -41,11 +41,8 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
 
   $scope.Generate = function () {
     try {
-
       var input = editor.getSession().getValue();
-
       input = jsyaml.safeLoad(input);
-
       if (input.paths != undefined) {
         var pathArray = Object.keys(input.paths);
         for (var i = 0; i < Object.keys(input.paths).length; i++) {
@@ -77,6 +74,4 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       $scope.error = e.message;
     }
   };
-
-}])
-;
+}]);
