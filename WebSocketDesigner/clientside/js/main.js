@@ -40,6 +40,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
     $scope.loggedIn = false;
     $scope.homeMessage = "No message";
     $scope.showHomeMessage = false;
+    $scope.isErrorMessage = false;
 
     if($routeParams.email !== undefined && $routeParams.confirmation !== undefined) {
         var confirmData = {
@@ -52,11 +53,13 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             console.log("Confirmation succes! " + data);
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Your account has been activated.";
+            $scope.isErrorMessage = false;
         }).
         error( function(data,status) {
             console.log("Confirmation error:", data, status);
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Couldn't activate this account.";
+            $scope.isErrorMessage = true;
         });
     }
 
@@ -75,6 +78,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             console.log("Succes! " + data);
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
+            $scope.isErrorMessage = false;
         }).
         error( function(data,status) {
             console.log("ERROR:", data, status);
@@ -82,13 +86,16 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
                 $scope.registerData.email = "";
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "This email address already exists.";
+                $scope.isErrorMessage = true;
             } else if(data === "Username already exists") {
                 $scope.registerData.username = "";
                 $scope.showHomeMessage = true;
-                $scope.homeMessage = "This username address already exists.";
+                $scope.homeMessage = "This username already exists.";
+                $scope.isErrorMessage = true;
             } else {
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Error: " + data;
+                $scope.isErrorMessage = true;
             }
             $scope.registerData.password = "";
         });
@@ -111,6 +118,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             console.log("ERROR:", data, status);
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Error: " + data;
+            $scope.isErrorMessage = true;
         });
     };
 
@@ -129,6 +137,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             $scope.loginData.password = "";
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Error: " + data;
+            $scope.isErrorMessage = true;
         });
     };
 

@@ -5,15 +5,15 @@ var server      = require('http').Server(app);
 var io          = require('socket.io')(server);
 var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
-var session = require("express-session");
+var session     = require("express-session");
 
-var mongoose = require('mongoose');
-var dbName = "socketDesignerDB";
-var User = require('./clientside/models/user');
-var Project = require('./clientside/models/project');
+var mongoose    = require('mongoose');
+var dbName      = "socketDesignerDB";
+var User        = require('./clientside/models/user');
+var Project     = require('./clientside/models/project');
 
 //This inserts the testdata
-var exec  = require('./clientside/models/testData/insertData');
+var exec        = require('./clientside/models/testData/insertData');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
