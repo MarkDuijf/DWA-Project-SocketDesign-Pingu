@@ -135,3 +135,14 @@
     border: none;
     padding: 10px;
 }
+
+#homeMessage {
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    width: 100%;
+    background-color: blue;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
