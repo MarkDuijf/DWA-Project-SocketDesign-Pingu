@@ -2,6 +2,7 @@ var path        = require('path');
 //var mongoose    = require('mongoose');
 var express     = require('express');
 var app         = express();
+module.exports = app;
 var server      = require('http').Server(app);
 var io          = require('socket.io')(server);
 var nodemailer  = require('nodemailer');
