@@ -43,27 +43,12 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     try {
       var input = editor.getSession().getValue();
       input = jsyaml.safeLoad(input);
+      console.log(input);
       if (input.paths != undefined) {
-        var pathArray = Object.keys(input.paths);
-        for (var i = 0; i < Object.keys(input.paths).length; i++) {
-          var actionArray = [input.paths[pathArray[i]].POST, input.paths[pathArray[i]].GET, input.paths[pathArray[i]].PUT];
-          $scope.savedData[pathArray[i]] = {};
-          for (var x = 0; x < Object.keys(input.paths[pathArray[i]]).length; x++) {
-            $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]] = {};
-            for (var z = 0; z < Object.keys(actionArray[x]).length; z++) {
-              var actionData = input.paths[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]];
-                $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]] = actionData;
-            }
-          }
-        }
-        input = JSON.stringify(input, null, 4);
-        generated.setValue(input, 1);
-        alert($scope.savedData);
-        $scope.error = null;
+        
       }
       input = JSON.stringify(input, null, 4);
       generated.setValue(input, 1);
-      console.log($scope.savedData);
       $scope.error = null;
     }
     catch
