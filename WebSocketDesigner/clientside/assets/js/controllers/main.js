@@ -130,6 +130,9 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
         success( function(data) {
             console.log("Succes! " + data);
             $scope.loggedIn = true;
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "You have been logged in (this is a placeholder)";
+            $scope.isErrorMessage = false;
         }).
         error(function(data,status) {
             console.log("ERROR:", data, status);
