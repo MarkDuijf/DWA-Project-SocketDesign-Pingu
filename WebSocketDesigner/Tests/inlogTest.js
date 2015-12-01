@@ -14,17 +14,18 @@ mongoose.connect('mongodb://localhost/' + testDbName, function() {
             var login = {
                 username: 'demo',
                 password: 'wrongPass'
+                //beide kunnen weggehaald worden, de test slaagt dan nog steeds..
             };
 
             agent
                 .post('/login')
                 .send(login)
                 .set('Content-Type', 'application/json')
-                .expect(200)
+                .expect(401)
                 .expect('Content-Type', /text\/html/)
                 .end(function (err, res) {
                     expect(err).to.be.null;
-                    expect(res.text).to.equal('Wrong password!');
+                    expect(res.text).to.equal('Wrong username/password');
                     done();
                 });
         });

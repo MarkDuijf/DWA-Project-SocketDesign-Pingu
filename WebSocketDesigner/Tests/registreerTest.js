@@ -14,18 +14,23 @@ mongoose.connect('mongodb://localhost/' + testDbName, function(){
 
        it('een fout e-mailadres geweigerd worden', function(done){
            var register = {
-               email: 'asdfg'
+               username: 'SebastiaanVonk',
+               password: 'testtest',
+               email: 'asdfg',
+               firstname: 'Sebastiaan',
+               lastname: 'Vonk',
+               confirmationLink: 'www.han.nl'
            };
 
            agent
                .post('/register')
                .send(register)
                .set('Content-Type', 'application/json')
-               .expect(200)
+               .expect(500)
                .expect('Content-Type', /text\/html/)
                .end(function(err,res) {
                    expect(err).to.be.null;
-                   expect(res.text).to.equal('Invalid e-mail');
+                   expect(res.text).to.equal('Error registering, missing data');
                    done();
                });
        });
