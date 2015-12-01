@@ -1807,7 +1807,7 @@
 		font-size: 18pt;
 		line-height: 1.75em;
 		color: #39454b;
-		letter-spacing: 0.5px;
+		/*letter-spacing: 0.5px;*/
 	}
 
 		body.is-loading *, body.is-resizing * {
@@ -2844,6 +2844,7 @@
 
 	#nav {
 		position: absolute;
+		overflow: hidden;
 		right: 0.5em;
 		top: 0;
 		height: 3em;
