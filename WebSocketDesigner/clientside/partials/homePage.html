@@ -1,4 +1,4 @@
-<div ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
+<div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
 
 <div class="col-lg-12 jumbotron jumbotron-background-header homeText">
     <div class="col-lg-push-4 col-lg-8"><label class="homepageTitle">SOCKET</label></div>
@@ -9,8 +9,8 @@
 
     <div class="col-lg-12">
         <center>
-            <a class="btn btn-validate btn-info" data-toggle="modal" data-backdrop="static" data-target="#loginModal">Log in</a>
-            <a class="btn btn-validate btn-info" data-toggle="modal" data-backdrop="static" data-target="#registerModal">Register</a>
+            <a id="logInButton" class="btn btn-validate btn-info" data-toggle="modal" data-backdrop="static" data-target="#loginModal">Log in</a>
+            <a is="registerButton" class="btn btn-validate btn-info" data-toggle="modal" data-backdrop="static" data-target="#registerModal">Register</a>
             <p ng-show="loggedIn">Je bent ingelogd</p>
         </center>
     </div>
@@ -137,7 +137,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
-                <button type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
+                <button id="logInButtonForm" type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
             </div>
         </div>
     </div>
