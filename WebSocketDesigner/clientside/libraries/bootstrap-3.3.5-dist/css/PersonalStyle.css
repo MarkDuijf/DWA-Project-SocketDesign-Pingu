@@ -135,3 +135,25 @@
     border: none;
     padding: 10px;
 }
+
+.succesMessage {
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    width: 100%;
+    background-color: green;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
+
+.errorMessage {
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    width: 100%;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}

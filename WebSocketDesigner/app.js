@@ -1,20 +1,19 @@
 var path        = require('path');
-//var mongoose    = require('mongoose');
 var express     = require('express');
 var app         = express();
 var server      = require('http').Server(app);
 var io          = require('socket.io')(server);
 var nodemailer  = require('nodemailer');
 var bodyParser  = require('body-parser');
-var session = require("express-session");
+var session     = require("express-session");
 
-var mongoose = require('mongoose');
-var dbName = "socketDesignerDB";
-var User = require('./clientside/models/user');
-var Project = require('./clientside/models/project');
+var mongoose    = require('mongoose');
+var dbName      = "socketDesignerDB";
+var User        = require('./clientside/models/user');
+var Project     = require('./clientside/models/project');
 
 //This inserts the testdata
-var exec  = require('./clientside/models/testData/insertData');
+var exec        = require('./clientside/models/testData/insertData');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
@@ -65,7 +64,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                 console.log("Incorrect!");
                 req.session.loggedin = false;
                 req.session.username = "";
-                res.status(500);
+                res.status(401);
                 res.send("Wrong username/password");
             } else if (user.activated === true) {
                 console.log("Correct");
@@ -76,7 +75,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
             } else if(user.activated === false) {
                 req.session.loggedin = false;
                 req.session.username = "";
-                res.status(500);
+                res.status(401);
                 res.send("Not yet activated");
             } else {
                 req.session.loggedin = false;
@@ -90,7 +89,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
     app.post('/confirm', function(req, res) {
         User.findOne({email: req.body.email, confirmationLink: req.body.confirmation}, function(err, user) {
             if(user === null || user === undefined) {
-                res.status(500);
+                res.status(401);
                 res.send("Confirmation failed, account doesn't exist");
             } else {
                 if(user.activated === false) {
@@ -106,7 +105,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                         }
                     });
                 } else if(user.activated === true) {
-                    res.status(500);
+                    res.status(401);
                     res.send("Account is already activated");
                 }
             }
@@ -133,7 +132,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                             if(err) {
                                 console.log(err);
                                 res.status(500);
-                                res.send("Error registering");
+                                res.send("Error registering, missing data");
                             } else {
                                 res.status(200);
                                 res.send("Account registered");
@@ -156,18 +155,18 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                             }
                         });
                     } else {
-                        res.status(500);
+                        res.status(401);
                         res.send("Username already exists");
                     }
                 });
             } else {
-                res.status(500);
+                res.status(401);
                 res.send("Email already exists");
             }
         });
     });
 
-    //TODO Dit is voor het testen van de projecten op de code generator pagina, moet later vervanngen worden
+    //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden
     app.post('/projectTest', function(req, res) {
         var project = new Project({
             code_id: 4,
