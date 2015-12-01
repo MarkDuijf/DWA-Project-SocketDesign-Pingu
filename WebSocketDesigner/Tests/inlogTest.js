@@ -21,7 +21,7 @@ mongoose.connect('mongodb://localhost/' + testDbName, function() {
                 .post('/login')
                 .send(login)
                 .set('Content-Type', 'application/json')
-                .expect(500)
+                .expect(401)
                 .expect('Content-Type', /text\/html/)
                 .end(function (err, res) {
                     expect(err).to.be.null;

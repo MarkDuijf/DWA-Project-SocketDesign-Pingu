@@ -30,7 +30,7 @@ mongoose.connect('mongodb://localhost/' + testDbName, function(){
                .expect('Content-Type', /text\/html/)
                .end(function(err,res) {
                    expect(err).to.be.null;
-                   expect(res.text).to.equal('Error registering');
+                   expect(res.text).to.equal('Error registering, missing data');
                    done();
                });
        });
