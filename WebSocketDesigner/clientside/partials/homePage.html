@@ -1,83 +1,87 @@
-<div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
-
-<div class="col-lg-12 jumbotron jumbotron-background-header homeText">
-    <div class="col-lg-push-4 col-lg-8"><label class="homepageTitle">SOCKET</label></div>
-    <div class="col-lg-push-5 col-lg-7"><label class="homepageTitle">GENERATOR</label></div>
-    <blockquote class="center-block col-lg-6 col-lg-push-4 quoteText"><p>WANT TO USE OUR SUPER AWESOME TOOL?</p></blockquote>
-
-    <div class="col-lg-12"></div>
-
-    <div class="col-lg-12">
-        <center>
-            <a id="logInButton" class="btn btn-validate btn-info" data-toggle="modal" data-backdrop="static" data-target="#loginModal">Log in</a>
-            <a is="registerButton" class="btn btn-validate btn-info" data-toggle="modal" data-backdrop="static" data-target="#registerModal">Register</a>
-            <p ng-show="loggedIn">Je bent ingelogd</p>
-        </center>
+<section id="intro" class="main style1 dark fullscreen">
+    <div class="content container 75%">
+        <header>
+            <h2>Hey.</h2>
+        </header>
+        <button data-toggle="modal" data-backdrop="static" data-target="#loginModal">Login</button>
+        <button data-toggle="modal" data-backdrop="static" data-target="#registerModal">Register</button>
+        <footer>
+            <a href="#aboutus" class="button style2 down">More</a>
+        </footer>
     </div>
+</section>
 
-
-</div>
-
-<div class="col-lg-8 col-lg-push-2 jumbotron jumbotron-background-aboutUs">
-    <h2>ABOUT US</h2>
-    <p>
-    <blockquote class="col-lg-6">We are a company of ten students, divided in two groups. Our group consists of five persons. We are focussing on the european part
-        of web developers. For more information visit our <a>github</a> page</blockquote>
-    </p>
-</div>
-
-<div class="col-lg-8 col-lg-push-2 jumbotron jumbotron-background-gitHub align-right">
-    <h2>GITHUB</h2>
-    <p>
-    <blockquote class="col-lg-6 col-lg-push-6 blockquote-reverse">On our GitHub page you can find all the latest developments in the running project. We hope to keep you
-        up-to-date and maybe invoke you in the project.</blockquote>
-    </p>
-</div>
-
-<div class="col-lg-8 col-lg-push-2 jumbotron jumbotron-background-helloWorld">
-    <h2>HELLO WORLD</h2>
-    <p>
-    <blockquote class="col-lg-6">Llorum ipsum en heel veel bacon voor hier een beetje text komt te staan, moeten we eerst een mooi stuk geprogrammeerd hebben
-        en deze moet vervolgens ook nog te publiceren zijn. Wij hopen hierbij op uw begrip en we zullen hier zo snel mogelijk wat aan doen.</blockquote>
-    </p>
-</div>
-
-
-<div class="col-lg-12 jumbotron jumbotron-footer">
-    <div class="col-lg-4">
-        <h4>Groupmembers</h4>
-        <ul class="list-group">
-            <li>Mark Duijf</li>
-            <li>Sebastiaan Vonk</li>
-            <li>Vincent van Rossum</li>
-            <li>Sam van Geijn</li>
-            <li>Eric Jans</li>
-        </ul>
+<!-- One -->
+<section id="aboutus" class="main style2 right dark fullscreen">
+    <div class="content box style2">
+        <header>
+            <h2>What I Do</h2>
+        </header>
+        <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
+            Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
+            id varius justo euismod in. Curabitur egestas consectetur magna.</p>
     </div>
-    <div class="col-lg-4">
-        <h4>Project management</h4>
-        <ul class="list-group">
-            <div class="col-lg-4">
-                <li>Theo Theunissen</li>
-                <li>Robert Holwerda</li>
-                <li>Pim Haenen</li>
-            </div>
-            <div class="col-lg-8">
-                Product Owner <br>
-                Process Coach <br>
-                Professional Skills
-            </div>
-        </ul>
-    </div>
-    <div class="col-lg-4">
+    <a href="#GitHub" class="button style2 down anchored">Next</a>
+</section>
 
+<!-- Two -->
+<section id="GitHub" class="main style2 left dark fullscreen">
+    <div class="content box style2">
+        <header>
+            <h2>Who I Am</h2>
+        </header>
+        <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
+            Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
+            id varius justo euismod in. Curabitur egestas consectetur magna.</p>
     </div>
-    <div class="col-lg-12">
-        <center>© Socket Designer EU 2015</center>
-    </div>
-</div>
+    <a href="#helloworld" class="button style2 down anchored">Next</a>
+</section>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- Work -->
+<section id="helloworld" class="main style2 right dark fullscreen">
+    <div class="content box style2">
+        <header>
+            <h2>Who I Am</h2>
+        </header>
+        <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
+            Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
+            id varius justo euismod in. Curabitur egestas consectetur magna.</p>
+    </div>
+    <a href="#contact" class="button style2 down anchored">Next</a>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="main style3 secondary">
+    <div class="content container">
+        <header>
+            <h2>Say Hello.</h2>
+            <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.</p>
+        </header>
+        <div class="box container 75%">
+
+            <!-- Contact Form -->
+            <form method="post" action="#">
+                <div class="row 50%">
+                    <div class="6u 12u(mobile)"><input type="text" name="name" placeholder="Name" /></div>
+                    <div class="6u 12u(mobile)"><input type="email" name="email" placeholder="Email" /></div>
+                </div>
+                <div class="row 50%">
+                    <div class="12u"><textarea name="message" placeholder="Message" rows="6"></textarea></div>
+                </div>
+                <div class="row">
+                    <div class="12u">
+                        <ul class="actions">
+                            <li><input type="submit" value="Send Message" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -116,7 +120,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -136,8 +140,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
-                <button id="logInButtonForm" type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
+                <button type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
             </div>
         </div>
     </div>

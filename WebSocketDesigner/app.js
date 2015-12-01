@@ -1,7 +1,6 @@
 var path        = require('path');
 var express     = require('express');
 var app         = express();
-module.exports = app;
 var server      = require('http').Server(app);
 var io          = require('socket.io')(server);
 var nodemailer  = require('nodemailer');
@@ -50,7 +49,6 @@ app.post('/email',function(req,res){
         res.send("Succes!");
     });
 });
-
 mongoose.connect('mongodb://localhost/' + dbName, function(){
     app.post('/login', function(req, res) {
         User.findOne({username: req.body.username, password: req.body.password}, function(err, user) {
@@ -179,7 +177,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
 
         project.save(function(err) {
             if(err) {
-               return console.log(error);
+                return console.log(error);
             }
             res.status(200);
             res.send("Toegevoegd");
@@ -193,8 +191,8 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
         });
     })
 });
-
-// All socket.io code
+//                     All socket.io code
+//
 io.on('connection', function(socket){
     console.log('a user connected');
     socket.on('disconnect', function(){

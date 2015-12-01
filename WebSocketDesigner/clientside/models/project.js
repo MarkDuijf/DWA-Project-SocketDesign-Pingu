@@ -4,10 +4,10 @@
 var mongoose = require("mongoose");
 
 var projectSchema = new mongoose.Schema({
-   username: {
-       type: String,
-       required: true
-   },
+    username: {
+        type: String,
+        required: true
+    },
     projectname: {
         type: String,
         required: true

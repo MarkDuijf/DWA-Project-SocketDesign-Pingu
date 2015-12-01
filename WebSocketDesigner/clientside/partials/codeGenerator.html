@@ -1,10 +1,10 @@
-<div class="generatorPage col-lg-12">
-
-    <div ng-show="error != null">
-      <div style="color:white">Something went wrong!<br/>
-      {{error}}</div>
-    </div>
-    <pre id="editor" class="col-lg-5">
+<div class="generatorPage">
+    <!--<div ng-show="error != null">-->
+    <!--<div style="color:white">Something went wrong!<br/>-->
+    <!--{{error}}-->
+    <!--</div>-->
+    <!--</div>-->
+    <pre id="editor">
 info:
     title: Sockettester
     description: Sockettester test generator
@@ -78,22 +78,18 @@ paths:
                 -   name: data
                     require: false
                     description: new data has been received
-
-
     </pre>
-
-    <div class="col-lg-2">
-        <br>
-        <br>
-        <center><a class="btn btn-validate btn-default" ng-click="Generate()">Generate code</a></center>
-        <center><a class="btn btn-validate btn-default" ng-click="saveInput()">Save input</a></center>
-        <center><a class="btn btn-validate btn-default" ng-click="getTest()">Get test</a></center>
+    <div id="generateButtons">
+        <div>
+            <button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate code</button>
+        </div>
+        <div>
+            <button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save input</button>
+        </div>
+        <div>
+            <button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get test</button>
+        </div>
     </div>
-
-    <pre id="generated" class="col-lg-5">
+    <pre id="generated">
     </pre>
 </div>
-
-
-
-

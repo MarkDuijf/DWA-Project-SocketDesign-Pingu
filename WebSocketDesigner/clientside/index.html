@@ -1,37 +1,72 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+<!--
+	Big Picture by HTML5 UP
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html lang="en" ng-app="generatorApp">
 <head>
-    <meta charset="UTF-8">
     <title>Socket Generator</title>
-    <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
-    <script src="libraries/ace-builds-master/ace-builds-master/src-min-noconflict/ace.js"></script>
-    <link rel="stylesheet" href="libraries/bootstrap-3.3.5-dist/css/bootstrap-style.css">
-    <link rel="stylesheet" href="libraries/bootstrap-3.3.5-dist/css/bootstrap-theme.css">
-    <link rel="stylesheet" href="libraries/bootstrap-3.3.5-dist/css/PersonalStyle.css">
-    <script src="libraries/angular.js"></script>
-    <script src="https://code.angularjs.org/1.2.16/angular-route.min.js"></script>
-    <script src="libraries/jquery-1.11.3.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/generatorController.js"></script>
-    <script src="js/chatController.js"></script>
-    <script src="libraries/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/angular-route.min.js"></script>
+    <script src="assets/js/controllers/main.js"></script>
+    <script src="assets/js/controllers/chatController.js"></script>
+    <script src="assets/js/controllers/generatorController.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.poptrox.min.js"></script>
+    <script src="assets/js/jquery.scrolly.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/skel.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/socket.io-1.3.7.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/ace-builds-master/ace-builds-master/src-min-noconflict/ace.js"></script>
     <script src="http://nodeca.github.io/js-yaml/js/esprima.js"></script>
     <script src="http://nodeca.github.io/js-yaml/js/js-yaml.js"></script>
-
-
-
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
+    <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css"/><![endif]-->
+    <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css"/><![endif]-->
+    <link rel="stylesheet" href="assets/css/Personal.css"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+    <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 </head>
 <body>
 
-    <div ng-view></div>
+<!-- Header -->
+<header id="header">
+    <h1 id="logo">Socket-Design</h1>
+    <!-- Nav -->
+    <nav ng-controller="menuControl" id="nav">
+        <ul>
+            <li ng-repeat="menu in menuItems"><a href="{{menu.LinkText}}">{{menu.Title}}</a></li>
+        </ul>
+    </nav>
+</header>
+<ng-view></ng-view>
+<!-- Footer -->
+<footer id="footer">
 
-    <div class="col-lg-8 btn-group btn-group-justified menu-bottom" ng-controller="menuControl">
-            <a ng-repeat="menu in menuItems"class="btn btn-menu" href='#{{menu.LinkText}}' ng-click="setCodeGenerator(menu)">
-                {{menu.Title}}
-            </a>
-        </div>
-    </div>
+    <!-- Icons -->
+    <ul class="actions">
+        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+        <li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
+        <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+        <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
+        <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+    </ul>
 
+    <!-- Menu -->
+    <ul class="menu">
+        <li>&copy; Untitled</li>
+        <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+    </ul>
 
+</footer>
 </body>
+
 </html>

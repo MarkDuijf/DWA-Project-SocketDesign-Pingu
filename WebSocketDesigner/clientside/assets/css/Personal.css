@@ -1,0 +1,73 @@
+#helloworld {
+    background-image: url("images/helloworld.jpg");
+    background-position: left;
+    /*color: #ddd;*/
+}
+
+#GitHub {
+    background-image: url("images/Github.jpg");
+    background-position: left;
+    /*color: #ddd;*/
+}
+
+#aboutus {
+    background-image: url("images/officepage.jpg");
+    background-position: left;
+    /*color: #ddd;*/
+}
+
+#editor {
+    position: relative;
+    /*top: 50px;*/
+    /*left: 20px;*/
+    /*height: 85vh;*/
+}
+
+#generated {
+    /*position: relative;*/
+    /*top: 50px;*/
+    /*right: 20px;*/
+    /*height: 85vh;*/
+    top: -147px;
+    float:right;
+}
+
+.generatorPage {
+    min-width: 1430px;
+    background-image: url("https://wallpaperscraft.com/image/skin_joints_texture_dark_50436_3840x2160.jpg");
+    background-size: cover;
+    height: 100vh;
+}
+
+.generatorPage > pre {
+    width: 660px;
+    height: calc(100% - 60px);
+}
+
+.generatorPage > pre {
+    display: inline;
+    position: relative;
+    float: left;
+}
+
+#generateButtons {
+    vertical-align: middle;
+}
+
+/*#generateButtons > div {*/
+    /*align-self: center;*/
+/*}*/
+
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#messages li {
+    padding: 5px 10px;
+}
+
+#messages li:nth-child(odd) {
+    background: #eee;
+}
