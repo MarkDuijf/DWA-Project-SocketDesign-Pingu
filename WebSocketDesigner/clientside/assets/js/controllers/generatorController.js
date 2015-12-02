@@ -38,15 +38,30 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     })
   };
 
-  var generateHost = function(varname, location, port, base){
-    if(port == undefined){
-      return "var " + varname + " = new WebSocket(\'ws://" + location + base + "\');";
-    }
-    else {
-      return "var " + varname + " = new WebSocket(\'ws://" + location + ":" + port + base + "\');";
-    }
+  var generateServer = function(location, port){
+      return'//This is the server code, it creates a basic server on the given port \n' +
+        'var app = require(\'http\').createServer(handler); \n' +
+        'var io = require(\'socket.io\')(app);\n' +
+        'var fs = require(\'fs\');\n' +
+        'var port = ' + port + '; \n\n' +
+        'app.listen(port, function(){\n  console.log(\'server listening on port: \' + port);\n' +
+        '}); \n\n' +
+        'function handler(req, res){\n' +
+        '  fs.readFile(__dirname + \'index.html\',' +
+        '  function(err, data){\n' +
+        '    if(err){\n' +
+        '      res.writeHead(500);\n' +
+        '      return res.end(\'Error loading index.html\');\n' +
+        '    }\n' +
+        '    res.writeHead(200);\n' +
+        '    res.end(data);\n' +
+        '  });\n' +
+        '}';
   };
 
+  var generateServerSocket = function(messageArray){
+
+  };
   var errorHandling = function(input){
     //Throw an error if the host or basepath doesn't exist
     if(input.host == undefined || input.basepath == undefined){
@@ -54,10 +69,11 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }
 
     //Throw an error if the location or socket variable doesn't exist
-    if(input.host.location == undefined || input.host.socketvar == undefined){
-      throw new Error('You didn\'t specify a location and/or websocket variable')
+    if(input.host.location == undefined){
+      throw new Error('You didn\'t specify a location in the host');
     }
 
+    //Throw an error if the location is equal to localhost and port has not been set
     if(input.host.port == undefined && input.host.location == 'localhost' || input.host.location == 'Localhost'){
       throw new Error('If localhost is used a port should be specified in the host');
     }
@@ -66,14 +82,16 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.Generate = function () {
     try {
       var input = editor.getSession().getValue();
+      var temp = [];
+      var output = '';
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      if (input.paths != undefined) {
+      temp.push(generateServer(input.host.location, input.host.port));
+      //temp.push(generateServerSocket(output));
+      for(var i = 0; i < temp.length; i++){
+        output += temp[i];
       }
-      var socketCon = generateHost(input.host.socketvar, input.host.location, input.host.port, input.basepath);
-      input = socketCon;
-      //input = JSON.stringify(input, null, 4);
-      generated.setValue(input, 1);
+      generated.setValue(output, 1);
       $scope.error = null;
     }
     catch
@@ -85,3 +103,5 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }
   };
 }]);
+
+
