@@ -38,7 +38,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     })
   };
 
-  var generateServer = function(location, port){
+  var generateServer = function(port){
       return'//This is the server code, it creates a basic server on the given port \n' +
         'var app = require(\'http\').createServer(handler); \n' +
         'var io = require(\'socket.io\')(app);\n' +
@@ -56,12 +56,24 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
         '    res.writeHead(200);\n' +
         '    res.end(data);\n' +
         '  });\n' +
-        '}';
+        '}\n\n';
   };
 
   var generateServerSocket = function(messageArray){
-
+    return '//This is the socket.io code for the server\n' +
+      'io.on(\'connection\', function(socket){\n' +
+      '  socket.emit(\'news\', {hello: \'world\'});\n' +
+      '  socket.on(\'my other event\', function(data){\n' +
+      '    console.log(data);\n' +
+      '  });\n' +
+      '});\n\n';
   };
+
+  var generateClientSocket = function(messageArray){
+    return '//This is the socket.io code for the client\n' +
+      '';
+  };
+
   var errorHandling = function(input){
     //Throw an error if the host or basepath doesn't exist
     if(input.host == undefined || input.basepath == undefined){
@@ -86,8 +98,9 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var output = '';
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      temp.push(generateServer(input.host.location, input.host.port));
-      //temp.push(generateServerSocket(output));
+      temp.push(generateServer(input.host.port));
+      temp.push(generateServerSocket(output));
+      temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){
         output += temp[i];
       }
