@@ -38,13 +38,51 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     })
   };
 
-  var generateHost = function(varname, location, port, base){
-    if(port == undefined){
-      return "var " + varname + " = new WebSocket(\'ws://" + location + base + "\');";
-    }
-    else {
-      return "var " + varname + " = new WebSocket(\'ws://" + location + ":" + port + base + "\');";
-    }
+  var generateServer = function(port){
+      return'//This is the server code, it creates a basic server on the given port \n' +
+        'var app = require(\'http\').createServer(handler); \n' +
+        'var io = require(\'socket.io\')(app);\n' +
+        'var fs = require(\'fs\');\n' +
+        'var port = ' + port + '; \n\n' +
+        'app.listen(port, function(){\n  console.log(\'server listening on port: \' + port);\n' +
+        '}); \n\n' +
+        'function handler(req, res){\n' +
+        '  fs.readFile(__dirname + \'/index.html\',' +
+        '  function(err, data){\n' +
+        '    if(err){\n' +
+        '      res.writeHead(500);\n' +
+        '      return res.end(\'Error loading index.html\');\n' +
+        '    }\n' +
+        '    res.writeHead(200);\n' +
+        '    res.end(data);\n' +
+        '  });\n' +
+        '}\n\n';
+  };
+  //Meerdere socketberichten = for-loop + 2 variablen(zie try)
+  var generateServerSocket = function(messageArray){
+    return '//This is the socket.io code for the server\n' +
+      'io.on(\'connection\', function(socket){\n' +
+      '  socket.emit(\'news\', {hello: \'world\'});\n' +
+      '  socket.on(\'my other event\', function(data){\n' +
+      '    console.log(data);\n' +
+      '  });\n' +
+      '});\n\n';
+  };
+
+  var generateClientScript = function(){
+    return '//This is the script you have to put in the head of the html\n' +
+      '<scr' + 'ipt src=\"socket.io/socket.io.js\"></scr' + 'ipt>\n\n';
+  };
+
+  var generateClientSocket = function(messageArray){
+    return '//This is the socket.io code for the client\n' +
+      '<scr'+'ipt>\n' +
+      '  var socket = io();\n' +
+      '  socket.on(\'news\', function(data){\n' +
+      '    console.log(data);\n' +
+      '    socket.emit(\'my other event\', {my: \'data\'});\n' +
+      '  });\n' +
+      '</scr' + 'ipt>\n\n';
   };
 
   var errorHandling = function(input){
@@ -54,10 +92,11 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }
 
     //Throw an error if the location or socket variable doesn't exist
-    if(input.host.location == undefined || input.host.socketvar == undefined){
-      throw new Error('You didn\'t specify a location and/or websocket variable')
+    if(input.host.location == undefined){
+      throw new Error('You didn\'t specify a location in the host');
     }
 
+    //Throw an error if the location is equal to localhost and port has not been set
     if(input.host.port == undefined && input.host.location == 'localhost' || input.host.location == 'Localhost'){
       throw new Error('If localhost is used a port should be specified in the host');
     }
@@ -66,14 +105,18 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.Generate = function () {
     try {
       var input = editor.getSession().getValue();
+      var temp = [];
+      var output = '';
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      if (input.paths != undefined) {
+      temp.push(generateServer(input.host.port));
+      temp.push(generateServerSocket(output));
+      temp.push(generateClientScript());
+      temp.push(generateClientSocket(output));
+      for(var i = 0; i < temp.length; i++){
+        output += temp[i];
       }
-      var socketCon = generateHost(input.host.socketvar, input.host.location, input.host.port, input.basepath);
-      input = socketCon;
-      //input = JSON.stringify(input, null, 4);
-      generated.setValue(input, 1);
+      generated.setValue(output, 1);
       $scope.error = null;
     }
     catch
@@ -85,3 +128,5 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }
   };
 }]);
+
+

@@ -7,7 +7,16 @@ var mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
     username:{
         type: String,
-        required: true
+        required: true,
+        validate: [
+            function(username) {
+                if(username.length >= 3 && username.length <= 15 ){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        ]
     },
     password:{
         type: String,
@@ -15,13 +24,24 @@ var userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        validate: [
+            function(email) {
+                if(email.indexOf('@') === -1)
+                {
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            "Doesn't have a @"
+        ]
     },
-    firstname: {
+    firstName: {
         type: String,
         required: true
     },
-    lastname: {
+    lastName: {
         type: String,
         required: true
     },

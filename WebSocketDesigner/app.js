@@ -122,8 +122,8 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                             username: req.body.username,
                             password: req.body.password,
                             email: req.body.email,
-                            firstname: req.body.firstName,
-                            lastname: req.body.lastName,
+                            firstName: req.body.firstName,
+                            lastName: req.body.lastName,
                             confirmationLink: req.body.confirmationLink,
                             activated: false
                         });
@@ -132,7 +132,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                             if(err) {
                                 console.log(err);
                                 res.status(500);
-                                res.send("Error registering, missing data");
+                                res.send("Error registering, missing/wrong data");
                             } else {
                                 res.status(200);
                                 res.send("Account registered");
