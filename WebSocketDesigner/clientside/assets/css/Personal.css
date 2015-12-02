@@ -1,18 +1,21 @@
 #helloworld {
     background-image: url("images/helloworld.jpg");
-    background-position: left;
+    /*background-position: left;*/
+    background-size: cover;
     /*color: #ddd;*/
 }
 
 #GitHub {
     background-image: url("images/Github.jpg");
-    background-position: left;
+    /*background-position: left;*/
+    background-size: cover;
     /*color: #ddd;*/
 }
 
 #aboutus {
     background-image: url("images/officepage.jpg");
-    background-position: left;
+    /*background-position: left;*/
+    background-size: cover;
     /*color: #ddd;*/
 }
 
@@ -33,18 +36,16 @@
 }
 
 .generatorPage {
-    min-width: 1430px;
+    min-width: 1310px;
     background-image: url("https://wallpaperscraft.com/image/skin_joints_texture_dark_50436_3840x2160.jpg");
     background-size: cover;
-    height: 100vh;
+    height: 100%;
 }
 
 .generatorPage > pre {
-    width: 660px;
-    height: calc(100% - 60px);
-}
-
-.generatorPage > pre {
+    width: 45%;
+    min-width: 600px;
+    height: 100%;
     display: inline;
     position: relative;
     float: left;
