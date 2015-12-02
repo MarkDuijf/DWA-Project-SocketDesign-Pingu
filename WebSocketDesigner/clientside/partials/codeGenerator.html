@@ -1,16 +1,17 @@
 <div class="generatorPage">
-    <!--<div ng-show="error != null">-->
-    <!--<div style="color:white">Something went wrong!<br/>-->
-    <!--{{error}}-->
-    <!--</div>-->
-    <!--</div>-->
+    <div ng-show="error != null">
+    <div style="color:white">Something went wrong!<br/>
+    {{error}}
+    </div>
+    </div>
     <pre id="editor">
 info:
     title: Sockettester
     description: Sockettester test generator
-Host:
-    title: localhost
+host:
+    location: localhost
     port: 3000
+    socketvar: ws
 basepath: /
 paths:
     /user:

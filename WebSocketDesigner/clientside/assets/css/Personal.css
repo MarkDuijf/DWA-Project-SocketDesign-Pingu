@@ -71,3 +71,25 @@
 #messages li:nth-child(odd) {
     background: #eee;
 }
+
+.succesMessage {
+    position: fixed;
+    top: 3em;
+    z-index: 10000;
+    width: 100%;
+    background-color: green;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
+
+.errorMessage {
+    position: fixed;
+    top: 3em;
+    z-index: 10000;
+    width: 100%;
+    background-color: red;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
