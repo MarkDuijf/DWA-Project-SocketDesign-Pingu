@@ -36,14 +36,14 @@
 }
 
 .generatorPage {
-    min-width: 1430px;
+    min-width: 1310px;
     background-image: url("https://wallpaperscraft.com/image/skin_joints_texture_dark_50436_3840x2160.jpg");
     background-size: cover;
     height: 100%;
 }
 
 .generatorPage > pre {
-    width: 660px;
+    width: 600px;
     height: 100%;
 }
 
