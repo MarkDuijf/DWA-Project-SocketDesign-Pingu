@@ -28,14 +28,14 @@ describe('Als een gebruiker wil registreren moet', function(){
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
-                expect(res.text).to.equal('Error registering, missing data');
+                expect(res.text).to.equal("Error registering, missing/wrong data");
                 done();
             });
     });
 
     it('een goed e-mailadres geen problemen hebben', function(done){
         var register = {
-            username: 'VincentvanRossum',
+            username: 'VincentvRossum',
             password: 'testtest',
             email: 'VD.vanRossum@student.han.nl',
             firstName: 'Vincent',
@@ -52,6 +52,29 @@ describe('Als een gebruiker wil registreren moet', function(){
             .end(function(err,res) {
                 expect(err).to.be.null;
                 expect(res.text).to.equal("Account registered");
+                done();
+            });
+    });
+
+    it('een te korte naam geweigerd worden', function(done){
+        var register = {
+            username: 'jo',
+            password: 'testtest',
+            email: 'LHA.Vonk@student.han.nl',
+            firstName: 'Sebastiaan',
+            lastName: 'Vonk',
+            confirmationLink: 'www.han.nl'
+        };
+
+        agent
+            .post('/register')
+            .send(register)
+            .set('Content-Type', 'application/json')
+            .expect(500)
+            .expect('Content-Type', /text\/html/)
+            .end(function(err,res) {
+                expect(err).to.be.null;
+                expect(res.text).to.equal("Error registering, missing/wrong data");
                 done();
             });
     });
