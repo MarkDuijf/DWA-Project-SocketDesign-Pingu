@@ -9,8 +9,8 @@ var agent = supertest.agent(app);
     describe('Als een gebruiker wil inloggen moet', function () {
         it('een fout wachtwoord geweigerd worden', function (done) {
             var login = {
-                username: 'demo',
-                password: 'wrongPass'
+                username: 'Mark',
+                password: 'Duijf',
                 //beide kunnen weggehaald worden, de test slaagt dan nog steeds..
             };
 
