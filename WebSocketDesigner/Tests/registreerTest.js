@@ -17,8 +17,8 @@ mongoose.connect('mongodb://localhost/' + testDbName, function(){
                username: 'SebastiaanVonk',
                password: 'testtest',
                email: 'asdfg',
-               firstname: 'Sebastiaan',
-               lastname: 'Vonk',
+               firstName: 'Sebastiaan',
+               lastName: 'Vonk',
                confirmationLink: 'www.han.nl'
            };
 
