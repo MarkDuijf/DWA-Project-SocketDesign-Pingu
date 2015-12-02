@@ -43,11 +43,9 @@
 }
 
 .generatorPage > pre {
-    width: 600px;
+    width: 45%;
+    min-width: 600px;
     height: 100%;
-}
-
-.generatorPage > pre {
     display: inline;
     position: relative;
     float: left;
