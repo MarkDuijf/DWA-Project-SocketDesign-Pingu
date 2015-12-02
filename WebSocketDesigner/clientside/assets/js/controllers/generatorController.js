@@ -47,7 +47,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
         'app.listen(port, function(){\n  console.log(\'server listening on port: \' + port);\n' +
         '}); \n\n' +
         'function handler(req, res){\n' +
-        '  fs.readFile(__dirname + \'index.html\',' +
+        '  fs.readFile(__dirname + \'/index.html\',' +
         '  function(err, data){\n' +
         '    if(err){\n' +
         '      res.writeHead(500);\n' +
@@ -58,7 +58,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
         '  });\n' +
         '}\n\n';
   };
-
+  //Meerdere socketberichten = for-loop + 2 variablen(zie try)
   var generateServerSocket = function(messageArray){
     return '//This is the socket.io code for the server\n' +
       'io.on(\'connection\', function(socket){\n' +
@@ -69,9 +69,20 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       '});\n\n';
   };
 
+  var generateClientScript = function(){
+    return '//This is the script you have to put in the head of the html\n' +
+      '<scr' + 'ipt src=\"socket.io/socket.io.js\"></scr' + 'ipt>\n\n';
+  };
+
   var generateClientSocket = function(messageArray){
     return '//This is the socket.io code for the client\n' +
-      '';
+      '<scr'+'ipt>\n' +
+      '  var socket = io();\n' +
+      '  socket.on(\'news\', function(data){\n' +
+      '    console.log(data);\n' +
+      '    socket.emit(\'my other event\', {my: \'data\'});\n' +
+      '  });\n' +
+      '</scr' + 'ipt>\n\n';
   };
 
   var errorHandling = function(input){
@@ -100,6 +111,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       errorHandling(input);
       temp.push(generateServer(input.host.port));
       temp.push(generateServerSocket(output));
+      temp.push(generateClientScript());
       temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){
         output += temp[i];
