@@ -10,7 +10,7 @@ var agent = supertest.agent(app);
         it('een fout wachtwoord geweigerd worden', function (done) {
             var login = {
                 username: 'demo',
-                //password: 'wrongPass'
+                password: 'wrongPass'
                 //beide kunnen weggehaald worden, de test slaagt dan nog steeds..
             };
 
@@ -22,7 +22,7 @@ var agent = supertest.agent(app);
                 .expect('Content-Type', /text\/html/)
                 .end(function (err, res) {
                     expect(err).to.be.null;
-                    //expect(res.text).to.equal('Wrong username/password');
+                    expect(res.text).to.equal('Wrong username/password');
                     done();
                 });
         });

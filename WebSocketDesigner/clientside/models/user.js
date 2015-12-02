@@ -15,7 +15,18 @@ var userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        validate: [
+            function(email) {
+                if(email.indexOf('@') === -1)
+                {
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            "Doesn't have a @"
+        ]
     },
     firstName: {
         type: String,
