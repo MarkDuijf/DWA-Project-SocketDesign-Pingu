@@ -132,7 +132,7 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
                             if(err) {
                                 console.log(err);
                                 res.status(500);
-                                res.send("Error registering, missing data");
+                                res.send("Error registering, missing/wrong data");
                             } else {
                                 res.status(200);
                                 res.send("Account registered");
