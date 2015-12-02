@@ -10,7 +10,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   generated.getSession().setMode("ace/mode/javascript");
   generated.$blockScrolling = Infinity;
 
-  $scope.savedData = {};
   $scope.error = null;
 
   $scope.saveInput = function(){
@@ -39,31 +38,42 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     })
   };
 
+  var generateHost = function(varname, location, port, base){
+    if(port == undefined){
+      return "var " + varname + " = new WebSocket(\'ws://" + location + base + "\');";
+    }
+    else {
+      return "var " + varname + " = new WebSocket(\'ws://" + location + ":" + port + base + "\');";
+    }
+  };
+
+  var errorHandling = function(input){
+    //Throw an error if the host or basepath doesn't exist
+    if(input.host == undefined || input.basepath == undefined){
+      throw new Error('You didn\'t specify a basepath and/or host');
+    }
+
+    //Throw an error if the location or socket variable doesn't exist
+    if(input.host.location == undefined || input.host.socketvar == undefined){
+      throw new Error('You didn\'t specify a location and/or websocket variable')
+    }
+
+    if(input.host.port == undefined && input.host.location == 'localhost' || input.host.location == 'Localhost'){
+      throw new Error('If localhost is used a port should be specified in the host');
+    }
+  };
+
   $scope.Generate = function () {
     try {
       var input = editor.getSession().getValue();
       input = jsyaml.safeLoad(input);
+      errorHandling(input);
       if (input.paths != undefined) {
-        var pathArray = Object.keys(input.paths);
-        for (var i = 0; i < Object.keys(input.paths).length; i++) {
-          var actionArray = [input.paths[pathArray[i]].POST, input.paths[pathArray[i]].GET, input.paths[pathArray[i]].PUT];
-          $scope.savedData[pathArray[i]] = {};
-          for (var x = 0; x < Object.keys(input.paths[pathArray[i]]).length; x++) {
-            $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]] = {};
-            for (var z = 0; z < Object.keys(actionArray[x]).length; z++) {
-              var actionData = input.paths[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]];
-              $scope.savedData[pathArray[i]][Object.keys(input.paths[pathArray[i]])[x]][Object.keys(actionArray[x])[z]] = actionData;
-            }
-          }
-        }
-        input = JSON.stringify(input, null, 4);
-        generated.setValue(input, 1);
-        alert($scope.savedData);
-        $scope.error = null;
       }
-      input = JSON.stringify(input, null, 4);
+      var socketCon = generateHost(input.host.socketvar, input.host.location, input.host.port, input.basepath);
+      input = socketCon;
+      //input = JSON.stringify(input, null, 4);
       generated.setValue(input, 1);
-      console.log($scope.savedData);
       $scope.error = null;
     }
     catch
