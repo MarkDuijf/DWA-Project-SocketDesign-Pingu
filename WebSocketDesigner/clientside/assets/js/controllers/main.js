@@ -143,6 +143,19 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
         });
     };
 
+    $scope.openLoginModal = function() {
+        $(function() {
+            $('#loginModal').modal('show')
+        })
+    };
+
+    $scope.openRegisterModal = function() {
+        $(function() {
+            $('#registerModal').modal('show')
+        })
+    };
+
+
     $scope.hideMessage = function() {
         $scope.showHomeMessage = false;
     }
@@ -152,25 +165,32 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
 
     $scope.menuItems = [{
         Title: 'HOME',
-        LinkText: '#intro'
+        LinkText: '#intro',
+        ID: 'home'
     }, {
         Title: 'ABOUT US',
-        LinkText: '#aboutus'
+        LinkText: '#aboutus',
+        ID: 'about-us'
     }, {
         Title: 'GITHUB',
-        LinkText: '#GitHub'
+        LinkText: '#GitHub',
+        ID: 'github'
 
     }, {
         Title: 'COMMUNITY CHAT',
-        LinkText: '/#/chatPage'
+        LinkText: '/#/chatPage',
+        ID: 'community-chat'
     }, {
         Title: 'HELLO WORLD',
-        LinkText: '#helloworld'
+        LinkText: '#helloworld',
+        ID: 'hello-world'
     }, {
         Title: 'CONTACT',
-        LinkText: '#contact'
+        LinkText: '#contact',
+        ID: 'Contact'
     }, {
         Title: 'CODE GENERATOR',
-        LinkText: '/#/codeGenerator'
+        LinkText: '/#/codeGenerator',
+        ID: 'code-generator'
     }];
 }]);

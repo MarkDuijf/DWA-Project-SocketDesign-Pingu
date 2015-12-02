@@ -42,31 +42,46 @@
     <!-- Nav -->
     <nav ng-controller="menuControl" id="nav">
         <ul>
-            <li ng-repeat="menu in menuItems"><a href="{{menu.LinkText}}">{{menu.Title}}</a></li>
+            <li ng-repeat="menu in menuItems"><a id="{{menu.ID}}" href="{{menu.LinkText}}">{{menu.Title}}</a></li>
         </ul>
     </nav>
 </header>
 <ng-view></ng-view>
 <!-- Footer -->
-<footer id="footer">
+<!--<footer id="footer">-->
 
-    <!-- Icons -->
-    <ul class="actions">
-        <li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
-        <li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
-        <li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>
-        <li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
-        <li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>
-        <li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
-    </ul>
+    <!--&lt;!&ndash; Icons &ndash;&gt;-->
+    <!--<ul class="actions">-->
+        <!--<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>-->
+        <!--<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>-->
+        <!--<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>-->
+        <!--<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>-->
+        <!--<li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>-->
+        <!--<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>-->
+    <!--</ul>-->
 
-    <!-- Menu -->
-    <ul class="menu">
-        <li>&copy; Untitled</li>
-        <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-    </ul>
+    <!--&lt;!&ndash; Menu &ndash;&gt;-->
+    <!--<ul class="menu">-->
+        <!--<li>&copy; Untitled</li>-->
+        <!--<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>-->
+    <!--</ul>-->
 
-</footer>
+<!--</footer>-->
 </body>
+<script>
+    $(window).resize(function() {
+        if ($(this).width() < 820) {
+            $('#about-us').hide();
+            $('#github').hide();
+            $('#hello-world').hide();
+            $('#Contact').hide();
+        } else {
+            $('#about-us').show();
+            $('#github').show();
+            $('#hello-world').show();
+            $('#Contact').show();
+        }
+    });
+</script>
 
 </html>
