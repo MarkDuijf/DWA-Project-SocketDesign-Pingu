@@ -20,7 +20,16 @@ var userSchema = new mongoose.Schema({
     },
     password:{
         type: String,
-        required: true
+        required: true,
+        validate: [
+            function(username) {
+                if(username.length >= 3 && username.length <= 15 ){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        ]
     },
     email: {
         type: String,
