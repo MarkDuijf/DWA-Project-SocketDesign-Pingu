@@ -1,18 +1,21 @@
 #helloworld {
     background-image: url("images/helloworld.jpg");
-    background-position: left;
+    /*background-position: left;*/
+    background-size: cover;
     /*color: #ddd;*/
 }
 
 #GitHub {
     background-image: url("images/Github.jpg");
-    background-position: left;
+    /*background-position: left;*/
+    background-size: cover;
     /*color: #ddd;*/
 }
 
 #aboutus {
     background-image: url("images/officepage.jpg");
-    background-position: left;
+    /*background-position: left;*/
+    background-size: cover;
     /*color: #ddd;*/
 }
 
