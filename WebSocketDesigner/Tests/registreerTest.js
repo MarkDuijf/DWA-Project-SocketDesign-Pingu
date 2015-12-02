@@ -15,8 +15,8 @@ var agent = supertest.agent(app);
                username: 'SebastiaanVonk',
                password: 'testtest',
                email: 'asdfg',
-               firstname: 'Sebastiaan',
-               lastname: 'Vonk',
+               firstName: 'Sebastiaan',
+               lastName: 'Vonk',
                confirmationLink: 'www.han.nl'
            };
 
