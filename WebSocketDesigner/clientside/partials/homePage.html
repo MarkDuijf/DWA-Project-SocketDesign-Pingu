@@ -1,12 +1,10 @@
-<div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
-
 <section id="intro" class="main style1 dark fullscreen">
     <div class="content container 75%">
         <header>
             <h2>Hey.</h2>
         </header>
-        <button data-toggle="modal" data-backdrop="static" data-target="#loginModal">Login</button>
-        <button data-toggle="modal" data-backdrop="static" data-target="#registerModal">Register</button>
+        <button id="logInButton" data-toggle="modal" data-backdrop="static" data-target="#loginModal">Login</button>
+        <button id="registerButton" data-toggle="modal" data-backdrop="static" data-target="#registerModal">Register</button>
         <footer>
             <a href="#aboutus" class="button style2 down">More</a>
         </footer>
@@ -142,6 +140,7 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
             </div>
         </div>
