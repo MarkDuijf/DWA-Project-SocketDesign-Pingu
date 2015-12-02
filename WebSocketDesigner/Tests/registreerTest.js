@@ -7,9 +7,7 @@ var expect = chai.expect;
 var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
-var testDbName = 'socketDesignerDB';
 
-mongoose.connect('mongodb://localhost/' + testDbName, function(){
    describe('Als een gebruiker wil registreren moet', function(){
 
        it('een fout e-mailadres geweigerd worden', function(done){
@@ -35,4 +33,3 @@ mongoose.connect('mongodb://localhost/' + testDbName, function(){
                });
        });
    });
-});
