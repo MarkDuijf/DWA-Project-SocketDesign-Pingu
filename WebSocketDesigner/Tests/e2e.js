@@ -3,7 +3,7 @@
  */
 // required libraries
 var webdriverio = require('webdriverio');
-var expect = require('chai').expect;
+var expect      = require('chai').expect;
 
 var mongoose    = require('mongoose');
 var dbName      = "socketDesignerDB";

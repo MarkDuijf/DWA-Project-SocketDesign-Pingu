@@ -69,20 +69,13 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       '});\n\n';
   };
 
-  var generateClientScript = function(){
-    return '//This is the script you have to put in the head of the html\n' +
-      '<scr' + 'ipt src=\"socket.io/socket.io.js\"></scr' + 'ipt>\n\n';
-  };
-
   var generateClientSocket = function(messageArray){
     return '//This is the socket.io code for the client\n' +
-      '<scr'+'ipt>\n' +
-      '  var socket = io();\n' +
-      '  socket.on(\'news\', function(data){\n' +
-      '    console.log(data);\n' +
-      '    socket.emit(\'my other event\', {my: \'data\'});\n' +
-      '  });\n' +
-      '</scr' + 'ipt>\n\n';
+      'var socket = io();\n' +
+      'socket.on(\'news\', function(data){\n' +
+      '  console.log(data);\n' +
+      '  socket.emit(\'my other event\', {my: \'data\'});\n' +
+      '});\n'
   };
 
   var errorHandling = function(input){
@@ -109,15 +102,17 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var output = '';
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      temp.push(generateServer(input.host.port));
-      temp.push(generateServerSocket(output));
-      temp.push(generateClientScript());
-      temp.push(generateClientSocket(output));
+      console.log(input.on.message);
+      temp.push(JSON.stringify(input, null, 4));
+      //temp.push(generateServer(input.host.port));
+      //temp.push(generateServerSocket(output));
+      //temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){
         output += temp[i];
       }
       generated.setValue(output, 1);
       $scope.error = null;
+
     }
     catch
         (e) {

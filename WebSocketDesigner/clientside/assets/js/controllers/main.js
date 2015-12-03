@@ -36,6 +36,11 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
     $scope.loginData.username = "";
     $scope.loginData.password = "";
 
+    $scope.contact = {};
+    $scope.contact.name = "";
+    $scope.contact.email = "";
+    $scope.contact.message = "";
+
     $scope.loggedIn = false;
     $scope.homeMessage = "No message";
     $scope.showHomeMessage = false;
@@ -109,7 +114,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             password: $scope.registerData.password
         };
 
-        $http.post("/email", emailData).
+        $http.post("/confirmationEmail", emailData).
         success( function(data) {
             console.log("Succes! " + data);
         }).
@@ -142,6 +147,33 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             $scope.isErrorMessage = true;
         });
     };
+
+    $scope.sendMessage = function() {
+        var messageData = {
+            name: $scope.contact.name,
+            email: $scope.contact.email,
+            message: $scope.contact.message
+        };
+        $http.post("/contact", messageData).
+        success( function(data) {
+            console.log("Succes! " + data);
+            $scope.loggedIn = true;
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "Message has been sent!";
+            $scope.isErrorMessage = false;
+
+            $scope.contact.name = "";
+            $scope.contact.email = "";
+            $scope.contact.message = "";
+        }).
+        error(function(data,status) {
+            console.log("ERROR:", data, status);
+            $scope.loginData.password = "";
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "Message failed to send";
+            $scope.isErrorMessage = true;
+        });
+    }
 
     $scope.openLoginModal = function() {
         $(function() {

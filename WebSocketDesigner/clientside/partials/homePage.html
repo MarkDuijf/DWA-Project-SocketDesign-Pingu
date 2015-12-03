@@ -63,16 +63,16 @@
             <!-- Contact Form -->
             <form method="post" action="#">
                 <div class="row 50%">
-                    <div class="6u 12u(mobile)"><input type="text" name="name" placeholder="Name" /></div>
-                    <div class="6u 12u(mobile)"><input type="email" name="email" placeholder="Email" /></div>
+                    <div class="6u 12u(mobile)"><input ng-model="contact.name" type="text" name="name" placeholder="Name" /></div>
+                    <div class="6u 12u(mobile)"><input ng-model="contact.email" type="email" name="email" placeholder="Email" /></div>
                 </div>
                 <div class="row 50%">
-                    <div class="12u"><textarea name="message" placeholder="Message" rows="6"></textarea></div>
+                    <div class="12u"><textarea ng-model="contact.message" name="message" placeholder="Message" rows="6"></textarea></div>
                 </div>
                 <div class="row">
                     <div class="12u">
                         <ul class="actions">
-                            <li><input type="submit" value="Send Message" /></li>
+                            <li><input type="button" ng-click="sendMessage()" value="Send Message" /></li>
                         </ul>
                     </div>
                 </div>
