@@ -83,6 +83,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
             $scope.isErrorMessage = false;
+                $scope.registerData = {};
         }).
         error( function(data,status) {
             console.log("ERROR:", data, status);

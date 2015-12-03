@@ -56,7 +56,7 @@ app.post('/confirmationEmail',function(req,res){
         from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
         to: req.body.email, // list of receivers
         subject: 'Hello ' + req.body.firstName, // Subject line
-        text: "Is it me you're looking for?", // plaintext body
+        text: "Please activate your account.", // plaintext body
         html: "<p>" + req.body.firstName + " " + req.body.lastName + "</p> <br> <p>" + req.body.username + ": " + req.body.password + " </p>" // html body
     };
 
@@ -75,7 +75,6 @@ app.post('/confirmationEmail',function(req,res){
 mongoose.connect('mongodb://localhost/' + dbName, function(){
     app.post('/login', function(req, res) {
         User.findOne({username: req.body.username, password: req.body.password}, function(err, user) {
-            console.log(user);
             if(err) {
                 console.log(err);
                 req.session.loggedin = false;

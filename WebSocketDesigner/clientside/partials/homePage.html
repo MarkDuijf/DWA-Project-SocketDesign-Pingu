@@ -1,4 +1,4 @@
-<!-- <div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div> -->
+<div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
 <section id="intro" class="main style1 dark fullscreen">
     <div class="content container 75%">
         <header>
@@ -63,16 +63,16 @@
             <!-- Contact Form -->
             <form method="post" action="#">
                 <div class="row 50%">
-                    <div class="6u 12u(mobile)"><input ng-model="contact.name" type="text" name="name" placeholder="Name" /></div>
-                    <div class="6u 12u(mobile)"><input ng-model="contact.email" type="email" name="email" placeholder="Email" /></div>
+                    <div class="6u 12u(mobile)"><input id="contactName" ng-model="contact.name" type="text" name="name" placeholder="Name" /></div>
+                    <div class="6u 12u(mobile)"><input id="contactEmail" ng-model="contact.email" type="email" name="email" placeholder="Email" /></div>
                 </div>
                 <div class="row 50%">
-                    <div class="12u"><textarea ng-model="contact.message" name="message" placeholder="Message" rows="6"></textarea></div>
+                    <div class="12u"><textarea id="contactMessage" ng-model="contact.message" name="message" placeholder="Message" rows="6"></textarea></div>
                 </div>
                 <div class="row">
                     <div class="12u">
                         <ul class="actions">
-                            <li><input type="button" ng-click="sendMessage()" value="Send Message" /></li>
+                            <li><input id="contactButton" type="button" ng-click="sendMessage()" value="Send Message" /></li>
                         </ul>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="register()" data-dismiss="modal">Register</button>
+                <button id="registerButtonForm" type="button" class="btn btn-primary" ng-click="register()" data-dismiss="modal">Register</button>
             </div>
         </div>
     </div>
@@ -142,7 +142,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
+                <button id="logInButtonForm" type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
             </div>
         </div>
     </div>
