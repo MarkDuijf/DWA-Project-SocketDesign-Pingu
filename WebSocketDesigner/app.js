@@ -29,7 +29,29 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-app.post('/email',function(req,res){
+app.post('/contact', function(req, res) {
+    var mailOptions = {
+        from: 'Contact Form <dwasdeu@gmail.com>', // sender address
+        to: 'dwasdeu@gmail.com', // list of receivers
+        subject: 'Bericht van contact formulier', // Subject line
+        text: "Contact form message", // plaintext body
+        html: "Bericht van: " + req.body.name + ", email naar: " + req.body.email + "<br><br><b>Bericht:</b><br>" + req.body.message // html body
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            res.status(500);
+            res.send("Error!" + error);
+            return console.log(error);
+        }
+        console.log('Message sent: ' + info.response);
+
+        res.status(200);
+        res.send("Succes!");
+    });
+});
+
+app.post('/confirmationEmail',function(req,res){
     var mailOptions = {
         from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
         to: req.body.email, // list of receivers
