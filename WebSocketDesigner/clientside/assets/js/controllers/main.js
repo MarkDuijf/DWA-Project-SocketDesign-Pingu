@@ -3,11 +3,11 @@ var theApp = angular.module("generatorApp", ['ngRoute']);
 theApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-        when('/', {
+        when('/home', {
             templateUrl: 'partials/homePage.html',
             controller: 'homeController'
         }).
-        when('/:email/:confirmation', {
+        when('/home/:email/:confirmation', {
             templateUrl: 'partials/homePage.html',
             controller: 'homeController'
         }).
@@ -20,7 +20,7 @@ theApp.config(['$routeProvider',
             controller: 'chatController'
         }).
         otherwise({
-            redirectTo: '/'
+            redirectTo: '/home'
         });
     }]);
 
@@ -115,7 +115,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             password: $scope.registerData.password
         };
 
-        $http.post("/confirmationEmail", emailData).
+        $http.post("/email", emailData).
         success( function(data) {
             console.log("Succes! " + data);
         }).

@@ -51,7 +51,8 @@ app.post('/contact', function(req, res) {
     });
 });
 
-app.post('/confirmationEmail',function(req,res){
+app.post('/email',function(req,res){
+
     var mailOptions = {
         from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
         to: req.body.email, // list of receivers
