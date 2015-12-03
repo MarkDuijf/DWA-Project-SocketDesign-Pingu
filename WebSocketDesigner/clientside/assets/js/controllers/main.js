@@ -177,10 +177,6 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         ID: 'github'
 
     }, {
-        Title: 'COMMUNITY CHAT',
-        LinkText: '/#/chatPage',
-        ID: 'community-chat'
-    }, {
         Title: 'HELLO WORLD',
         LinkText: '#helloworld',
         ID: 'hello-world'
@@ -192,5 +188,9 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         Title: 'CODE GENERATOR',
         LinkText: '/#/codeGenerator',
         ID: 'code-generator'
+    }, {
+        Title: 'COMMUNITY CHAT',
+        LinkText: '/#/chatPage',
+        ID: 'community-chat'
     }];
 }]);
