@@ -8,6 +8,10 @@ var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
 
+var mongoose    = require('mongoose');
+var dbName      = "socketDesignerDB";
+var User        = require('../clientside/models/user');
+
 describe('Als een gebruiker wil registreren moet', function(){
 
     it('een fout e-mailadres geweigerd worden', function(done){
@@ -142,10 +146,10 @@ describe('Als een gebruiker wil registreren moet', function(){
             .expect(200)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
-            expect(err).to.be.null;
-            expect(res.text).to.equal("Account registered");
-            done();
-        });
+                expect(err).to.be.null;
+                expect(res.text).to.equal("Account registered");
+                done();
+            });
     });
 
     it('een gebruikersnaam die al gebruikt is geweigerd worden', function(done) {
@@ -236,6 +240,34 @@ describe('Als een gebruiker wil registreren moet', function(){
             .end(function(err,res) {
                 expect(err).to.be.null;
                 expect(res.text).to.equal("Error registering, missing/wrong data");
+
+                mongoose.connect('mongodb://localhost/' + dbName, function(){
+                    User.remove({username: 'EricJans'}, function(err, result) {
+                        if(err) { throw err; }
+                    });
+
+                    User.remove({username: 'SebastiaanVonk'}, function(err, result) {
+                        if(err) { throw err; }
+                    });
+
+                    User.remove({username: 'Mark'}, function(err, result) {
+                        if(err) { throw err; }
+                    });
+
+                    User.remove({username: 'jo'}, function(err, result) {
+                        if(err) { throw err; }
+                    });
+
+                    User.remove({username: 'VincentvanRossum'}, function(err, result) {
+                        if(err) { throw err; }
+                        console.log("Tester removed");
+                    });
+
+                    User.remove({username: 'SamvanGeijn'}, function(err, result) {
+                        if(err) { throw err; }
+                    });
+                });
+
                 done();
             });
     });
