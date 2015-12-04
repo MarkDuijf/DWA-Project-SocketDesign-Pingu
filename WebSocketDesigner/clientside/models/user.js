@@ -30,7 +30,8 @@ var userSchema = new mongoose.Schema({
         required: true,
         validate: [
             function(email) {
-                return email.indexOf('@') === -1;
+                var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                return re.test(email);
             },
             "Doesn't have a @"
         ]
