@@ -85,7 +85,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4>Register</h4>
-                <div ng-show="registererror != null" class="alert alert-danger">
+                <div ng-show="registererror != null" id="registerError" class="alert alert-danger">
                     {{registererror}}
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -127,7 +127,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4>Login</h4>
-                <div ng-show="loginerror != null" class="alert alert-danger">
+                <div ng-show="loginerror != null" id="loginError" class="alert alert-danger">
                     {{loginerror}}
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

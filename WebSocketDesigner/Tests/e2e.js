@@ -16,9 +16,9 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
     });
 });
 
-describe("Selenium Tests - Login and Register", function() {
+describe("Selenium Tests - Login, Register and Contact", function() {
 
-    this.timeout(45000);
+    this.timeout(90000);
     var browser;
 
     before( function (done) {
@@ -36,23 +36,8 @@ describe("Selenium Tests - Login and Register", function() {
             .url("http://localhost:13000")
             .click('#logInButton')
             .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 1500)
-            .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
-                expect(result).to.be.a("string");
-                expect(result).to.have.string('Error: Wrong username/password');
-                done();
-            });
-    });
-
-
-    it("Should get an username/password doesn't exist error", function(done) {
-        browser
-            .url("http://localhost:13000")
-            .click('#logInButton')
-            .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 1500)
-            .getText("#topMessage").then( function(result) {
+            .waitForVisible('#loginError', 5000)
+            .getText("#loginError").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Error: Wrong username/password');
@@ -70,7 +55,7 @@ describe("Selenium Tests - Login and Register", function() {
             .setValue('#password', 'abc123')
             .setValue('#email', 'iets@iets.nl')
             .click('#registerButtonForm')
-            .waitForVisible('#topMessage', 1500)
+            .waitForVisible('#topMessage', 5000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -92,8 +77,8 @@ describe("Selenium Tests - Login and Register", function() {
                 expect(value).to.be.a("string");
             })
             .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 1500)
-            .getText("#topMessage").then( function(result) {
+            .waitForVisible('#loginError', 5000)
+            .getText("#loginError").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Not yet activated');
@@ -114,7 +99,7 @@ describe("Selenium Tests - Login and Register", function() {
                 expect(value).to.be.a("string");
             })
             .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 1500)
+            .waitForVisible('#topMessage', 5000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -130,7 +115,7 @@ describe("Selenium Tests - Login and Register", function() {
             .setValue('#contactEmail', 'dwasdeu@gmail.com')
             .setValue('#contactMessage', 'Test message 123')
             .click('#contactButton')
-            .waitForVisible('#topMessage', 1500)
+            .waitForVisible('#topMessage', 5000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
