@@ -45,20 +45,6 @@ describe("Selenium Tests - Login and Register", function() {
             });
     });
 
-    it("Should get a wrong/missing data error", function(done) {
-        browser
-            .url("http://localhost:13000")
-            .click('#registerButton')
-            .click('#registerButtonForm')
-            .waitForVisible('#topMessage', 1500)
-            .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
-                expect(result).to.be.a("string");
-                expect(result).to.have.string('Error registering, missing/wrong data');
-                done();
-            });
-    });
-
 
     it("Should get an username/password doesn't exist error", function(done) {
         browser
@@ -133,6 +119,22 @@ describe("Selenium Tests - Login and Register", function() {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('You have been logged in');
+                done();
+            });
+    });
+
+    it("Should send a message via the contact form", function(done) {
+        browser
+            .url("http://localhost:13000")
+            .setValue('#contactName', 'Naam')
+            .setValue('#contactEmail', 'dwasdeu@gmail.com')
+            .setValue('#contactMessage', 'Test message 123')
+            .click('#contactButton')
+            .waitForVisible('#topMessage', 1500)
+            .getText("#topMessage").then( function(result) {
+                console.log("Message is: ", result);
+                expect(result).to.be.a("string");
+                expect(result).to.have.string('Message has been sent!');
                 done();
             });
     });

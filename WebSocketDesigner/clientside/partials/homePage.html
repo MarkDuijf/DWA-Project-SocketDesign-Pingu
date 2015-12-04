@@ -1,4 +1,4 @@
-<!-- <div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div> -->
+<div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
 <section id="intro" class="main style1 dark fullscreen">
     <div class="content container 75%">
         <header>
@@ -16,11 +16,11 @@
 <section id="aboutus" class="main style2 right dark fullscreen">
     <div class="content box style2">
         <header>
-            <h2>What I Do</h2>
+            <h2>About us</h2>
         </header>
-        <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
-            Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
-            id varius justo euismod in. Curabitur egestas consectetur magna.</p>
+        <p>We are a group of 10 people creating a webapplication in which you can generate socket.io code with the inputted YAML code.
+            In this project there is an US devision and an EU devision. Also there is an availability to save the inputted YAML code.
+            The saved pieces of code can be reviewed at the profile page.</p>
     </div>
     <a href="#GitHub" class="button style2 down anchored">Next</a>
 </section>
@@ -29,11 +29,10 @@
 <section id="GitHub" class="main style2 left dark fullscreen">
     <div class="content box style2">
         <header>
-            <h2>Who I Am</h2>
+            <h2>GitHub</h2>
         </header>
-        <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
-            Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
-            id varius justo euismod in. Curabitur egestas consectetur magna.</p>
+        <p>We are working on an online platform in which you can use the generator. At our github page you can see the whole structure of the website.
+            You can visit our githup page <a href="https://github.com/MarkDuijf/DWA-Project-SocketDesign-Pingu" target="_blank"><b>here</b></a></p>
     </div>
     <a href="#helloworld" class="button style2 down anchored">Next</a>
 </section>
@@ -42,11 +41,10 @@
 <section id="helloworld" class="main style2 right dark fullscreen">
     <div class="content box style2">
         <header>
-            <h2>Who I Am</h2>
+            <h2>Hello Chat</h2>
         </header>
-        <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.
-            Fusce blandit ultrices sapien, in accumsan orci rhoncus eu. Sed sodales venenatis arcu,
-            id varius justo euismod in. Curabitur egestas consectetur magna.</p>
+        <p>If you are new to this generator, there is a possibility to try out the functionality. At our 'Hello World' page you can see an
+            example YAML input and the generated client side and server side code.</p>
     </div>
     <a href="#contact" class="button style2 down anchored">Next</a>
 </section>
@@ -56,23 +54,23 @@
     <div class="content container">
         <header>
             <h2>Say Hello.</h2>
-            <p>Lorem ipsum dolor sit amet et sapien sed elementum egestas dolore condimentum.</p>
+            <p>If you want more information or you have questions for us, do not hesitate to send us a message!</p>
         </header>
         <div class="box container 75%">
 
             <!-- Contact Form -->
             <form method="post" action="#">
                 <div class="row 50%">
-                    <div class="6u 12u(mobile)"><input ng-model="contact.name" type="text" name="name" placeholder="Name" /></div>
-                    <div class="6u 12u(mobile)"><input ng-model="contact.email" type="email" name="email" placeholder="Email" /></div>
+                    <div class="6u 12u(mobile)"><input id="contactName" ng-model="contact.name" type="text" name="name" placeholder="Name" /></div>
+                    <div class="6u 12u(mobile)"><input id="contactEmail" ng-model="contact.email" type="email" name="email" placeholder="Email" /></div>
                 </div>
                 <div class="row 50%">
-                    <div class="12u"><textarea ng-model="contact.message" name="message" placeholder="Message" rows="6"></textarea></div>
+                    <div class="12u"><textarea id="contactMessage" ng-model="contact.message" name="message" placeholder="Message" rows="6"></textarea></div>
                 </div>
                 <div class="row">
                     <div class="12u">
                         <ul class="actions">
-                            <li><input type="button" ng-click="sendMessage()" value="Send Message" /></li>
+                            <li><input id="contactButton" type="button" ng-click="sendMessage()" value="Send Message" /></li>
                         </ul>
                     </div>
                 </div>
@@ -115,7 +113,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="register()" data-dismiss="modal">Register</button>
+                <button id="registerButtonForm" type="button" class="btn btn-primary" ng-click="register()" data-dismiss="modal">Register</button>
             </div>
         </div>
     </div>
@@ -142,7 +140,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
+                <button id="logInButtonForm" type="button" class="btn btn-primary" ng-click="login()" data-dismiss="modal">Login</button>
             </div>
         </div>
     </div>
