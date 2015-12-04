@@ -246,21 +246,8 @@ describe('Als een gebruiker wil registreren moet', function(){
                         if(err) { throw err; }
                     });
 
-                    User.remove({username: 'SebastiaanVonk'}, function(err, result) {
-                        if(err) { throw err; }
-                    });
-
                     User.remove({username: 'Mark'}, function(err, result) {
                         if(err) { throw err; }
-                    });
-
-                    User.remove({username: 'jo'}, function(err, result) {
-                        if(err) { throw err; }
-                    });
-
-                    User.remove({username: 'VincentvanRossum'}, function(err, result) {
-                        if(err) { throw err; }
-                        console.log("Tester removed");
                     });
 
                     User.remove({username: 'SamvanGeijn'}, function(err, result) {
