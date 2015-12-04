@@ -220,7 +220,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     it('een wachtwoord langer dan 3 en korter dan 15 tekens geaccepteerd worden', function(done) {
         var register  = {
             username: 'EricJans',
-            password: 'Ditiseenheellangwachtwoord',
+            password: 'wachtwoord',
             email: 'ericjans@student.han.nl',
             firstName: 'Eric',
             lastName: 'Jans',
@@ -231,11 +231,11 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(500)
+            .expect(200)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Error registering, missing/wrong data");
+                expect(res.text).to.equal("Account registered");
                 done();
             });
     });
