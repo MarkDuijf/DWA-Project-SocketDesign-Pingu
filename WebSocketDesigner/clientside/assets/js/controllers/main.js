@@ -28,7 +28,7 @@ theApp.config(['$routeProvider',
         });
     }]);
 
-theApp.controller('homeController', function($scope, $http, $routeParams) {
+theApp.controller('homeController', function($scope, $http, $routeParams, $timeout) {
     $scope.registerData = {};
     $scope.registerData.firstName = "";
     $scope.registerData.lastName = "";
@@ -87,26 +87,28 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
             $scope.isErrorMessage = false;
-                $scope.registerData = {};
+            $scope.registerData = {};
         }).
         error( function(data,status) {
             console.log("ERROR:", data, status);
             if(data === "Email already exists") {
                 $scope.registerData.email = "";
-                $scope.showHomeMessage = true;
-                $scope.homeMessage = "This email address already exists.";
-                $scope.isErrorMessage = true;
+                //$scope.showHomeMessage = true;
+                //$scope.homeMessage = "This email address already exists.";
+                //$scope.isErrorMessage = true;
             } else if(data === "Username already exists") {
                 $scope.registerData.username = "";
-                $scope.showHomeMessage = true;
-                $scope.homeMessage = "This username already exists.";
-                $scope.isErrorMessage = true;
-            } else {
-                $scope.showHomeMessage = true;
-                $scope.homeMessage = "Error: " + data;
-                $scope.isErrorMessage = true;
-            }
+                //$scope.showHomeMessage = true;
+                //$scope.homeMessage = "This username already exists.";
+                //$scope.isErrorMessage = true;
+            } //else {
+            //    //$scope.showHomeMessage = true;
+            //    //$scope.homeMessage = "Error: " + data;
+            //    //$scope.isErrorMessage = true;
+            //}
             $scope.registerData.password = "";
+            $scope.registererror = "Error: " + data;
+            $timeout(function() {$('#registerModal').modal('show')}, 800);
         });
     };
 
@@ -147,9 +149,13 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
         error(function(data,status) {
             console.log("ERROR:", data, status);
             $scope.loginData.password = "";
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "Error: " + data;
-            $scope.isErrorMessage = true;
+            $scope.loginData.username = "";
+            //$scope.showHomeMessage = true;
+            //$scope.homeMessage = "Error: " + data;
+            //$scope.isErrorMessage = true;
+            $scope.loginerror = "Error: " + data;
+            $timeout(function() {$('#loginModal').modal('show')}, 800);
+
         });
     };
 
