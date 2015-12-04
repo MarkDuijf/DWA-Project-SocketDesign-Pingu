@@ -178,7 +178,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             $scope.homeMessage = "Message failed to send";
             $scope.isErrorMessage = true;
         });
-    }
+    };
 
     $scope.openLoginModal = function() {
         $(function() {
