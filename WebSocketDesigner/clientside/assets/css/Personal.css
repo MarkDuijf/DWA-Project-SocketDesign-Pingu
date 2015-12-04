@@ -31,7 +31,6 @@
     /*top: 50px;*/
     /*right: 20px;*/
     /*height: 85vh;*/
-    top: -147px;
     float:right;
 }
 
@@ -43,6 +42,7 @@
 }
 
 .generatorPage > pre {
+    top: -276px;
     width: 45%;
     min-width: 600px;
     height: 100%;
@@ -51,8 +51,10 @@
     float: left;
 }
 
-#generateButtons {
-    vertical-align: middle;
+.generateButtons {
+    width: 8em;
+    margin: 10px;
+    white-space: initial;
 }
 
 /*#generateButtons > div {*/

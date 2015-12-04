@@ -10,25 +10,19 @@ var userSchema = new mongoose.Schema({
         required: true,
         validate: [
             function(username) {
-                if(username.length >= 3 && username.length <= 15 ){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+                return username.length >= 3 && username.length <= 15;
+            },
+            "Username is too long or too short"
         ]
     },
     password:{
         type: String,
         required: true,
         validate: [
-            function(username) {
-                if(username.length >= 3 && username.length <= 15 ){
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+            function(password) {
+                return password.length >= 3 && password.length <= 15;
+            },
+            "Password is too long or too short"
         ]
     },
     email: {
@@ -36,12 +30,7 @@ var userSchema = new mongoose.Schema({
         required: true,
         validate: [
             function(email) {
-                if(email.indexOf('@') === -1)
-                {
-                    return false;
-                } else {
-                    return true;
-                }
+                return email.indexOf('@') === -1;
             },
             "Doesn't have a @"
         ]

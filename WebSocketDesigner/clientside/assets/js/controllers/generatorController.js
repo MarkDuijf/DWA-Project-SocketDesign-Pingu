@@ -102,14 +102,17 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var output = '';
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      temp.push(generateServer(input.host.port));
-      temp.push(generateServerSocket(output));
-      temp.push(generateClientSocket(output));
+      console.log(input.on.message);
+      temp.push(JSON.stringify(input, null, 4));
+      //temp.push(generateServer(input.host.port));
+      //temp.push(generateServerSocket(output));
+      //temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){
         output += temp[i];
       }
       generated.setValue(output, 1);
       $scope.error = null;
+
     }
     catch
         (e) {

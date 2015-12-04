@@ -3,11 +3,11 @@ var theApp = angular.module("generatorApp", ['ngRoute']);
 theApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
-        when('/', {
+        when('/home', {
             templateUrl: 'partials/homePage.html',
             controller: 'homeController'
         }).
-        when('/:email/:confirmation', {
+        when('/home/:email/:confirmation', {
             templateUrl: 'partials/homePage.html',
             controller: 'homeController'
         }).
@@ -19,8 +19,12 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/chatPage.html',
             controller: 'chatController'
         }).
+        when('/helloworld', {
+            templateUrl: 'partials/helloworld.html',
+            controller: ''
+        }).
         otherwise({
-            redirectTo: '/'
+            redirectTo: '/home'
         });
     }]);
 
@@ -35,6 +39,11 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
     $scope.loginData = {};
     $scope.loginData.username = "";
     $scope.loginData.password = "";
+
+    $scope.contact = {};
+    $scope.contact.name = "";
+    $scope.contact.email = "";
+    $scope.contact.message = "";
 
     $scope.loggedIn = false;
     $scope.homeMessage = "No message";
@@ -78,6 +87,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
             $scope.showHomeMessage = true;
             $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
             $scope.isErrorMessage = false;
+                $scope.registerData = {};
         }).
         error( function(data,status) {
             console.log("ERROR:", data, status);
@@ -143,6 +153,33 @@ theApp.controller('homeController', function($scope, $http, $routeParams) {
         });
     };
 
+    $scope.sendMessage = function() {
+        var messageData = {
+            name: $scope.contact.name,
+            email: $scope.contact.email,
+            message: $scope.contact.message
+        };
+        $http.post("/contact", messageData).
+        success( function(data) {
+            console.log("Succes! " + data);
+            $scope.loggedIn = true;
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "Message has been sent!";
+            $scope.isErrorMessage = false;
+
+            $scope.contact.name = "";
+            $scope.contact.email = "";
+            $scope.contact.message = "";
+        }).
+        error(function(data,status) {
+            console.log("ERROR:", data, status);
+            $scope.loginData.password = "";
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "Message failed to send";
+            $scope.isErrorMessage = true;
+        });
+    };
+
     $scope.openLoginModal = function() {
         $(function() {
             $('#loginModal').modal('show')
@@ -177,10 +214,6 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         ID: 'github'
 
     }, {
-        Title: 'COMMUNITY CHAT',
-        LinkText: '/#/chatPage',
-        ID: 'community-chat'
-    }, {
         Title: 'HELLO WORLD',
         LinkText: '#helloworld',
         ID: 'hello-world'
@@ -192,5 +225,9 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         Title: 'CODE GENERATOR',
         LinkText: '/#/codeGenerator',
         ID: 'code-generator'
+    }, {
+        Title: 'COMMUNITY CHAT',
+        LinkText: '/#/chatPage',
+        ID: 'community-chat'
     }];
 }]);

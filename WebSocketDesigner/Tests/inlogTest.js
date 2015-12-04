@@ -9,9 +9,8 @@ var agent = supertest.agent(app);
     describe('Als een gebruiker wil inloggen moet', function () {
         it('een fout wachtwoord geweigerd worden', function (done) {
             var login = {
-                username: 'Mark',
-                password: 'Duijf',
-                //beide kunnen weggehaald worden, de test slaagt dan nog steeds..
+                username: 'test',
+                password: '123'
             };
 
             agent
@@ -23,6 +22,24 @@ var agent = supertest.agent(app);
                 .end(function (err, res) {
                     expect(err).to.be.null;
                     expect(res.text).to.equal('Wrong username/password');
+                    done();
+                });
+        });
+        it('een nog niet geactiveerd account weigeren', function (done) {
+            var login = {
+                username: 'demo',
+                password: 'demo'
+            };
+
+            agent
+                .post('/login')
+                .send(login)
+                .set('Content-Type', 'application/json')
+                .expect(401)
+                .expect('Content-Type', /text\/html/)
+                .end(function (err, res) {
+                    expect(err).to.be.null;
+                    expect(res.text).to.equal('Not yet activated');
                     done();
                 });
         });

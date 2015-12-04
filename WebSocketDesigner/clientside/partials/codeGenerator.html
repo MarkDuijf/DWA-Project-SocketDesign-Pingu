@@ -4,6 +4,11 @@
     {{error}}
     </div>
     </div>
+    <center><button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate client-side code</button></center>
+    <!--TODO: de onderstaande knop heeft nog geen functie. De functie namen moeten misschien wat tactischer worden-->
+    <center><button class="btn btn-validate btn-default generateButtons" ng-click="">Generate server-side code</button></center>
+    <center><button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save input</button></center>
+    <center><button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get test</button></center>
     <pre id="editor">
 info:
     appname: Sockettester
@@ -79,17 +84,17 @@ paths:
                     require: false
                     description: new data has been received
     </pre>
-    <div id="generateButtons">
-        <div>
-            <button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate code</button>
-        </div>
-        <div>
-            <button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save input</button>
-        </div>
-        <div>
-            <button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get test</button>
-        </div>
-    </div>
+    <!--<div id="generateButtons">-->
+        <!--<div>-->
+            <!--<button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate code</button>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save input</button>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get test</button>-->
+        <!--</div>-->
+    <!--</div>-->
     <pre id="generated">
     </pre>
 </div>
