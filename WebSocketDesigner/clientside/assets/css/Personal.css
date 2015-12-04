@@ -42,7 +42,7 @@
 }
 
 .generatorPage > pre {
-    top: -207px;
+    top: -276px;
     width: 45%;
     min-width: 600px;
     height: 100%;
@@ -54,6 +54,7 @@
 .generateButtons {
     width: 8em;
     margin: 10px;
+    white-space: initial;
 }
 
 /*#generateButtons > div {*/
