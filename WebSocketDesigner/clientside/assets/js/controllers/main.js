@@ -19,6 +19,10 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/chatPage.html',
             controller: 'chatController'
         }).
+        when('/helloworld', {
+            templateUrl: 'partials/helloworld.html',
+            controller: ''
+        }).
         otherwise({
             redirectTo: '/home'
         });
