@@ -1,5 +1,10 @@
 var theApp = angular.module("generatorApp", ['ngRoute']);
 
+theApp.factory('usernameFactory', function() {
+    var username = null;
+    return username;
+});
+
 theApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
@@ -28,7 +33,7 @@ theApp.config(['$routeProvider',
         });
     }]);
 
-theApp.controller('homeController', function($scope, $http, $routeParams, $timeout) {
+theApp.controller('homeController', function($scope, $http, $routeParams, $timeout, usernameFactory) {
     $scope.registerData = {};
     $scope.registerData.firstName = "";
     $scope.registerData.lastName = "";
@@ -145,6 +150,8 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
             $scope.showHomeMessage = true;
             $scope.homeMessage = "You have been logged in (this is a placeholder)";
             $scope.isErrorMessage = false;
+            usernameFactory = $scope.loginData.username;
+            console.log("logged in user is: " + usernameFactory);
         }).
         error(function(data,status) {
             console.log("ERROR:", data, status);
@@ -188,7 +195,9 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
 
     $scope.openLoginModal = function() {
         $(function() {
-            $('#loginModal').modal('show')
+            $('#loginModal').modal('show');
+            console.log(usernameFactory);
+
         })
     };
 
@@ -204,36 +213,38 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
     }
 });
 
-theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
+theApp.controller('menuControl', function ($scope, usernameFactory) {
+    console.log(usernameFactory);
+    $scope.usernameFactory = usernameFactory;
 
     $scope.menuItems = [{
-        Title: 'HOME',
-        LinkText: '#intro',
-        ID: 'home'
-    }, {
-        Title: 'ABOUT US',
-        LinkText: '#aboutus',
-        ID: 'about-us'
-    }, {
-        Title: 'GITHUB',
-        LinkText: '#GitHub',
-        ID: 'github'
+            Title: 'HOME',
+            LinkText: '#intro',
+            ID: 'home'
+        }, {
+            Title: 'ABOUT US',
+            LinkText: '#aboutus',
+            ID: 'about-us'
+        }, {
+            Title: 'GITHUB',
+            LinkText: '#GitHub',
+            ID: 'github'
 
-    }, {
-        Title: 'HELLO WORLD',
-        LinkText: '#helloworld',
-        ID: 'hello-world'
-    }, {
-        Title: 'CONTACT',
-        LinkText: '#contact',
-        ID: 'Contact'
-    }, {
-        Title: 'CODE GENERATOR',
-        LinkText: '/#/codeGenerator',
-        ID: 'code-generator'
-    }, {
-        Title: 'COMMUNITY CHAT',
-        LinkText: '/#/chatPage',
-        ID: 'community-chat'
-    }];
-}]);
+        }, {
+            Title: 'HELLO WORLD',
+            LinkText: '#helloworld',
+            ID: 'hello-world'
+        }, {
+            Title: 'CONTACT',
+            LinkText: '#contact',
+            ID: 'Contact'
+        }, {
+            Title: 'CODE GENERATOR',
+            LinkText: '/#/codeGenerator',
+            ID: 'code-generator'
+        }, {
+            Title: 'COMMUNITY CHAT',
+            LinkText: '/#/chatPage',
+            ID: 'community-chat'
+        }];
+});

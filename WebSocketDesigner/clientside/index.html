@@ -27,12 +27,16 @@
     <script src="http://nodeca.github.io/js-yaml/js/esprima.js"></script>
     <script src="http://nodeca.github.io/js-yaml/js/js-yaml.js"></script>
     <link rel="stylesheet" href="assets/css/bootstrap.min.css"/>
-    <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-    <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css"/><![endif]-->
-    <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css"/><![endif]-->
+    <!--[if lte IE 8]>
+    <script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="assets/css/ie8.css"/><![endif]-->
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="assets/css/ie9.css"/><![endif]-->
     <link rel="stylesheet" href="assets/css/Personal.css"/>
     <link rel="stylesheet" href="assets/css/main.css"/>
-    <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+    <!--[if lte IE 8]>
+    <script src="assets/js/ie/respond.min.js"></script><![endif]-->
 </head>
 <body>
 
@@ -42,6 +46,7 @@
     <!-- Nav -->
     <nav ng-controller="menuControl" id="nav">
         <ul>
+            <li ng-show="usernameFactory != null"><a>{{usernameFactory}}</a></li>
             <li ng-repeat="menu in menuItems"><a id="{{menu.ID}}" href="{{menu.LinkText}}">{{menu.Title}}</a></li>
         </ul>
     </nav>
@@ -50,26 +55,26 @@
 <!-- Footer -->
 <!--<footer id="footer">-->
 
-    <!--&lt;!&ndash; Icons &ndash;&gt;-->
-    <!--<ul class="actions">-->
-        <!--<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>-->
-        <!--<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>-->
-        <!--<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>-->
-        <!--<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>-->
-        <!--<li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>-->
-        <!--<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>-->
-    <!--</ul>-->
+<!--&lt;!&ndash; Icons &ndash;&gt;-->
+<!--<ul class="actions">-->
+<!--<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>-->
+<!--<li><a href="#" class="icon fa-facebook"><span class="label">Facebook</span></a></li>-->
+<!--<li><a href="#" class="icon fa-google-plus"><span class="label">Google+</span></a></li>-->
+<!--<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>-->
+<!--<li><a href="#" class="icon fa-pinterest"><span class="label">Pinterest</span></a></li>-->
+<!--<li><a href="#" class="icon fa-instagram"><span class="label">Instagram</span></a></li>-->
+<!--</ul>-->
 
-    <!--&lt;!&ndash; Menu &ndash;&gt;-->
-    <!--<ul class="menu">-->
-        <!--<li>&copy; Untitled</li>-->
-        <!--<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>-->
-    <!--</ul>-->
+<!--&lt;!&ndash; Menu &ndash;&gt;-->
+<!--<ul class="menu">-->
+<!--<li>&copy; Untitled</li>-->
+<!--<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>-->
+<!--</ul>-->
 
 <!--</footer>-->
 </body>
 <script>
-    $(window).resize(function() {
+    $(window).resize(function () {
         if ($(this).width() < 820) {
             $('#about-us').hide();
             $('#github').hide();
