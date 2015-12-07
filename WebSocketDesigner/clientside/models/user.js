@@ -33,7 +33,7 @@ var userSchema = new mongoose.Schema({
                 var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
                 return re.test(email);
             },
-            "Doesn't have a @"
+            "Email address is not valid"
         ]
     },
     firstName: {
