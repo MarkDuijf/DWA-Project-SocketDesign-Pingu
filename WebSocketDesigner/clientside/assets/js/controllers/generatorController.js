@@ -104,7 +104,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var output = '';
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      console.log(input.on.message);
+      //console.log(input.on.message);
       temp.push(JSON.stringify(input, null, 4));
       //temp.push(generateServer(input.host.port));
       //temp.push(generateServerSocket(output));
@@ -125,5 +125,3 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }
   };
 }]);
-
-
