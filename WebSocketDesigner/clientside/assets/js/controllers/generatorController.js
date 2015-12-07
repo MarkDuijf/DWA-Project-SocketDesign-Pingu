@@ -12,6 +12,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
 
   $scope.error = null;
 
+  //Testcode voor het oplsaan van YAML in de database, wordt verwijderd
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan
     var data = {
@@ -26,6 +27,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     });
   };
 
+  //Testcode voor het ophalen van YAML uit de database, wordt verwijderd
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
     $http.get('/projectTest').

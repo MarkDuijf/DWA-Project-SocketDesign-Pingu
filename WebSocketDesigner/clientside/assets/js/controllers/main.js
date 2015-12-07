@@ -50,6 +50,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
     $scope.showHomeMessage = false;
     $scope.isErrorMessage = false;
 
+    //Gebruikt voor het activeren van een account, kijkt of de benodigde gegevens in de adresbalk staan en voert het daarna uit
     if($routeParams.email !== undefined && $routeParams.confirmation !== undefined) {
         var confirmData = {
             email: $routeParams.email,
@@ -71,6 +72,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
         });
     }
 
+    //Gebruikt voor het registreren met de ingevoerde gegevens
     $scope.register= function() {
         var registerData = {
             email: $scope.registerData.email,
@@ -93,46 +95,16 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
             console.log("ERROR:", data, status);
             if(data === "Email already exists") {
                 $scope.registerData.email = "";
-                //$scope.showHomeMessage = true;
-                //$scope.homeMessage = "This email address already exists.";
-                //$scope.isErrorMessage = true;
             } else if(data === "Username already exists") {
                 $scope.registerData.username = "";
-                //$scope.showHomeMessage = true;
-                //$scope.homeMessage = "This username already exists.";
-                //$scope.isErrorMessage = true;
-            } //else {
-            //    //$scope.showHomeMessage = true;
-            //    //$scope.homeMessage = "Error: " + data;
-            //    //$scope.isErrorMessage = true;
-            //}
+            }
             $scope.registerData.password = "";
             $scope.registererror = "Error: " + data;
             $timeout(function() {$('#registerModal').modal('show')}, 800);
         });
     };
 
-    $scope.sendConfirmationMail = function() {
-        var emailData = {
-            email: $scope.registerData.email,
-            firstName: $scope.registerData.firstName,
-            lastName: $scope.registerData.lastName,
-            username: $scope.registerData.username,
-            password: $scope.registerData.password
-        };
-
-        $http.post("/email", emailData).
-        success( function(data) {
-            console.log("Succes! " + data);
-        }).
-        error( function(data,status) {
-            console.log("ERROR:", data, status);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "Error: " + data;
-            $scope.isErrorMessage = true;
-        });
-    };
-
+    //Gebruikt om een gebruiker in te loggen, kijkt via de server of de ingevoerde gegevens bestaan/kloppen
     $scope.login = function() {
         var loginData = {
             username: $scope.loginData.username,
@@ -159,6 +131,7 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
         });
     };
 
+    //Gebruikt door het contactformulier
     $scope.sendMessage = function() {
         var messageData = {
             name: $scope.contact.name,
@@ -198,14 +171,14 @@ theApp.controller('homeController', function($scope, $http, $routeParams, $timeo
         })
     };
 
-
+    //Verbergt de balk die onder de navigatiebalk verschijnen kan
     $scope.hideMessage = function() {
         $scope.showHomeMessage = false;
     }
 });
 
 theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
-
+    //Alle menuitems staan hier in met de linknaam, de link naar de doel pagina en een ID
     $scope.menuItems = [{
         Title: 'HOME',
         LinkText: '#intro',
