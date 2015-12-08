@@ -1,15 +1,16 @@
 /**
  * Created by developer on 8-12-15.
  */
-module.exports = function(app){
-    var bodyParser  = require('body-parser');
-    var session     = require("express-session");
-    var nodemailer  = require('nodemailer');
+module.exports = function (app) {
+    "use strict";
+    require('body-parser');
+    require("express-session");
+    var nodemailer = require('nodemailer');
 
-    var mongoose    = require('mongoose');
-    var dbName      = "socketDesignerDB";
-    var User        = require('./../models/user');
-    var Project     = require('./../models/project');
+    var mongoose = require('mongoose');
+    var dbName = "socketDesignerDB";
+    var User = require('./../models/user');
+    var Project = require('./../models/project');
 
     var transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -19,17 +20,20 @@ module.exports = function(app){
         }
     });
 
-    mongoose.connect('mongodb://localhost/' + dbName, function(){
+    mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
-        app.post('/login', function(req, res) {
-            User.findOne({username: req.body.username, password: req.body.password}, function(err, user) {
-                if(err) {
+        app.post('/login', function (req, res) {
+            User.findOne({
+                username: req.body.username,
+                password: req.body.password
+            }, function (err, user) {
+                if (err) {
                     console.log(err);
                     req.session.loggedin = false;
                     req.session.username = "";
                     res.status(500);
-                    res.send("Server error")
-                } else if(user === null) {
+                    res.send("Server error");
+                } else if (user === null) {
                     //Als een gebruiker niet gevonden kan worden met de ingevoerde gebruikersnaam en wachtwoord
                     req.session.loggedin = false;
                     req.session.username = "";
@@ -41,7 +45,7 @@ module.exports = function(app){
                     req.session.username = req.body.username;
                     res.status(200);
                     res.send("Succes!");
-                } else if(user.activated === false) {
+                } else if (user.activated === false) {
                     req.session.loggedin = false;
                     req.session.username = "";
                     res.status(403);
@@ -56,25 +60,35 @@ module.exports = function(app){
         });
 
         //Gebruikt om een account te activeren, gebruikers krijgen na het registreren een mail met een link naar deze route
-        app.post('/confirm', function(req, res) {
-            User.findOne({email: req.body.email, confirmationLink: req.body.confirmation}, function(err, user) {
-                if(user === null || user === undefined) {
+        app.post('/confirm', function (req, res) {
+            User.findOne({
+                email: req.body.email,
+                confirmationLink: req.body.confirmation
+            }, function (err, user) {
+                if (user === null || user === undefined) {
                     res.status(404);
                     res.send("Confirmation failed, account doesn't exist");
                 } else {
-                    if(user.activated === false) {
-                        User.update({email: req.body.email, confirmationLink: req.body.confirmation}, { $set: { activated: true } }, function(err, result) {
-                            if(err) {
+                    if (user.activated === false) {
+                        User.update({
+                            email: req.body.email,
+                            confirmationLink: req.body.confirmation
+                        }, {
+                            $set: {
+                                activated: true
+                            }
+                        }, function (err, result) {
+                            if (err) {
                                 console.log(err);
                                 res.status(500);
                                 res.send("Couldn't set activated to true");
                             } else {
                                 console.log(result);
                                 res.status(200);
-                                res.send("The account has been activated")
+                                res.send("The account has been activated");
                             }
                         });
-                    } else if(user.activated === true) {
+                    } else if (user.activated === true) {
                         res.status(401);
                         res.send("Account is already activated");
                     }
@@ -83,13 +97,17 @@ module.exports = function(app){
         });
 
         //Gebruikt om een gebruiker te registreren, checkt eerst of er al iemand bestaat met hetzelfde email adres of gebruikersnaam
-        app.post('/register', function(req, res) {
+        app.post('/register', function (req, res) {
             //TODO Dit moet makkelijker kunnen dan 2 findOne's in elkaar, weet even niet hoe
-            User.findOne({email: req.body.email}, function(err, user) {
-                if(user === null || user === undefined) {
-                    User.findOne({username: req.body.username}, function(err, user) {
-                        if(user === null || user === undefined) {
-                            var user = new User({
+            User.findOne({
+                email: req.body.email
+            }, function (err, user) {
+                if (user === null || user === undefined) {
+                    User.findOne({
+                        username: req.body.username
+                    }, function (err, user) {
+                        if (user === null || user === undefined) {
+                            var registerUser = new User({
                                 username: req.body.username,
                                 password: req.body.password,
                                 email: req.body.email,
@@ -99,8 +117,8 @@ module.exports = function(app){
                                 activated: false
                             });
 
-                            user.save(function(err) {
-                                if(err) {
+                            registerUser.save(function (err) {
+                                if (err) {
                                     console.log(err);
                                     res.status(401);
                                     res.send("Error registering, missing/wrong data");
@@ -117,8 +135,8 @@ module.exports = function(app){
                                         html: "<p>Please confirm your Socket Designer account</p> </p><a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
                                     };
 
-                                    transporter.sendMail(mailOptions, function(error, info){
-                                        if(error){
+                                    transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
                                             return console.log(error);
                                         }
                                         console.log('Message sent: ' + info.response);
@@ -138,7 +156,7 @@ module.exports = function(app){
         });
 
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden
-        app.post('/projectTest', function(req, res) {
+        app.post('/projectTest', function (req, res) {
             var project = new Project({
                 code_id: 4,
                 projectname: "test",
@@ -147,8 +165,8 @@ module.exports = function(app){
                 date: "2015-5-5"
             });
 
-            project.save(function(err) {
-                if(err) {
+            project.save(function (err) {
+                if (err) {
                     return console.log(error);
                     res.status(401);
                     res.send("Error registering, missing/wrong data");
@@ -158,11 +176,13 @@ module.exports = function(app){
             });
         });
 
-        app.get('/projectTest', function(req, res) {
-            Project.findOne({code_id: 4}, function(err, project) {
+        app.get('/projectTest', function (req, res) {
+            Project.findOne({
+                code_id: 4
+            }, function (err, project) {
                 res.status(200);
                 res.send(project.code);
             });
-        })
+        });
     });
 };
