@@ -30,7 +30,7 @@ var userSchema = new mongoose.Schema({
         required: true,
         validate: [
             function(email) {
-                var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //Regex voor een goed email adres
                 return re.test(email);
             },
             "Email address is not valid"

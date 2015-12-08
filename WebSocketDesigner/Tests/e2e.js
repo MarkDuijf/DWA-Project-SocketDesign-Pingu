@@ -9,13 +9,6 @@ var mongoose    = require('mongoose');
 var dbName      = "socketDesignerDB";
 var User        = require('./user');
 
-mongoose.connect('mongodb://localhost/' + dbName, function(){
-    User.remove({username: 'Tester'}, function(err, result) {
-        if(err) { throw err; }
-        console.log("Tester removed");
-    });
-});
-
 describe("Selenium Tests - Login, Register and Contact", function() {
 
     this.timeout(90000);
@@ -120,6 +113,14 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Message has been sent!');
+
+                mongoose.connect('mongodb://localhost/' + dbName, function(){
+                    User.remove({username: 'Tester'}, function(err, result) {
+                        if(err) { throw err; }
+                        console.log("Tester removed");
+                    });
+                });
+
                 done();
             });
     });
