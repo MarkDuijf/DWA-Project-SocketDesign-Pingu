@@ -132,6 +132,28 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
     //Gebruikt om een gebruiker in te loggen, kijkt via de server of de ingevoerde gegevens bestaan/kloppen
     $scope.login = function () {
+    $scope.sendConfirmationMail = function() {
+        var emailData = {
+            email: $scope.registerData.email,
+            firstName: $scope.registerData.firstName,
+            lastName: $scope.registerData.lastName,
+            username: $scope.registerData.username,
+            password: $scope.registerData.password
+        };
+
+        $http.post("/email", emailData).
+        success( function(data) {
+            console.log("Succes! " + data);
+        }).
+        error( function(data,status) {
+            console.log("ERROR:", data, status);
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "Error: " + data;
+            $scope.isErrorMessage = true;
+        });
+    };
+
+    $scope.login = function() {
         var loginData = {
             username: $scope.loginData.username,
             password: $scope.loginData.password
@@ -154,9 +176,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             //$scope.homeMessage = "Error: " + data;
             //$scope.isErrorMessage = true;
             $scope.loginerror = "Error: " + data;
-            $timeout(function () {
-                $('#loginModal').modal('show')
-            }, 800);
+            $timeout(function() {$('#loginModal').modal('show')}, 800);
 
         });
     };

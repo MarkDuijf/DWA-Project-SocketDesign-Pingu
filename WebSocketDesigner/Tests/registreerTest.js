@@ -28,7 +28,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(500)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -51,7 +51,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(200)
+            .expect(201)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -74,7 +74,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(401)
+            .expect(409)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -97,7 +97,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(500)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -120,7 +120,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(500)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -143,7 +143,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(200)
+            .expect(201)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
             expect(err).to.be.null;
@@ -166,7 +166,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(401)
+            .expect(409)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -189,7 +189,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(500)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -212,7 +212,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(500)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -235,7 +235,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             .post('/register')
             .send(register)
             .set('Content-Type', 'application/json')
-            .expect(200)
+            .expect(201)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;

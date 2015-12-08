@@ -17,7 +17,7 @@ var agent = supertest.agent(app);
                 .post('/login')
                 .send(login)
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(404)
                 .expect('Content-Type', /text\/html/)
                 .end(function (err, res) {
                     expect(err).to.be.null;
@@ -35,7 +35,7 @@ var agent = supertest.agent(app);
                 .post('/login')
                 .send(login)
                 .set('Content-Type', 'application/json')
-                .expect(401)
+                .expect(403)
                 .expect('Content-Type', /text\/html/)
                 .end(function (err, res) {
                     expect(err).to.be.null;
