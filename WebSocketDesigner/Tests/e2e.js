@@ -7,7 +7,7 @@ var expect      = require('chai').expect;
 
 var mongoose    = require('mongoose');
 var dbName      = "socketDesignerDB";
-var User        = require('../clientside/models/user');
+var User        = require('./user');
 
 mongoose.connect('mongodb://localhost/' + dbName, function(){
     User.remove({username: 'Tester'}, function(err, result) {

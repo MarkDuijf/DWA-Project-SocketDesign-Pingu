@@ -10,7 +10,7 @@ var agent = supertest.agent(app);
 
 var mongoose    = require('mongoose');
 var dbName      = "socketDesignerDB";
-var User        = require('../clientside/models/user');
+var User        = require('./user');
 
 describe('Als een gebruiker wil registreren moet', function(){
 
