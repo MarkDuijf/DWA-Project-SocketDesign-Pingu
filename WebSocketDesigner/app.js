@@ -52,6 +52,29 @@ app.post('/contact', function(req, res) {
     });
 });
 
+app.post('/email',function(req,res){
+
+    var mailOptions = {
+        from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
+        to: req.body.email, // list of receivers
+        subject: 'Hello ' + req.body.firstName, // Subject line
+        text: "Please activate your account.", // plaintext body
+        html: "<p>" + req.body.firstName + " " + req.body.lastName + "</p> <br> <p>" + req.body.username + ": " + req.body.password + " </p>" // html body
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            res.status(500);
+            res.send("Error!" + error);
+            return console.log(error);
+        }
+        console.log('Message sent: ' + info.response);
+
+        res.status(200);
+        res.send("Succes!");
+    });
+});
+
 //Verbinden met de database, hierin staan ook de paths die iets te maken hebben met mongo
 mongoose.connect('mongodb://localhost/' + dbName, function(){
     // Gebruikt om een gebruiker in te loggen
