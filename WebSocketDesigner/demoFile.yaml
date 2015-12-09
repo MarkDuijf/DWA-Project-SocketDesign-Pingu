@@ -1,0 +1,130 @@
+info:
+  title: Hello Chat
+  description: this is a test chat application
+  hostname:
+  port: 8000
+  namespace:
+
+client:
+  /globalChat
+    join:
+      summary: De user joined de algemene chat
+      description: Als de user de chatpagina bezoekt heeft deze de mogelijk te chatten met iedereen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+
+    message:
+      summary: Stuur chat naar iedereen
+      description: Wanneer een user iets post moeten alle users het ontvangen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+        - name: message
+          required: true
+          type: string
+          description:
+      responses:
+        type: emit
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
+  /roomChat
+    join:
+      summary: User joined een room
+      description: De user moet een bepaalde room kunnen joinen om daar met mensen de chatten
+      parameters:
+        - name: username
+        required: true
+        type: string
+        description:
+        - name: roomname
+          required: true
+          type: string
+          description:
+
+    message:
+      summary: De user post iets in de room
+      description: Wanneer een user in een room zit moet deze chats kunnen versturen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+        - name: message
+          required: true
+          type: string
+          description:
+        - name: roomname
+          required: true
+          type: string
+          description:
+      responses:
+        type: emit
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
+          - name: roomname
+            required: true
+            type: string
+            description:
+  /personalChat
+    message:
+      summary: User stuurt privevericht
+      description: De user moet iemand een persoonlijk bericht kunnen sturen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+        - name: message
+          required: true
+          type: string
+          description:
+      responses:
+        type: emit
+        messagename: "chat/message"
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+server:
+  /roomChat
+    message:
+      summary: wanneer er een bericht binnenkomt van een client moet deze naar alle mensen in de room verstuurd worden
+      description: niet relevant
+      responses:
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
