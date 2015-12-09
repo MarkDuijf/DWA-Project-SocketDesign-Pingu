@@ -159,7 +159,7 @@ module.exports = function (app) {
         app.post('/projectTest', function (req, res) {
             var project = new Project({
                 code_id: 4,
-                projectname: "test",
+                projectname: req.body.name,
                 username: "test",
                 code: req.body.code,
                 date: "2015-5-5"
@@ -176,6 +176,7 @@ module.exports = function (app) {
             });
         });
 
+        /*
         app.get('/projectTest', function (req, res) {
             Project.findOne({
                 code_id: 4
@@ -183,6 +184,20 @@ module.exports = function (app) {
                 res.status(200);
                 res.send(project.code);
             });
+        });
+        */
+
+        app.get('/projectTest', function (req, res) {
+            Project.find({}, function(err, projects) {
+                if(err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("Problem finding projects");
+                }
+                console.log(projects);
+                res.status(200);
+                res.send(projects);
+            })
         });
     });
 };

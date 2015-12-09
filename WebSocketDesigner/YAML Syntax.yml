@@ -1,0 +1,91 @@
+YAML
+info:
+    title:
+    description:
+    hostname:
+    port: (we genereren een app.js dus die moet misschien een poortnr. hebben)?
+    namespace:
+client:
+    /chat
+        join:
+               summary: De user post iets in de chat
+               description: weet ik veeeeeeel
+               parameters:
+                   - name: username
+                     required: true
+                     type: string
+                     description:
+
+          message:
+              summary: Wanneer een user iets post moet een andere user het kunnen ontvangen
+              description: weet ik veeeeeeel
+              parameters:
+                  - name: username
+                    required: true
+                    type: string
+                    description:
+                  - name: message
+                    required: true
+                    type: string
+                    description:n
+              responses:
+                    type: emit            /to the client itself/broadcast (socket.to(id).emit.... zo respons je naar een client zelf)
+                    messagename: "chat/message"
+                    to: client
+                    parameters:
+                      - name: message
+                        required: true
+                        type: string
+                        description:
+                      - name: username
+                        required: true
+                        type: string
+                        description:
+
+server:
+    /chat
+        date:
+            summary: De server stuurt af en toe random de datum naar de client.. als voorbeeld
+            description: niet relevant
+            parameters:
+                - name: date
+                  required: true
+                  type: date
+                  description: "de datum"
+
+
+
+
+resulteert in clientside:
+
+    socket.emit('chat/join', {username: username});
+    socket.emit('chat/message', {username: username, message: message});
+    omdat de chat message een response heeft krijgt client side een nieuwe on namelijk:
+    socket.on('chat/messageResponse', function(data){
+
+    });
+
+resulteert in serverside:
+io.on('connection', function (socket) {
+    socket.on('chat/join', function(data) {
+
+    });
+
+    socket.on('chat/message', function(data) {
+        socket.emit('chat/message', {message: data.message, username: data.username);
+    });
+
+}
+io.emit('chat/date', {date: date});
+
+
+Alle onderdelen van een list beginnen met: "- " (dash en tab)
+Arrays en lijsten:
+        responses:
+                   - type: emit/to the client/broadcast
+                     messagename: ""
+                     parameters:
+                         - name:
+                           requred:
+                           type:
+                           description:
