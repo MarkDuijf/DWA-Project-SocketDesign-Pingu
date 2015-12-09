@@ -43,7 +43,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       'var express = require(\'express\');\n' +
       'var app = express();\n' +
       'var server = require(\'http\').createServer(app);\n' +
-      'var io = require(\'socket.io\').listen(server);\n\n' +
+      'var io = require(\'socket.io\').listen(server);\n' +
       'var path = require(\'path\');\n\n' +
       'app.use(express.static(path.join(__dirname)));\n' +
       'server.listen(' + port + ');\n\n';
@@ -113,8 +113,8 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       //console.log(input.on.message);
       //temp.push(JSON.stringify(input, null, 4));
       temp.push(generateServer(input.host.port));
-      temp.push(generateServerSocket(output));
-      temp.push(generateClientSocket(output));
+      //temp.push(generateServerSocket(output));
+      //temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){
         output += temp[i];
       }
