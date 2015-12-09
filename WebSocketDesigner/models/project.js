@@ -10,7 +10,13 @@ var projectSchema = new mongoose.Schema({
     },
     projectname: {
         type: String,
-        required: true
+        required: true,
+        validate: [     // controle of de projectnaam minimaal 3 en maximaal 15 tekens lang is
+            function(projectname) {
+                return username.length >= 3 && username.length <= 15;
+            },
+            "Projectname is too long or too short"
+        ]
     },
     code_id: {
         type: Number,
@@ -18,7 +24,13 @@ var projectSchema = new mongoose.Schema({
     },
     code: {
         type: String,
-        required: true
+        required: true,
+        validate: [     // controle of de projectnaam minimaal 3 en maximaal 15 tekens lang is
+            function(code) {
+                return username.length > 0;
+            },
+            "Projectname is too short"
+        ]
     },
     date: {
         type: String,
