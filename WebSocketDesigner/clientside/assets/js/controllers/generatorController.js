@@ -12,7 +12,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
 
   $scope.error = null;
 
-  //Testcode voor het oplsaan van YAML in de database, wordt verwijderd
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan
     var data = {
@@ -27,7 +26,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     });
   };
 
-  //Testcode voor het ophalen van YAML uit de database, wordt verwijderd
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
     $http.get('/projectTest').
@@ -41,24 +39,32 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   };
 
   var generateServer = function(port){
-      return'//This is the server code, it creates a basic server on the given port \n' +
-        'var app = require(\'http\').createServer(handler); \n' +
-        'var io = require(\'socket.io\')(app);\n' +
-        'var fs = require(\'fs\');\n' +
-        'var port = ' + port + '; \n\n' +
-        'app.listen(port, function(){\n  console.log(\'server listening on port: \' + port);\n' +
-        '}); \n\n' +
-        'function handler(req, res){\n' +
-        '  fs.readFile(__dirname + \'/index.html\',' +
-        '  function(err, data){\n' +
-        '    if(err){\n' +
-        '      res.writeHead(500);\n' +
-        '      return res.end(\'Error loading index.html\');\n' +
-        '    }\n' +
-        '    res.writeHead(200);\n' +
-        '    res.end(data);\n' +
-        '  });\n' +
-        '}\n\n';
+      return'//This is the server code, it creates a basic server(using expressJS) on the given port \n' +
+      'var express = require(\'express\');\n' +
+      'var app = express();\n' +
+      'var server = require(\'http\').createServer(app);\n' +
+      'var io = require(\'socket.io\').listen(server);\n\n' +
+      'var path = require(\'path\');\n\n' +
+      'app.use(express.static(path.join(__dirname)));\n' +
+      'server.listen(' + port + ');\n\n';
+
+        // 'var app = require(\'http\').createServer(handler); \n' +
+        // 'var io = require(\'socket.io\')(app);\n' +
+        // 'var fs = require(\'fs\');\n' +
+        // 'var port = ' + port + '; \n\n' +
+        // 'app.listen(port, function(){\n  console.log(\'server listening on port: \' + port);\n' +
+        // '}); \n\n' +
+        // 'function handler(req, res){\n' +
+        // '  fs.readFile(__dirname + \'/index.html\',' +
+        // '  function(err, data){\n' +
+        // '    if(err){\n' +
+        // '      res.writeHead(500);\n' +
+        // '      return res.end(\'Error loading index.html\');\n' +
+        // '    }\n' +
+        // '    res.writeHead(200);\n' +
+        // '    res.end(data);\n' +
+        // '  });\n' +
+        // '}\n\n';
   };
   //Meerdere socketberichten = for-loop + 2 variablen(zie try)
   var generateServerSocket = function(messageArray){
@@ -105,10 +111,10 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       input = jsyaml.safeLoad(input);
       errorHandling(input);
       //console.log(input.on.message);
-      temp.push(JSON.stringify(input, null, 4));
-      //temp.push(generateServer(input.host.port));
-      //temp.push(generateServerSocket(output));
-      //temp.push(generateClientSocket(output));
+      //temp.push(JSON.stringify(input, null, 4));
+      temp.push(generateServer(input.host.port));
+      temp.push(generateServerSocket(output));
+      temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){
         output += temp[i];
       }
