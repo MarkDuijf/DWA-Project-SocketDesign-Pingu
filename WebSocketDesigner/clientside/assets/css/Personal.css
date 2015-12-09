@@ -96,3 +96,13 @@
     padding: 5px;
     text-align: center;
 }
+
+.codeKiesveld {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.codeKiesveld:hover {
+    background-color: grey;
+}

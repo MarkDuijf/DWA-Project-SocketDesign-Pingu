@@ -7,8 +7,8 @@
     <center><button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate client-side code</button></center>
     <!--TODO: de onderstaande knop heeft nog geen functie. De functie namen moeten misschien wat tactischer worden-->
     <center><button class="btn btn-validate btn-default generateButtons" ng-click="">Generate server-side code</button></center>
-    <center><button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save input</button></center>
-    <center><button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get test</button></center>
+    <center><button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save Project</button></center>
+    <center><button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get A Project</button></center>
     <pre id="editor">
 info:
     appname: Sockettester
@@ -97,4 +97,14 @@ paths:
     <!--</div>-->
     <pre id="generated">
     </pre>
+</div>
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="codeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p ng-repeat="data in beschikbareCode" ng-click="setCode(data.code)" class="codeKiesveld">{{data.projectname}}</p>
+            </div>
+        </div>
+    </div>
 </div>
