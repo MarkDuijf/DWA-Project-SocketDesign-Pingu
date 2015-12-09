@@ -10,20 +10,29 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   generated.getSession().setMode("ace/mode/javascript");
   generated.$blockScrolling = Infinity;
 
+  $scope.beschikbareCode = [];
+
   $scope.error = null;
 
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan
-    var data = {
-      code: editor.getSession().getValue()
-    };
-    $http.post("/projectTest", data).
-    success( function(data) {
-      console.log("Succes! " + data);
-    }).
-    error( function(data,status) {
-      console.log("ERROR:", data, status);
-    });
+    function myFunction() {
+      var name = prompt("Enter a project name", "My Project");
+      if (name != null) {
+        var data = {
+          code: editor.getSession().getValue(),
+          name: name
+        };
+        $http.post("/projectTest", data).
+            success( function(data) {
+              console.log("Succes! " + data);
+            }).
+            error( function(data,status) {
+              console.log("ERROR:", data, status);
+            });
+      }
+    }
+    myFunction();
   };
 
   //Code van ID 4 opvragen voor test doeleinden
@@ -31,11 +40,22 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     $http.get('/projectTest').
     success(function(data) {
       console.log("Succes! " + data);
-      editor.getSession().setValue(data);
+          console.log(data);
+          $scope.beschikbareCode = data;
+          $(function () {
+            $('#codeModal').modal('show');
+          });
     }).
     error(function(data, status) {
       console.log("ERROR:", data, status);
     })
+  };
+
+  $scope.setCode = function(code) {
+    editor.getSession().setValue(code);
+    $(function () {
+      $('#codeModal').modal('hide');
+    });
   };
 
   var generateServer = function(port){
