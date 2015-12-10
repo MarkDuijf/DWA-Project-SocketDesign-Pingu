@@ -55,7 +55,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     $http.get('/projectTest').
     success(function(data) {
       console.log("Succes! " + data);
-          console.log(data);
           $scope.beschikbareCode = data;
           $(function () {
             $('#codeModal').modal('show');
