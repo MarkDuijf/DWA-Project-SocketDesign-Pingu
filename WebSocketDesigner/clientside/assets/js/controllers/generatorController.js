@@ -107,20 +107,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   };
 
   var errorHandling = function(input){
-    //Throw an error if the host or basepath doesn't exist
-    if(input.host == undefined || input.basepath == undefined){
-      throw new Error('You didn\'t specify a basepath and/or host');
-    }
 
-    //Throw an error if the location or socket variable doesn't exist
-    if(input.host.location == undefined){
-      throw new Error('You didn\'t specify a location in the host');
-    }
-
-    //Throw an error if the location is equal to localhost and port has not been set
-    if(input.host.port == undefined && input.host.location == 'localhost' || input.host.location == 'Localhost'){
-      throw new Error('If localhost is used a port should be specified in the host');
-    }
   };
 
   $scope.Generate = function () {
@@ -128,11 +115,23 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var input = editor.getSession().getValue();
       var temp = [];
       var output = '';
+      var basePaths = [];  //Worden de basepaths in opgeslagen, zoals de client, server en info
+      var scopePaths = []; //Worden de scopes in opgeslagen, zoals de chat in de demo
+      var info = {};       //Wordt de info in opgeslagen
       input = jsyaml.safeLoad(input);
       errorHandling(input);
-      //console.log(input.on.message);
+      for(var base = 0; base < Object.keys(input).length; base++){
+        basePaths.push(Object.keys(input)[base]);
+        for(var scope = 0; scope < Object.keys(input[basePaths[base]]).length; scope++){
+          if(Object.keys(input)[base] == "info"){
+            temp.push(Object.keys(input[basePaths[base]])[scope]);
+            info[temp[scope]] = input[basePaths[base]][temp[scope]];
+          }
+        }
+        temp = [];
+      }
       //temp.push(JSON.stringify(input, null, 4));
-      temp.push(generateServer(input.host.port));
+      temp.push(generateServer(info.port));
       //temp.push(generateServerSocket(output));
       //temp.push(generateClientSocket(output));
       for(var i = 0; i < temp.length; i++){

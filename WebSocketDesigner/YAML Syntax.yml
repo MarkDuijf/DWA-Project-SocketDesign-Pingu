@@ -2,48 +2,45 @@ YAML
 info:
     title:
     description:
-    hostname:
-    port: (we genereren een app.js dus die moet misschien een poortnr. hebben)?
+    port: 3000
     namespace:
 client:
-    /chat
+    chat:
         join:
-               summary: De user post iets in de chat
-               description: weet ik veeeeeeel
-               parameters:
-                   - name: username
-                     required: true
-                     type: string
-                     description:
+            summary: De user post iets in de chat
+            description: weet ik veeeeeeel
+            parameters:
+                - name: username
+                  required: true
+                  type: string
+                  description:
 
-          message:
-              summary: Wanneer een user iets post moet een andere user het kunnen ontvangen
-              description: weet ik veeeeeeel
-              parameters:
-                  - name: username
-                    required: true
-                    type: string
-                    description:
-                  - name: message
-                    required: true
-                    type: string
-                    description:n
-              responses:
-                    type: emit            /to the client itself/broadcast (socket.to(id).emit.... zo respons je naar een client zelf)
-                    messagename: "chat/message"
-                    to: client
-                    parameters:
-                      - name: message
-                        required: true
-                        type: string
-                        description:
-                      - name: username
-                        required: true
-                        type: string
-                        description:
+        message:
+            summary: Wanneer een user iets post moet een andere user het kunnen ontvangen
+            description: weet ik veeeeeeel
+            parameters:
+                - name: username
+                  required: true
+                  type: string
+                  description:
+                - name: message
+                  required: true
+                  type: string
+                  description: n
+            responses:
+                  type: emit            /to the client itself/broadcast (socket.to(id).emit.... zo respons je naar een client zelf)
+                  parameters:
+                    - name: message
+                      required: true
+                      type: string
+                      description:
+                    - name: username
+                      required: true
+                      type: string
+                      description:
 
 server:
-    /chat
+    chat:
         date:
             summary: De server stuurt af en toe random de datum naar de client.. als voorbeeld
             description: niet relevant
@@ -51,7 +48,7 @@ server:
                 - name: date
                   required: true
                   type: date
-                  description: "de datum"
+                  description: 10-12-2015
 
 
 
@@ -79,6 +76,25 @@ io.on('connection', function (socket) {
 io.emit('chat/date', {date: date});
 
 
+info:
+    port: 80
+
+emit:
+    "MESSAGENAME HIER":
+        to: client/room/broadcast/server
+        from: client/server
+        messageData:
+
+     nieuweuser:
+
+on:
+    regarding: server/client
+    "MESSAGENAME HIER":
+       - action: emit
+         newmessageName: nieuweuser
+
+
+
 Alle onderdelen van een list beginnen met: "- " (dash en tab)
 Arrays en lijsten:
         responses:
@@ -89,3 +105,142 @@ Arrays en lijsten:
                            requred:
                            type:
                            description:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+info:
+  title: Hello Chat
+  description: this is a test chat application
+  hostname: localhost
+  port: 8000
+  namespace:
+client:
+  globalChat:
+    join:
+      summary: De user joined de algemene chat
+      description: Als de user de chatpagina bezoekt heeft deze de mogelijk te chatten met iedereen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+
+    message:
+      summary: Stuur chat naar iedereen
+      description: Wanneer een user iets post moeten alle users het ontvangen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+        - name: message
+          required: true
+          type: string
+          description:
+      responses:
+        type: emit
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
+  roomChat:
+    join:
+      summary: User joined een room
+      description: De user moet een bepaalde room kunnen joinen om daar met mensen de chatten
+      parameters:
+        - name: username
+        required: true
+        type: string
+        description:
+
+    message:
+      summary: De user post iets in de room
+      description: Wanneer een user in een room zit moet deze chats kunnen versturen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+        - name: message
+          required: true
+          type: string
+          description:
+      responses:
+        type: emit
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
+  personalChat:
+    message:
+      summary: User stuurt privevericht
+      description: De user moet iemand een persoonlijk bericht kunnen sturen
+      parameters:
+        - name: username
+          required: true
+          type: string
+          description:
+        - name: message
+          required: true
+          type: string
+          description:
+      responses:
+        type: emit
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
+
+server:
+  roomChat:
+    message:
+      summary: wanneer er een bericht binnenkomt van een client moet deze naar alle mensen in de room verstuurd worden
+      description: niet relevant
+      responses:
+        type: emit
+        parameters:
+          - name: message
+            required: true
+            type: string
+            description:
+          - name: username
+            required: true
+            type: string
+            description:
