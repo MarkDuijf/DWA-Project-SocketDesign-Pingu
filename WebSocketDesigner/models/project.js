@@ -21,6 +21,7 @@ var projectSchema = new mongoose.Schema({
     code_id: {
         type: Number,
         required: true
+        // TODO controle op uniek nummer?
     },
     code: {
         type: String,
