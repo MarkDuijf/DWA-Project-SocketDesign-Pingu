@@ -167,7 +167,7 @@ module.exports = function (app) {
 
             project.save(function (err) {
                 if (err) {
-                    return console.log(error);
+                    return console.log(err);
                     res.status(401);
                     res.send("Error registering, missing/wrong data");
                 }

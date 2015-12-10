@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var session = require("express-session");
 
 //This inserts the testdata
-require('./models/dummyData/insertData');
+var inserData = require('./models/dummyData/insertData');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));

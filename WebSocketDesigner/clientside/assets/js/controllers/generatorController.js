@@ -11,29 +11,44 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   generated.$blockScrolling = Infinity;
 
   $scope.beschikbareCode = [];
+  $scope.projectName = "My Project";
 
   $scope.error = null;
 
+  $scope.homeMessage = "No message";
+  $scope.showHomeMessage = false;
+  $scope.isErrorMessage = false;
+
   $scope.saveInput = function(){
-    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan
-    function myFunction() {
-      var name = prompt("Enter a project name", "My Project");
-      if (name != null) {
-        var data = {
-          code: editor.getSession().getValue(),
-          name: name
-        };
-        $http.post("/projectTest", data).
-            success( function(data) {
-              console.log("Succes! " + data);
-            }).
-            error( function(data,status) {
-              console.log("ERROR:", data, status);
-            });
-      }
-    }
-    myFunction();
+    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
+    $(function () {
+      $('#saveModal').modal('show');
+    });
   };
+
+  $scope.saveProject = function() {
+    var data = {
+      code: editor.getSession().getValue(),
+      name: $scope.projectName
+    };
+    $http.post("/projectTest", data).
+        success( function(data) {
+          console.log("Succes! " + data);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "Your project has been saved.";
+          $scope.isErrorMessage = false;
+        }).
+        error( function(data,status) {
+          console.log("ERROR:", data, status);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "There was an error saving your project.";
+          $scope.isErrorMessage = true;
+        });
+  };
+
+  $scope.hideMessage = function () {
+    $scope.showHomeMessage = false;
+  }
 
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
