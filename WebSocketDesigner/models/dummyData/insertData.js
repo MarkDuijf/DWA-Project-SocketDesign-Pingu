@@ -11,11 +11,9 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
     User.findOne({}, function(err, result) {
         if (err) throw err;
         if (result == null) {
-            User.remove({}, function () {
-                User.create(users, function () {
-                    console.log('Users inserted in DB!');
+            User.create(users, function (err) {
+                console.log('Users inserted in DB!',err);
                 })
-            });
         }
     });
 

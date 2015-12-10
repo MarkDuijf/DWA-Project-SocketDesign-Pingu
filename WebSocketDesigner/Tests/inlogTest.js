@@ -5,7 +5,6 @@ var agent = supertest.agent(app);
 //var User = require('../clientside/models/user');
 
 
-
     describe('Als een gebruiker wil inloggen moet', function () {
         it('een fout wachtwoord geweigerd worden', function (done) {
             var login = {
