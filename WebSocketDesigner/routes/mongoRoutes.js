@@ -159,7 +159,7 @@ module.exports = function (app) {
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var project = new Project({
                 username: "test",
-                projectname: req.body.name,
+                projectName: req.body.projectName,
                 code: req.body.code,
                 date: "2015-5-5"
             });
