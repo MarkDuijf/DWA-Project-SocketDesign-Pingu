@@ -25,6 +25,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
         browser.init(done);
     });
 
+    /*
     it("Should get an username/password doesn't exist error", function(done) {
         browser
             .url("http://localhost:13000")
@@ -117,6 +118,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 done();
             });
     });
+     */
 
     it("Should save generator code", function(done) {
         browser
@@ -129,6 +131,16 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Your project has been saved.');
+                done();
+            });
+    });
+
+    it("Should load the previously made generator code", function(done) {
+        browser
+            .url("http://localhost:13000/#/codeGenerator")
+            .click('#generatorLoadButton')
+            .waitForVisible('#codeModal', 15000)
+            .click(".codeKiesveld=E2E Project").then(function(result) {
                 done();
             });
     });
