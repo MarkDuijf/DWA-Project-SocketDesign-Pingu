@@ -7,7 +7,7 @@ var projects = require('./testProjects');
 var User = require('../user');
 var Project = require('../project');
 
-mongoose.connect('mongodb://localhost/' + dbName, function(){
+mongoose.connect('mongodb://localhost/' + dbName, function(){                   //Inserts testusers in the database
     User.findOne({}, function(err, result) {
         if (err) throw err;
         if (result == null) {
@@ -17,14 +17,12 @@ mongoose.connect('mongodb://localhost/' + dbName, function(){
         }
     });
 
-    Project.findOne({}, function(err, result) {
+    Project.findOne({}, function(err, result) {                                 //Inserts testprojects in the database
         if (err) throw err;
         if (result == null) {
-            Project.remove({}, function () {
-                Project.create(projects, function () {
-                    console.log('Projects inserted in DB!');
-                })
-            })
+            Project.create(projects, function () {
+                console.log('Projects inserted in DB!');
+            });
         }
     });
 });

@@ -126,12 +126,12 @@ module.exports = function (app) {
                                     res.status(201);
                                     res.send("Account registered");
 
-                                    //Email user
+                                                                                                        // Email user
                                     var mailOptions = {
-                                        from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
-                                        to: req.body.email, // list of receivers
-                                        subject: 'Confirm your account ' + req.body.firstName, // Subject line
-                                        text: "Please confirm your Socket Designer account", // plaintext body
+                                        from: 'Socket Designer <dwasdeu@gmail.com>',                    // sender address
+                                        to: req.body.email,                                             // list of receivers
+                                        subject: 'Confirm your account ' + req.body.firstName,          // Subject line
+                                        text: "Please confirm your Socket Designer account",            // plaintext body
                                         html: "<p>Please confirm your Socket Designer account</p> </p><a href='http://localhost:13000/#/home/" + req.body.email + "/" + req.body.confirmationLink + "'>Confirm your account</a>" // html body
                                     };
 
@@ -156,20 +156,19 @@ module.exports = function (app) {
         });
 
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden
-        app.post('/projectTest', function (req, res) {
+        app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var project = new Project({
-                code_id: 4,
-                projectname: req.body.name,
                 username: "test",
+                projectname: req.body.name,
                 code: req.body.code,
                 date: "2015-5-5"
             });
 
             project.save(function (err) {
                 if (err) {
-                    return console.log(error);
+                    return console.log(err);
                     res.status(401);
-                    res.send("Error registering, missing/wrong data");
+                    res.send("Error saving data, missing/wrong data");
                 }
                 res.status(200);
                 res.send("Toegevoegd");
@@ -187,14 +186,14 @@ module.exports = function (app) {
         });
         */
 
-        app.get('/projectTest', function (req, res) {
+        app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
             Project.find({}, function(err, projects) {
-                if(err) {
+                if(err) {                                                   //Wanneer ophalen faalt geef error
                     console.log(err);
                     res.status(500);
                     res.send("Problem finding projects");
                 }
-                console.log(projects);
+                console.log(projects);                                      //Anders stuur het resultaat terug
                 res.status(200);
                 res.send(projects);
             })

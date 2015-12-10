@@ -1,3 +1,4 @@
+<div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
 <div class="generatorPage">
     <div ng-show="error != null">
     <div style="color:white">Something went wrong!<br/>
@@ -7,7 +8,7 @@
     <center><button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate client-side code</button></center>
     <!--TODO: de onderstaande knop heeft nog geen functie. De functie namen moeten misschien wat tactischer worden-->
     <center><button class="btn btn-validate btn-default generateButtons" ng-click="">Generate server-side code</button></center>
-    <center><button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save Project</button></center>
+    <center><button class="btn btn-validate btn-default generateButtons" id="generatorSaveButton" ng-click="saveInput()">Save Project</button></center>
     <center><button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get A Project</button></center>
     <pre id="editor">
 info:
@@ -62,26 +63,33 @@ server:
                   description: 10-11-2015
 
     </pre>
-    <!--<div id="generateButtons">-->
-        <!--<div>-->
-            <!--<button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate code</button>-->
-        <!--</div>-->
-        <!--<div>-->
-            <!--<button class="btn btn-validate btn-default generateButtons" ng-click="saveInput()">Save input</button>-->
-        <!--</div>-->
-        <!--<div>-->
-            <!--<button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get test</button>-->
-        <!--</div>-->
-    <!--</div>-->
     <pre id="generated">
     </pre>
 </div>
 
 <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="codeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog maxLengthDialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body maxLengthBody">
+                <p ng-repeat="data in beschikbareCode" ng-click="setCode(data.code)" class="codeKiesveld">{{data.projectname}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <p>Enter a project name</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
             <div class="modal-body">
-                <p ng-repeat="data in beschikbareCode" ng-click="setCode(data.code)" class="codeKiesveld">{{data.projectname}}</p>
+                <label for="projectName">Project name: </label>
+                <input ng-model="projectName" type="text" class="form-control" id="projectName">
+            </div>
+            <div class="modal-footer">
+                <button id="saveButton" type="submit" class="btn btn-primary" ng-click="saveProject()" data-dismiss="modal">Save</button>
             </div>
         </div>
     </div>
