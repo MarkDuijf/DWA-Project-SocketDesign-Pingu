@@ -1,36 +1,23 @@
 #helloworld {
     background-image: url("images/helloworld.jpg");
-    /*background-position: left;*/
     background-size: cover;
-    /*color: #ddd;*/
 }
 
 #GitHub {
     background-image: url("images/Github.jpg");
-    /*background-position: left;*/
     background-size: cover;
-    /*color: #ddd;*/
 }
 
 #aboutus {
     background-image: url("images/officepage.jpg");
-    /*background-position: left;*/
     background-size: cover;
-    /*color: #ddd;*/
 }
 
 #editor {
     position: relative;
-    /*top: 50px;*/
-    /*left: 20px;*/
-    /*height: 85vh;*/
 }
 
 #generated {
-    /*position: relative;*/
-    /*top: 50px;*/
-    /*right: 20px;*/
-    /*height: 85vh;*/
     float:right;
 }
 
@@ -57,9 +44,6 @@
     white-space: initial;
 }
 
-/*#generateButtons > div {*/
-    /*align-self: center;*/
-/*}*/
 
 #messages {
     list-style-type: none;
