@@ -11,78 +11,56 @@
     <center><button class="btn btn-validate btn-default generateButtons" ng-click="getTest()">Get A Project</button></center>
     <pre id="editor">
 info:
-    appname: Sockettester
-    description: Sockettester test generator
-host:
-    location: localhost
+    title:
+    description:
     port: 3000
-basepath: /
-paths:
-    /user:
-        POST:
-            messageName: New User POST
-            description: a new user has been created
+    namespace:
+client:
+    chat:
+        join:
+            summary: De user post iets in de chat
+            description: weet ik veeeeeeel
             parameters:
-                -   username: Leo
-                    require: true
-                    description: a new user with the name Leo has joined
-        GET:
-            messageName: New User GET
-            description: a new user has been created
-            parameters:
-                -   username: Leo
-                    require: true
-                    description: a new user with the name Leo has joined
-        PUT:
-            messageName: New User PUT
-            description: replacing a user
-            parameters:
-                -   username: Leo
-                    require: true
-                    description: User whose name will be changed
-                    newusername: Patrick
+                - name: username
+                  required: true
+                  type: string
+                  description:
 
-    /message:
-        POST:
-            messageName: New Message POST
-            description: when a user sends a message....
+        message:
+            summary: Wanneer een user iets post moet een andere user het kunnen ontvangen
+            description: weet ik veeeeeeel
             parameters:
-                -   name: message
-                    require: true
-                    description: a new message has been sent
-                    content: message content comes here
+                - name: username
+                  required: true
+                  type: string
+                  description:
+                - name: message
+                  required: true
+                  type: string
+                  description: n
+            responses:
+                  type: emit            /to the client itself/broadcast (socket.to(id).emit.... zo respons je naar een client zelf)
+                  parameters:
+                    - name: message
+                      required: true
+                      type: string
+                      description:
+                    - name: username
+                      required: true
+                      type: string
+                      description:
 
-                -   username: Leo
-                    require: true
-                    description: user from whom the message comes
-        GET:
-            messageName: New Message GET
-            description: a new message has been received....
+server:
+    chat:
+        date:
+            summary: De server stuurt af en toe random de datum naar de client.. als voorbeeld
+            description: niet relevant
             parameters:
-                -   name: message
-                    require: true
-                    description: a new message has been received
-                    content: message content comes here
+                - name: date
+                  required: true
+                  type: date
+                  description: 10-11-2015
 
-                -   username: Leo
-                    require: true
-                    description: user from whom the message comes
-
-    /data:
-        POST:
-            messageName: New Data POST
-            description: New Data has been sent
-            parameters:
-                -   name: data
-                    require: false
-                    description: new data has been sent
-        GET:
-            messageName: New Data GET
-            description: New Data has been received
-            parameters:
-                -   name: data
-                    require: false
-                    description: new data has been received
     </pre>
     <pre id="generated">
     </pre>
