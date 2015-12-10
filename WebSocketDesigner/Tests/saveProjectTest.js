@@ -14,7 +14,6 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         var save = {
             username: "SebastiaanVonk",
             projectname: "jo",
-            code_id: 4,
             code: "Hier staat hele leuke code",
             date: "2015-10-12"
         };
@@ -37,7 +36,6 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         var save = {
             username: "SebastiaanVonk",
             projectname: "Eenveeltelangenaam",
-            code_id: 4,
             code: "Hier staat hele leuke code",
             date: "2015-10-12"
         };
