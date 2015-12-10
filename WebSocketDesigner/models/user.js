@@ -36,11 +36,11 @@ var userSchema = new mongoose.Schema({
             "Email address is not valid"
         ]
     },
-    firstName: {
+    firstname: {
         type: String,
         required: true
     },
-    lastName: {
+    lastname: {
         type: String,
         required: true
     },
