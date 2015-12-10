@@ -4,6 +4,7 @@ theApp.factory('usernameFactory', function () {
     return username;
 });
 
+//Declaratie providers en hun controllers
 theApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
@@ -150,9 +151,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 console.log("ERROR:", data, status);
                 $scope.loginData.password = "";
                 $scope.loginData.username = "";
-                //$scope.showHomeMessage = true;
-                //$scope.homeMessage = "Error: " + data;
-                //$scope.isErrorMessage = true;
                 $scope.loginerror = "Error: " + data;
                 $timeout(function () {
                     $('#loginModal').modal('show')
@@ -211,7 +209,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 );
 
 theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
-
+// genereerd vantevoren een aantal items voor in het menu en geeft daarbij ook de links en ID's.
     $scope.menuItems = [{
         Title: 'HOME',
         LinkText: '#intro',

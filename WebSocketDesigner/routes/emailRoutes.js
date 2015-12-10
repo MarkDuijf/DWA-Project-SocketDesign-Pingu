@@ -15,11 +15,11 @@ module.exports = function(app){
 
     app.post('/contact', function(req, res) {
         var mailOptions = {
-            from: 'Contact Form <dwasdeu@gmail.com>', // sender address
-            to: 'dwasdeu@gmail.com', // list of receivers
-            subject: 'Bericht van contact formulier', // Subject line
-            text: "Contact form message", // plaintext body
-            html: "Bericht van: " + req.body.name + ", email naar: " + req.body.email + "<br><br><b>Bericht:</b><br>" + req.body.message // html body
+            from: 'Contact Form <dwasdeu@gmail.com>',                                                                                       // sender address
+            to: 'dwasdeu@gmail.com',                                                                                                        // list of receivers
+            subject: 'Bericht van contact formulier',                                                                                       // Subject line
+            text: "Contact form message",                                                                                                   // plaintext body
+            html: "Bericht van: " + req.body.name + ", email naar: " + req.body.email + "<br><br><b>Bericht:</b><br>" + req.body.message    // html body
         };
 
         transporter.sendMail(mailOptions, function(error, info){
@@ -38,11 +38,11 @@ module.exports = function(app){
     //Wordt niet meer gebruikt volgens mij
     app.post('/email',function(req,res){
         var mailOptions = {
-            from: 'Socket Designer <dwasdeu@gmail.com>', // sender address
-            to: req.body.email, // list of receivers
-            subject: 'Hello ' + req.body.firstName, // Subject line
-            text: "Please activate your account.", // plaintext body
-            html: "<p>" + req.body.firstName + " " + req.body.lastName + "</p> <br> <p>" + req.body.username + ": " + req.body.password + " </p>" // html body
+            from: 'Socket Designer <dwasdeu@gmail.com>',                                                                                            // sender address
+            to: req.body.email,                                                                                                                     // list of receivers
+            subject: 'Hello ' + req.body.firstName,                                                                                                 // Subject line
+            text: "Please activate your account.",                                                                                                  // plaintext body
+            html: "<p>" + req.body.firstName + " " + req.body.lastName + "</p> <br> <p>" + req.body.username + ": " + req.body.password + " </p>"   // html body
         };
 
         transporter.sendMail(mailOptions, function(error, info){
