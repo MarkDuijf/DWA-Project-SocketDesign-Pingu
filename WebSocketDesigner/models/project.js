@@ -18,10 +18,6 @@ var projectSchema = new mongoose.Schema({
             "Projectname is too long or too short"
         ]
     },
-    code_id: {
-        type: Number,
-        required: true
-    },
     code: {
         type: String,
         required: true,

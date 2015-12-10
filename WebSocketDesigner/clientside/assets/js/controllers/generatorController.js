@@ -11,29 +11,44 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   generated.$blockScrolling = Infinity;
 
   $scope.beschikbareCode = [];
+  $scope.projectName = "My Project";
 
   $scope.error = null;
 
+  $scope.homeMessage = "No message";
+  $scope.showHomeMessage = false;
+  $scope.isErrorMessage = false;
+
   $scope.saveInput = function(){
-    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan
-    function myFunction() {
-      var name = prompt("Enter a project name", "My Project");
-      if (name != null) {
-        var data = {
-          code: editor.getSession().getValue(),
-          name: name
-        };
-        $http.post("/projectTest", data).
-            success( function(data) {
-              console.log("Succes! " + data);
-            }).
-            error( function(data,status) {
-              console.log("ERROR:", data, status);
-            });
-      }
-    }
-    myFunction();
+    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
+    $(function () {
+      $('#saveModal').modal('show');
+    });
   };
+
+  $scope.saveProject = function() {
+    var data = {
+      code: editor.getSession().getValue(),
+      name: $scope.projectName
+    };
+    $http.post("/projectTest", data).
+        success( function(data) {
+          console.log("Succes! " + data);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "Your project has been saved.";
+          $scope.isErrorMessage = false;
+        }).
+        error( function(data,status) {
+          console.log("ERROR:", data, status);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "There was an error saving your project.";
+          $scope.isErrorMessage = true;
+        });
+  };
+
+  $scope.hideMessage = function () {
+    $scope.showHomeMessage = false;
+  }
 
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
@@ -115,22 +130,36 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       var input = editor.getSession().getValue();
       var temp = [];
       var output = '';
-      var basePaths = [];  //Worden de basepaths in opgeslagen, zoals de client, server en info
-      var scopePaths = []; //Worden de scopes in opgeslagen, zoals de chat in de demo
-      var info = {};       //Wordt de info in opgeslagen
+      var basePaths = [];  //Worden de basepaths Keys in opgeslagen, zoals de client, server en info
+      var scopePaths = []; //Worden de scopes Keys in opgeslagen, zoals de chat(demo)
+      var scopeMessagePaths = []; //Worden de scope message Keys in opgeslagen, zoals join en message(demo)
+      var info = {};       //Wordt de info in opgeslagen in JSON formaat
       input = jsyaml.safeLoad(input);
       errorHandling(input);
       for(var base = 0; base < Object.keys(input).length; base++){
         basePaths.push(Object.keys(input)[base]);
+        if(basePaths[base] !== "client" && basePaths[base] !== "server" && basePaths[base] !== "info"){
+          //Error als er een andere basetag dan client/server/info gebruikt is
+          throw new Error('The used tag \'' + basePaths[base] + '\' is not used in our syntax. Please remove it');
+        }
         for(var scope = 0; scope < Object.keys(input[basePaths[base]]).length; scope++){
           if(Object.keys(input)[base] == "info"){
             temp.push(Object.keys(input[basePaths[base]])[scope]);
             info[temp[scope]] = input[basePaths[base]][temp[scope]];
           }
+          if(Object.keys(input)[base] == "client" || Object.keys(input)[base] == "server"){
+            scopePaths.push(Object.keys(input[basePaths[base]])[scope]);
+          }
+          console.log(Object.keys(input[basePaths[base]])[scopePaths[scope]]);
+          // for(var messageName = 0; messageName < Object.keys(input[basePaths[base]][scopePaths[scope]]).length ; messageName++){
+          //   console.log(Object.keys(input[basePaths[base]][scopePaths[scope]])[messageName]);
+          // }
         }
         temp = [];
       }
-      //temp.push(JSON.stringify(input, null, 4));
+      console.log("basepaths: " + basePaths);
+      console.log("scopePaths: " + scopePaths);
+      console.log(info);
       temp.push(generateServer(info.port));
       //temp.push(generateServerSocket(output));
       //temp.push(generateClientSocket(output));

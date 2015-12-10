@@ -90,3 +90,11 @@
 .codeKiesveld:hover {
     background-color: grey;
 }
+
+.maxLengthDialog {
+    overflow-y: initial !important
+}
+.maxLengthBody {
+    height: 300px;
+    overflow-y: auto;
+}

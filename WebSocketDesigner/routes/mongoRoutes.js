@@ -158,16 +158,15 @@ module.exports = function (app) {
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var project = new Project({
-                code_id: 4,
-                projectname: req.body.name,
                 username: "test",
+                projectname: req.body.name,
                 code: req.body.code,
                 date: "2015-5-5"
             });
 
             project.save(function (err) {
                 if (err) {
-                    return console.log(error);
+                    return console.log(err);
                     res.status(401);
                     res.send("Error saving data, missing/wrong data");
                 }
