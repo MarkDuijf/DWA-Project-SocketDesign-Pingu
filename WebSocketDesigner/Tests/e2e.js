@@ -25,7 +25,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
         browser.init(done);
     });
 
-    /*
     it("Should get an username/password doesn't exist error", function(done) {
         browser
             .url("http://localhost:13000")
@@ -118,7 +117,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 done();
             });
     });
-    */
 
     it("Should save generator code", function(done) {
         browser
