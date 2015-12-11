@@ -25,6 +25,15 @@ require('./routes/emailRoutes')(app);
 //Alle code van routes die mongo nodig hebben om te werken, zoals inloggen, registreren en confirmeren
 require('./routes/mongoRoutes')(app);
 
+var fs = require('fs');
+
+app.get('/downloadTest', function(req, res) {
+    fs.writeFile('downloads/message.js', 'var vari = 5; \n var n = vari * 5;', function (err) {
+        if (err) throw err;
+        console.log('It\'s saved!');
+    });
+});
+
 //All socket.io code
 io.on('connection', function (socket) {
     "use strict";
