@@ -155,48 +155,62 @@ module.exports = function (app) {
             });
         });
 
-        //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden
+        //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
-            var project = new Project({
-                username: "test",
-                projectName: req.body.projectName,
-                code: req.body.code,
-                date: "2015-5-5"
-            });
+            var project;
+            if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
+                //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
+                project = new Project({
+                    username: "test",
+                    projectname: req.body.name,
+                    code: req.body.code,
+                    date: "2015-5-5"
+                });
+            } else {
+                project = new Project({
+                    username: req.session.username,
+                    projectname: req.body.name,
+                    code: req.body.code,
+                    date: "2015-5-5"
+                });
+            }
 
             project.save(function (err) {
                 if (err) {
-                    return console.log(err);
                     res.status(401);
-                    res.send("Error saving data, missing/wrong data");
+                    res.send("Error saving data, missing/wrong data")
+                    return console.log(err);
                 }
                 res.status(200);
                 res.send("Toegevoegd");
             });
         });
 
-        /*
-        app.get('/projectTest', function (req, res) {
-            Project.findOne({
-                code_id: 4
-            }, function (err, project) {
-                res.status(200);
-                res.send(project.code);
-            });
-        });
-        */
-
         app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
-            Project.find({}, function(err, projects) {
-                if(err) {                                                   //Wanneer ophalen faalt geef error
-                    console.log(err);
-                    res.status(500);
-                    res.send("Problem finding projects");
-                }
-                console.log(projects);                                      //Anders stuur het resultaat terug
-                res.status(200);
-                res.send(projects);
-            })
+            if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
+                //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
+                Project.find({}, function (err, projects) {
+                    if (err) {                                                   //Wanneer ophalen faalt geef error
+                        console.log(err);
+                        res.status(500);
+                        res.send("Problem finding projects");
+                    }
+                    console.log(projects);                                      //Anders stuur het resultaat terug
+                    res.status(200);
+                    res.send(projects);
+                });
+            } else {
+                Project.find({username: req.session.username}, function (err, projects) {
+                    if (err) {                                                   //Wanneer ophalen faalt geef error
+                        console.log(err);
+                        res.status(500);
+                        res.send("Problem finding projects");
+                    }
+                    console.log(projects);                                      //Anders stuur het resultaat terug
+                    res.status(200);
+                    res.send(projects);
+                })
+            }
         });
     });
 };

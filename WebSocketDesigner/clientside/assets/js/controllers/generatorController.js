@@ -27,29 +27,23 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   };
 
   $scope.saveProject = function() {
-    if($scope.projectName !== "") {
-      var data = {
-        code: editor.getSession().getValue(),
-        name: $scope.projectName
-      };
-      $http.post("/projectTest", data).
-          success(function (data) {
-            console.log("Succes! " + data);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "Your project has been saved.";
-            $scope.isErrorMessage = false;
-          }).
-          error(function (data, status) {
-            console.log("ERROR:", data, status);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "There was an error saving your project.";
-            $scope.isErrorMessage = true;
-          });
-    } else {
-      $scope.showHomeMessage = true;
-      $scope.homeMessage = "You didn't enter a project name.";
-      $scope.isErrorMessage = true;
-    }
+    var data = {
+      code: editor.getSession().getValue(),
+      name: $scope.projectName
+    };
+    $http.post("/projectTest", data).
+        success( function(data) {
+          console.log("Succes! " + data);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "Your project has been saved.";
+          $scope.isErrorMessage = false;
+        }).
+        error( function(data,status) {
+          console.log("ERROR:", data, status);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "There was an error saving your project.";
+          $scope.isErrorMessage = true;
+        });
   };
 
   $scope.hideMessage = function () {
@@ -61,6 +55,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     $http.get('/projectTest').
     success(function(data) {
       console.log("Succes! " + data);
+          console.log(data);
           $scope.beschikbareCode = data;
           $(function () {
             $('#codeModal').modal('show');
@@ -68,9 +63,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }).
     error(function(data, status) {
       console.log("ERROR:", data, status);
-          $scope.showHomeMessage = true;
-          $scope.homeMessage = "Error retrieving projects.";
-          $scope.isErrorMessage = false;
     })
   };
 
@@ -155,19 +147,20 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
             temp.push(Object.keys(input[basePaths[base]])[scope]);
             info[temp[scope]] = input[basePaths[base]][temp[scope]];
           }
+
           if(Object.keys(input)[base] == "client" || Object.keys(input)[base] == "server"){
             scopePaths.push(Object.keys(input[basePaths[base]])[scope]);
+            for(var messageName = 0; messageName < Object.keys(input[basePaths[base]][scopePaths[scope]]).length ; messageName++){
+              scopeMessagePaths.push(Object.keys(input[basePaths[base]][scopePaths[scope]])[messageName]);
+              for(var messageData = 0; messageData < Object.keys(input[basePaths[base]][scopePaths[scope]][scopeMessagePaths[messageName]]).length; messageData++){
+                console.log(Object.keys(input[basePaths[base]][scopePaths[scope]][scopeMessagePaths[messageName]])[messageData]);
+              }
+            }
           }
-          console.log(Object.keys(input[basePaths[base]])[scopePaths[scope]]);
-          // for(var messageName = 0; messageName < Object.keys(input[basePaths[base]][scopePaths[scope]]).length ; messageName++){
-          //   console.log(Object.keys(input[basePaths[base]][scopePaths[scope]])[messageName]);
-          // }
         }
         temp = [];
       }
-      console.log("basepaths: " + basePaths);
-      console.log("scopePaths: " + scopePaths);
-      console.log(info);
+      console.log(scopeMessagePaths);
       temp.push(generateServer(info.port));
       //temp.push(generateServerSocket(output));
       //temp.push(generateClientSocket(output));
