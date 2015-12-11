@@ -60,7 +60,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.getTest = function() {
     $http.get('/projectTest').
     success(function(data) {
-      console.log("Succes!");
+      console.log("Succes! " + data);
           $scope.beschikbareCode = data;
           $(function () {
             $('#codeModal').modal('show');
@@ -70,7 +70,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       console.log("ERROR:", data, status);
           $scope.showHomeMessage = true;
           $scope.homeMessage = "Error retrieving projects.";
-          $scope.isErrorMessage = false;
+          $scope.isErrorMessage = true;
     })
   };
 
