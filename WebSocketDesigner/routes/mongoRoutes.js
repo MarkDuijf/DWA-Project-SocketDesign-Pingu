@@ -37,7 +37,7 @@ module.exports = function (app) {
                     //Als een gebruiker niet gevonden kan worden met de ingevoerde gebruikersnaam en wachtwoord
                     req.session.loggedin = false;
                     req.session.username = "";
-                    res.status(404);
+                    res.lstatus(404);
                     res.send("Wrong username/password");
                 } else if (user.activated === true) {
                     console.log("Correct");
