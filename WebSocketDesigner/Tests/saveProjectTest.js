@@ -26,7 +26,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Error registering, missing/wrong data");
+                expect(res.text).to.equal("Error saving data, missing/wrong data");
                 done();
             });
     });
@@ -48,7 +48,51 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             .expect('Content-Type', /text\/html/)
             .end(function(err,res){
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Error registering, missing/wrong data");
+                expect(res.text).to.equal("Error saving data, missing/wrong data");
+                done();
+            });
+    });
+
+    it("een projectnaam van minstens 3 en maximaal 15 tekens geaccepteerd worden", function(done){
+
+        var save = {
+            username: "SebastiaanVonk",
+            projectname: "Een projectnaam",
+            code: "Hier staat hele leuke code",
+            date: "2015-10-12"
+        };
+
+        agent
+            .post('/projectTest')
+            .send(save)
+            .set('Content-Type', 'application.json')
+            .expect(200)
+            .expect('Content-Type', /text\/html/)
+            .end(function(err,res){
+                expect(err).to.be.null;
+                expect(res.text).to.equal("Toegevoegd");
+                done();
+            });
+    });
+
+    it("een leeg codeblok geweigerd worden", function(done) {
+
+        var save = {
+            username: "SebastiaanVonk",
+            projectName: "Eenveeltelangenaam",
+            code: "",
+            date: "2015-10-12"
+        };
+
+        agent
+            .post('/projectTest')
+            .send(save)
+            .set('Content-Type', 'application.json')
+            .expect(401)
+            .expect('Content-Type', /text\/html/)
+            .end(function(err,res){
+                expect(err).to.be.null;
+                expect(res.text).to.equal("Error saving data, missing/wrong data");
                 done();
             });
     });

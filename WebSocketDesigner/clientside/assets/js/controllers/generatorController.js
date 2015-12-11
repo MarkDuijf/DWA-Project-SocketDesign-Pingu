@@ -155,19 +155,20 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
             temp.push(Object.keys(input[basePaths[base]])[scope]);
             info[temp[scope]] = input[basePaths[base]][temp[scope]];
           }
+
           if(Object.keys(input)[base] == "client" || Object.keys(input)[base] == "server"){
             scopePaths.push(Object.keys(input[basePaths[base]])[scope]);
+            for(var messageName = 0; messageName < Object.keys(input[basePaths[base]][scopePaths[scope]]).length ; messageName++){
+              scopeMessagePaths.push(Object.keys(input[basePaths[base]][scopePaths[scope]])[messageName]);
+              for(var messageData = 0; messageData < Object.keys(input[basePaths[base]][scopePaths[scope]][scopeMessagePaths[messageName]]).length; messageData++){
+                console.log(Object.keys(input[basePaths[base]][scopePaths[scope]][scopeMessagePaths[messageName]])[messageData]);
+              }
+            }
           }
-          console.log(Object.keys(input[basePaths[base]])[scopePaths[scope]]);
-          // for(var messageName = 0; messageName < Object.keys(input[basePaths[base]][scopePaths[scope]]).length ; messageName++){
-          //   console.log(Object.keys(input[basePaths[base]][scopePaths[scope]])[messageName]);
-          // }
         }
         temp = [];
       }
-      console.log("basepaths: " + basePaths);
-      console.log("scopePaths: " + scopePaths);
-      console.log(info);
+      console.log(scopeMessagePaths);
       temp.push(generateServer(info.port));
       //temp.push(generateServerSocket(output));
       //temp.push(generateClientSocket(output));

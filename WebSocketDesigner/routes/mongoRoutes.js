@@ -184,7 +184,6 @@ module.exports = function (app) {
                 res.status(200);
                 res.send("Toegevoegd");
             });
-            project.update()
         });
 
         app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
