@@ -60,7 +60,8 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.getDownload = function() {
     $http.get("/downloadTest").
         success(function (data) {
-          console.log("Succes! " + data);
+          console.log("Succes!");
+          console.log(data);
         }).
         error(function (data, status) {
           console.log("ERROR:", data, status);
