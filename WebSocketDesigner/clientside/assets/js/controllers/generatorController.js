@@ -27,27 +27,44 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   };
 
   $scope.saveProject = function() {
-    var data = {
-      code: editor.getSession().getValue(),
-      name: $scope.projectName
-    };
-    $http.post("/projectTest", data).
-        success( function(data) {
-          console.log("Succes! " + data);
-          $scope.showHomeMessage = true;
-          $scope.homeMessage = "Your project has been saved.";
-          $scope.isErrorMessage = false;
-        }).
-        error( function(data,status) {
-          console.log("ERROR:", data, status);
-          $scope.showHomeMessage = true;
-          $scope.homeMessage = "There was an error saving your project.";
-          $scope.isErrorMessage = true;
-        });
+    if($scope.projectName !== "") {
+      var data = {
+        code: editor.getSession().getValue(),
+        name: $scope.projectName
+      };
+      $http.post("/projectTest", data).
+          success(function (data) {
+            console.log("Succes! " + data);
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "Your project has been saved.";
+            $scope.isErrorMessage = false;
+          }).
+          error(function (data, status) {
+            console.log("ERROR:", data, status);
+            $scope.showHomeMessage = true;
+            $scope.homeMessage = "There was an error saving your project.";
+            $scope.isErrorMessage = true;
+          });
+    } else {
+      $scope.showHomeMessage = true;
+      $scope.homeMessage = "You didn't enter a project name.";
+      $scope.isErrorMessage = true;
+    }
   };
 
   $scope.hideMessage = function () {
     $scope.showHomeMessage = false;
+  }
+
+  //Test functie, moet later weg
+  $scope.getDownload = function() {
+    $http.get("/downloadTest").
+        success(function (data) {
+          console.log("Succes! " + data);
+        }).
+        error(function (data, status) {
+          console.log("ERROR:", data, status);
+        });
   }
 
   //Code van ID 4 opvragen voor test doeleinden
@@ -55,7 +72,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     $http.get('/projectTest').
     success(function(data) {
       console.log("Succes! " + data);
-          console.log(data);
           $scope.beschikbareCode = data;
           $(function () {
             $('#codeModal').modal('show');
@@ -63,6 +79,9 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     }).
     error(function(data, status) {
       console.log("ERROR:", data, status);
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "Error retrieving projects.";
+          $scope.isErrorMessage = true;
     })
   };
 
