@@ -13,7 +13,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
 
         var save = {
             username: "SebastiaanVonk",
-            projectname: "jo",
+            projectName: "jo",
             code: "Hier staat hele leuke code",
             date: "2015-10-12"
         };
@@ -22,7 +22,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             .post('/projectTest')
             .send(save)
             .set('Content-Type', 'application/json')
-            .expect(401)
+            .expect(200)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -31,11 +31,11 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een te lange projectnaam geweigerd worden", function(done) {
+    xit("een te lange projectnaam geweigerd worden", function(done) {
 
         var save = {
             username: "SebastiaanVonk",
-            projectname: "Eenveeltelangenaam",
+            projectName: "Eenveeltelangenaam",
             code: "Hier staat hele leuke code",
             date: "2015-10-12"
         };
@@ -53,11 +53,11 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een projectnaam van minstens 3 en maximaal 15 tekens geaccepteerd worden", function(done){
+    xit("een projectnaam van minstens 3 en maximaal 15 tekens geaccepteerd worden", function(done){
 
         var save = {
             username: "SebastiaanVonk",
-            projectname: "Een projectnaam",
+            projectName: "Een projectnaam",
             code: "Hier staat hele leuke code",
             date: "2015-10-12"
         };
@@ -75,7 +75,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een leeg codeblok geweigerd worden", function(done) {
+    xit("een leeg codeblok geweigerd worden", function(done) {
 
         var save = {
             username: "SebastiaanVonk",
@@ -95,6 +95,14 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
                 expect(res.text).to.equal("Error saving data, missing/wrong data");
                 done();
             });
+    });
+
+    xit("dan moet goede code zonder problemen opgeslagen worden",function(done){
+
+    });
+
+    xit("dan moet ik een melding ontvangen of ik het zeker weet, wanneer de code fouten bevat", function(done){
+
     });
 
 });
