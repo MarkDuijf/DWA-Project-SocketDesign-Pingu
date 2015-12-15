@@ -19,6 +19,12 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.showHomeMessage = false;
   $scope.isErrorMessage = false;
 
+  $scope.client = {};
+  $scope.server = {};
+  $scope.info = {};
+
+  $scope.infoTags = ['description', 'port', 'title'];
+
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
     $(function () {
@@ -50,12 +56,27 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       $scope.homeMessage = "You didn't enter a project name.";
       $scope.isErrorMessage = true;
     }
-  };
 
+  };
   $scope.hideMessage = function () {
     $scope.showHomeMessage = false;
   }
 
+<<<<<<< HEAD
+=======
+  //Test functie, moet later weg
+  $scope.getDownload = function() {
+    $http.get("/downloadTest").
+        success(function (data) {
+          console.log("Succes!");
+          console.log(data);
+        }).
+        error(function (data, status) {
+          console.log("ERROR:", data, status);
+        });
+  }
+
+>>>>>>> ae3ebe4cfb896d2c3b0c5c12858831b11bcf35b4
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
     $http.get('/projectTest').
@@ -81,33 +102,19 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     });
   };
 
-  var generateServer = function(port){
-      return'//This is the server code, it creates a basic server(using expressJS) on the given port \n' +
+  var generateServerCode = function(info){
+    var description = 'Basic server made with ExpressJS';
+    if(info.description != null || info.description != undefined){
+        description = info.description;
+    }
+      return '//' + description + '\n' +
       'var express = require(\'express\');\n' +
       'var app = express();\n' +
       'var server = require(\'http\').createServer(app);\n' +
       'var io = require(\'socket.io\').listen(server);\n' +
       'var path = require(\'path\');\n\n' +
       'app.use(express.static(path.join(__dirname)));\n' +
-      'server.listen(' + port + ');\n\n';
-
-        // 'var app = require(\'http\').createServer(handler); \n' +
-        // 'var io = require(\'socket.io\')(app);\n' +
-        // 'var fs = require(\'fs\');\n' +
-        // 'var port = ' + port + '; \n\n' +
-        // 'app.listen(port, function(){\n  console.log(\'server listening on port: \' + port);\n' +
-        // '}); \n\n' +
-        // 'function handler(req, res){\n' +
-        // '  fs.readFile(__dirname + \'/index.html\',' +
-        // '  function(err, data){\n' +
-        // '    if(err){\n' +
-        // '      res.writeHead(500);\n' +
-        // '      return res.end(\'Error loading index.html\');\n' +
-        // '    }\n' +
-        // '    res.writeHead(200);\n' +
-        // '    res.end(data);\n' +
-        // '  });\n' +
-        // '}\n\n';
+      'server.listen(' + info.port + ');\n\n';
   };
   //Meerdere socketberichten = for-loop + 2 variablen(zie try)
   var generateServerSocket = function(messageArray){
@@ -119,7 +126,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       '  });\n' +
       '});\n\n';
   };
-
   var generateClientSocket = function(messageArray){
     return '//This is the socket.io code for the client\n' +
       'var socket = io();\n' +
@@ -130,53 +136,60 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   };
 
   var errorHandling = function(input){
+    var name = 'peter';
+    var array = ['patrick', 'aargh'];
+    if(input.info.port == null || input.info.port == undefined){
+      throw new Error('Port is not specified in the Info');
+    }
+    if(typeof input.info.port != 'number' || input.info.port > 65535){
+      throw new Error('please put in a port number between 1 and 65535');
+    }
 
-  };
+    for(var checkInfo = 0; checkInfo < Object.keys(input.info).length; checkInfo++){
+      console.log(Object.keys(input.info)[checkInfo]);
+    if(!(Object.keys(input.info)[checkInfo] in $scope.infoTags)){
+      console.log('ja!');
+    }
+    else{
+      console.log('nee!');
+    }
+  }
+};
 
-  $scope.Generate = function () {
-    try {
-      var input = editor.getSession().getValue();
-      var temp = [];
-      var output = '';
-      var basePaths = [];  //Worden de basepaths Keys in opgeslagen, zoals de client, server en info
-      var scopePaths = []; //Worden de scopes Keys in opgeslagen, zoals de chat(demo)
-      var scopeMessagePaths = []; //Worden de scope message Keys in opgeslagen, zoals join en message(demo)
-      var info = {};       //Wordt de info in opgeslagen in JSON formaat
-      input = jsyaml.safeLoad(input);
-      errorHandling(input);
-      for(var base = 0; base < Object.keys(input).length; base++){
-        basePaths.push(Object.keys(input)[base]);
-        if(basePaths[base] !== "client" && basePaths[base] !== "server" && basePaths[base] !== "info"){
-          //Error als er een andere basetag dan client/server/info gebruikt is
-          throw new Error('The used tag \'' + basePaths[base] + '\' is not used in our syntax. Please remove it');
-        }
-        for(var scope = 0; scope < Object.keys(input[basePaths[base]]).length; scope++){
-          if(Object.keys(input)[base] == "info"){
-            temp.push(Object.keys(input[basePaths[base]])[scope]);
-            info[temp[scope]] = input[basePaths[base]][temp[scope]];
+var traverse = function(input){
+  for (i in input) {
+      if (typeof(input[i])=="object") {
+          if(i == 'client'){
+            $scope.client = input[i];
           }
-
-          if(Object.keys(input)[base] == "client" || Object.keys(input)[base] == "server"){
-            scopePaths.push(Object.keys(input[basePaths[base]])[scope]);
-            for(var messageName = 0; messageName < Object.keys(input[basePaths[base]][scopePaths[scope]]).length ; messageName++){
-              scopeMessagePaths.push(Object.keys(input[basePaths[base]][scopePaths[scope]])[messageName]);
-              for(var messageData = 0; messageData < Object.keys(input[basePaths[base]][scopePaths[scope]][scopeMessagePaths[messageName]]).length; messageData++){
-                console.log(Object.keys(input[basePaths[base]][scopePaths[scope]][scopeMessagePaths[messageName]])[messageData]);
-              }
-            }
+          if(i == 'server'){
+            $scope.server = input[i];
           }
+          if(i == 'info'){
+            $scope.info = input[i];
+          }
+          traverse(input[i] );
         }
-        temp = [];
-      }
-      console.log(scopeMessagePaths);
-      temp.push(generateServer(info.port));
-      //temp.push(generateServerSocket(output));
-      //temp.push(generateClientSocket(output));
-      for(var i = 0; i < temp.length; i++){
-        output += temp[i];
-      }
-      generated.setValue(output, 1);
-      $scope.error = null;
+    }
+}
+
+$scope.Generate = function () {
+  try {
+    var input = editor.getSession().getValue();
+    var temp = [];
+    var output = '';
+    input = jsyaml.safeLoad(input);
+    errorHandling(input);
+    traverse(input);
+    temp.push(generateServerCode($scope.info));
+    //temp.push(generateServerSocket(output));
+    //temp.push(generateClientSocket(output));
+    for(var i = 0; i < temp.length; i++){
+      output += temp[i];
+    }
+    generated.setValue(output, 1);
+    $scope.error = null;
+    console.log($scope.client);
 
     }
     catch
