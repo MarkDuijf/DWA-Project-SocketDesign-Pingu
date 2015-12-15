@@ -158,6 +158,13 @@ module.exports = function (app) {
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
+
+            //Voor unit test
+            if (req.body.username !== undefined || req.body.username !== null || req.body.username !== "") {
+                req.session.username = req.body.username;
+                req.session.loggedin = true;
+            }
+
             if (req.session.username === undefined || req.session.username === null || req.session.username === "") {
                 /*Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
                 project = {
