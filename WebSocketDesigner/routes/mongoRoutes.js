@@ -157,31 +157,36 @@ module.exports = function (app) {
 
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
-            var project;
             var datetime = new Date();
             if (req.session.username === undefined || req.session.username === null || req.session.username === "") {
-                //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
+                /*Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
                 project = {
                     username: "test",
                     projectname: req.body.name,
                     code: req.body.code,
                     date: datetime
                 };
+                */
+                res.status(400);
+                res.send("No username found");
+            } else if(req.body.name === undefined || req.body.name === null || req.body.name === "") {
+                res.status(400);
+                res.send("No project name found");
             } else {
-                project = {
+                var project = {
                     username: req.session.username,
                     projectname: req.body.name,
                     code: req.body.code,
                     date: datetime
                 };
+
+                Project.findOneAndUpdate({username: req.session.username, projectname: req.body.name}, project, {upsert:true}, function(err, doc){
+                    if (err) return res.send(500, { error: err });
+                    return res.send("Saved the project");
+                });
             }
 
-            Project.findOneAndUpdate({username: req.session.username, projectname: req.body.name}, project, {upsert:true}, function(err, doc){
-                if (err) return res.send(500, { error: err });
-                return res.send("Saved the project");
-            });
-
-            /*
+            /* Werke niet vanwege upsert
             project.save(function (err) {
                 if (err) {
                     res.status(401);
