@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" href="/clientSide/demoStyle.css">
+</head>
+<body>
+<div id="chat"></div>
+<form id="send-message">
+    <input type="text" size="35" id="message" />
+    <input type="submit" value="send"/>
+
+    <div id="heartbeat">...</div>
+</form>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/clientSide/clientSocket.js"></script>
+</body>
+</html>
