@@ -31,7 +31,7 @@ require('./routes/mongoRoutes')(app);
 
 app.get('/downloadTest', function(req, res) {
     console.log("Maak het");
-    var dir = "testdir123";
+    var dir = "testdir123"; //TODO naam genereren, iets van [username]_[projectname]
     fs.mkdir("downloads/"+dir, function(err) {
         if (err) {
             if (err.code == 'EEXIST') {
@@ -41,32 +41,31 @@ app.get('/downloadTest', function(req, res) {
                 res.send('Failed to make the folder');
             }
         } else {
-            maakBestand();
+            maakBestand("bestand", 'var vari = 5; \n var n = vari * 5;'); //TODO bestand voor clientside en serverside en evt andere bestanden
         }
 
-        function maakBestand() {
-            fs.writeFile("downloads/"+dir+"/bestand.js", 'var vari = 5; \n var n = vari * 5;', function (err) {
+        function maakBestand(name, data) {
+            fs.writeFile("downloads/"+dir+"/"+name+".js", data, function (err) {
                 if (err) {
                     console.log(err);
                     res.status(500);
                     res.send("Error creating file");
                 } else {
                     console.log('It\'s saved!');
-                    writeZip("downloads/"+dir, "bestand");
+                    //TODO wrtieZip() alleen uitvoeren als alle bestanden geschreven zijn (kan pas nadat we weten wat er allemaal in moet)
+                    writeZip();
                 }
             });
         }
 
-        function writeZip(dir,name) {
-            var output = fs.createWriteStream('downloads/'+name+'.zip');
+        function writeZip() {
+            var output = fs.createWriteStream('downloads/'+dir+'.zip');
             var archive = archiver('zip');
 
             output.on('close', function () {
                 console.log(archive.pointer() + ' total bytes');
                 console.log('archiver has been finalized and the output file descriptor has closed.');
                 downloadFile();
-                //res.status(200);
-                //res.send("Zip made");
             });
 
             archive.on('error', function(err){
@@ -76,12 +75,12 @@ app.get('/downloadTest', function(req, res) {
             });
 
             archive.pipe(output);
-            archive.glob(dir+'/**', { nodir: true }, { date: new Date() });
+            archive.glob("downloads/"+dir+'/**', { nodir: true }, { date: new Date() });
             archive.finalize();
         }
 
         function downloadFile() {
-            var stream = fs.createReadStream('downloads/bestand.zip');
+            var stream = fs.createReadStream('downloads/'+dir+'.zip');
             res.setHeader('content-type', 'application/x-zip');
             stream.pipe(res);
 
@@ -91,8 +90,8 @@ app.get('/downloadTest', function(req, res) {
             });
             stream.on('close', function () {
                 if (!had_error) {
-                    fs.unlink('downloads/bestand.zip');
-                    rmdir('downloads/testdir123', function(error){
+                    fs.unlink('downloads/'+dir+'.zip');
+                    rmdir('downloads/'+dir, function(error){
                         if(error) {
                             console.log("Error deleting folder");
                         }
