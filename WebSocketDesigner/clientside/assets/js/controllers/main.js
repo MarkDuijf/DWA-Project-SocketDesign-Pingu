@@ -1,4 +1,4 @@
-var theApp = angular.module("generatorApp", ['ngRoute']);
+var theApp = angular.module("generatorApp", ['ngRoute', 'ngFileSaver']);
 
 theApp.factory('usernameFactory', function () {
     return username;

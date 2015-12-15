@@ -12,7 +12,7 @@ var archiver = require('archiver');
 var rmdir = require('rimraf');
 
 //This inserts the testdata
-var inserData = require('./models/dummyData/insertData');
+var inserlData = require('./models/dummyData/insertData');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
@@ -28,6 +28,17 @@ require('./routes/emailRoutes')(app);
 
 //Alle code van routes die mongo nodig hebben om te werken, zoals inloggen, registreren en confirmeren
 require('./routes/mongoRoutes')(app);
+
+app.get('/downloadTest/:id', function(req, res) {
+    console.log('downloads/'+req.params.id+'.zip');
+    res.download('downloads/'+req.params.id+'.zip', 'file.zip', function(err){
+        if(err) {
+            console.log("niet oke");
+        } else {
+            console.log("oke");
+        }
+    });
+});
 
 app.get('/downloadTest', function(req, res) {
     console.log("Maak het");
@@ -80,16 +91,10 @@ app.get('/downloadTest', function(req, res) {
         }
 
         function downloadFile() {
-            var stream = fs.createReadStream('downloads/'+dir+'.zip');
-            res.setHeader('content-type', 'application/x-zip');
-            stream.pipe(res);
-
-            var had_error = false;
-            stream.on('error', function (err) {
-                had_error = true;
-            });
-            stream.on('close', function () {
-                if (!had_error) {
+            res.download('downloads/'+dir+'.zip', 'file.zip', function(err){
+                if (err) {
+                    console.log(err);
+                } else {
                     fs.unlink('downloads/'+dir+'.zip');
                     rmdir('downloads/'+dir, function(error){
                         if(error) {

@@ -1,4 +1,4 @@
-theApp.controller('generatorController', ['$scope', '$http', '$location', function ($scope, $http) {
+theApp.controller('generatorController', function ($scope, $http, $location, $routeParams, FileSaver, Blob) {
 
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
@@ -62,10 +62,17 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
 
   //Test functie, moet later weg
   $scope.getDownload = function() {
-    $http.get("/downloadTest").
+        $http({
+          url: '/downloadTest',
+          method: "GET",
+          headers: {
+            'Content-type': 'application/zip'
+          },
+          responseType: 'arraybuffer'
+        }).
         success(function (data) {
-          console.log("Succes!");
-          console.log(data);
+          var blob = new Blob([data], {type: "application/zip"});
+          FileSaver.saveAs(blob, "Project.zip");
         }).
         error(function (data, status) {
           console.log("ERROR:", data, status);
@@ -188,4 +195,4 @@ $scope.Generate = function () {
       $scope.error = e.message;
     }
   };
-}]);
+});
