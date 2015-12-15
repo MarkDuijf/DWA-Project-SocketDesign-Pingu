@@ -62,8 +62,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     $scope.showHomeMessage = false;
   }
 
-<<<<<<< HEAD
-=======
   //Test functie, moet later weg
   $scope.getDownload = function() {
     $http.get("/downloadTest").
@@ -76,7 +74,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
         });
   }
 
->>>>>>> ae3ebe4cfb896d2c3b0c5c12858831b11bcf35b4
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
     $http.get('/projectTest').
