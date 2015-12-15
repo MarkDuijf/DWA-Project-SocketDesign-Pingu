@@ -10,14 +10,15 @@ jQuery(function ($) {
         $messageBox.val("");
     });
 
-    socket.on("newMessage", function (data) {
+    socket.on("newMessage", function (data, time) {
+        $chat.append(time + ": ");
         $chat.append(data);
         $chat.append("<br/>");
     });
 
     socket.on('heartbeat', function (data) {
         console.log("heartbeat", data);
-        document.getElementById("heartbeat").innerHTML = JSON.stringify(data);
-    });
 
+        document.getElementById("heartbeat").innerHTML = "<h1>" + data.time + "</h1>";
+    });
 });
