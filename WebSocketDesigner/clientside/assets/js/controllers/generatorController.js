@@ -22,9 +22,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   $scope.client = {};
   $scope.server = {};
   $scope.info = {};
-
-  $scope.infoTags = ['description', 'port', 'title'];
-
+  
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
     $(function () {
@@ -62,8 +60,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
     $scope.showHomeMessage = false;
   }
 
-<<<<<<< HEAD
-=======
   //Test functie, moet later weg
   $scope.getDownload = function() {
     $http.get("/downloadTest").
@@ -76,7 +72,6 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
         });
   }
 
->>>>>>> ae3ebe4cfb896d2c3b0c5c12858831b11bcf35b4
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
     $http.get('/projectTest').
@@ -157,6 +152,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
 };
 
 var traverse = function(input){
+  console.log(input);
   for (i in input) {
       if (typeof(input[i])=="object") {
           if(i == 'client'){
@@ -181,6 +177,8 @@ $scope.Generate = function () {
     input = jsyaml.safeLoad(input);
     errorHandling(input);
     traverse(input);
+    console.log('TUSSENSTUK');
+    traverse($scope.client);
     temp.push(generateServerCode($scope.info));
     //temp.push(generateServerSocket(output));
     //temp.push(generateClientSocket(output));
@@ -189,7 +187,6 @@ $scope.Generate = function () {
     }
     generated.setValue(output, 1);
     $scope.error = null;
-    console.log($scope.client);
 
     }
     catch
