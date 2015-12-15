@@ -130,29 +130,16 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
       '});\n'
   };
 
-  var errorHandling = function(input){
-    var name = 'peter';
-    var array = ['patrick', 'aargh'];
-    if(input.info.port == null || input.info.port == undefined){
-      throw new Error('Port is not specified in the Info');
-    }
-    if(typeof input.info.port != 'number' || input.info.port > 65535){
-      throw new Error('please put in a port number between 1 and 65535');
-    }
-
-    for(var checkInfo = 0; checkInfo < Object.keys(input.info).length; checkInfo++){
-      console.log(Object.keys(input.info)[checkInfo]);
-    if(!(Object.keys(input.info)[checkInfo] in $scope.infoTags)){
-      console.log('ja!');
-    }
-    else{
-      console.log('nee!');
-    }
-  }
-};
+   var errorHandling = function(input){
+//     if(input.info.port == null || input.info.port == undefined){
+//       throw new Error('Port is not specified in the Info');
+//     }
+//     if(typeof input.info.port != 'number' || input.info.port > 65535){
+//       throw new Error('please put in a port number between 1 and 65535');
+//     }
+ };
 
 var traverse = function(input){
-  console.log(input);
   for (i in input) {
       if (typeof(input[i])=="object") {
           if(i == 'client'){
@@ -169,16 +156,21 @@ var traverse = function(input){
     }
 }
 
+
+
 $scope.Generate = function () {
   try {
+    var parser = PEG.buildParser("start = ('a' / 'b')+");
+    var x = prompt("put in an a or b or combination");
+    console.log(parser.parse(x));
     var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
+    console.log(esprima.tokenize(input));
     input = jsyaml.safeLoad(input);
     errorHandling(input);
     traverse(input);
-    console.log('TUSSENSTUK');
-    traverse($scope.client);
+    //console.log(JSON.stringify(esprima.parse(test), null, 4));
     temp.push(generateServerCode($scope.info));
     //temp.push(generateServerSocket(output));
     //temp.push(generateClientSocket(output));
@@ -187,7 +179,6 @@ $scope.Generate = function () {
     }
     generated.setValue(output, 1);
     $scope.error = null;
-
     }
     catch
         (e) {
