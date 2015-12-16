@@ -22,7 +22,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             .post('/projectTest')
             .send(save)
             .set('Content-Type', 'application/json')
-            .expect(200)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;

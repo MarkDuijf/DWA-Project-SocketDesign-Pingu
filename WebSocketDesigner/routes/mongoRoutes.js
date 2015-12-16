@@ -180,7 +180,7 @@ module.exports = function (app) {
                 //console.log(req.body.name);
                 res.status(400);
                 res.send("No project name found");
-            } else if(req.body.projectName < 3 || req.body.projectName > 15){
+            } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
                 res.status(401);
                 res.send("Projectname is too long or too short");
             } else {

@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var session = require("express-session");
 
 //This inserts the testdata
-var inserlData = require('./models/dummyData/insertData');
+require('./models/dummyData/insertData');
 
 // Express
 app.use(express.static(path.join(__dirname, 'clientside')));
@@ -25,6 +25,7 @@ require('./routes/emailRoutes')(app);
 //Alle code van routes die mongo nodig hebben om te werken, zoals inloggen, registreren en confirmeren
 require('./routes/mongoRoutes')(app);
 
+//Alle code voor het downloaden van een zip bestand met een project
 require('./routes/downloadRoutes')(app);
 
 //All socket.io code

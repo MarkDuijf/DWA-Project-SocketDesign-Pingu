@@ -2,7 +2,6 @@
  * Created by developer on 16-12-15.
  */
 module.exports = function(app){
-
     var fs = require('fs');
     var archiver = require('archiver');
     var rmdir = require('rimraf');
