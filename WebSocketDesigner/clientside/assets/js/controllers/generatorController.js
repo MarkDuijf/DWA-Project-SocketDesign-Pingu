@@ -79,7 +79,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         error(function (data, status) {
           console.log("ERROR:", data, status);
         });
-  }
+  };
 
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
