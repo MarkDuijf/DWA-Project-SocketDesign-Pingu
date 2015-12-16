@@ -182,6 +182,9 @@ module.exports = function (app) {
             } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
                 res.status(401);
                 res.send("Projectname is too long or too short");
+            } else if(req.body.code === undefined || req.body.code === null || req.body.code === "") {
+                res.status(400);
+                res.send("No code found");
             } else {
                 var project = {
                     username: req.session.username,
