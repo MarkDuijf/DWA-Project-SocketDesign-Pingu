@@ -32,7 +32,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         console.log(save);
     });
 
-    xit("een te lange projectnaam geweigerd worden", function(done) {
+    it("een te lange projectnaam geweigerd worden", function(done) {
 
         var save = {
             username: "SebastiaanVonk",
@@ -44,17 +44,17 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         agent
             .post('/projectTest')
             .send(save)
-            .set('Content-Type', 'application.json')
+            .set('Content-Type', 'application/json')
             .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res){
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Error saving data, missing/wrong data");
+                expect(res.text).to.equal("Projectname is too long or too short");
                 done();
             });
     });
 
-    xit("een projectnaam van minstens 3 en maximaal 15 tekens geaccepteerd worden", function(done){
+    it("een projectnaam van minstens 3 en maximaal 15 tekens geaccepteerd worden", function(done){
 
         var save = {
             username: "SebastiaanVonk",
@@ -66,21 +66,21 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         agent
             .post('/projectTest')
             .send(save)
-            .set('Content-Type', 'application.json')
+            .set('Content-Type', 'application/json')
             .expect(200)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res){
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Toegevoegd");
+                expect(res.text).to.equal("Saved the project");
                 done();
             });
     });
 
-    xit("een leeg codeblok geweigerd worden", function(done) {
+    it("een leeg codeblok geweigerd worden", function(done) {
 
         var save = {
             username: "SebastiaanVonk",
-            projectName: "Eenveeltelangenaam",
+            projectName: "Een project",
             code: "",
             date: "2015-10-12"
         };
@@ -88,12 +88,12 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         agent
             .post('/projectTest')
             .send(save)
-            .set('Content-Type', 'application.json')
-            .expect(401)
+            .set('Content-Type', 'application/json')
+            .expect(400)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res){
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Error saving data, missing/wrong data");
+                expect(res.text).to.equal("No code found");
                 done();
             });
     });

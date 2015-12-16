@@ -158,7 +158,6 @@ module.exports = function (app) {
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
-            console.log(req.body.projectName);
             //Voor unit test
             if (req.body.username !== undefined || req.body.username !== null || req.body.username !== "") {
                 req.session.username = req.body.username;
@@ -177,12 +176,14 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
-                //console.log(req.body.name);
                 res.status(400);
                 res.send("No project name found");
             } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
                 res.status(401);
                 res.send("Projectname is too long or too short");
+            } else if(req.body.code === undefined || req.body.code === null || req.body.code === "") {
+                res.status(400);
+                res.send("No code found");
             } else {
                 var project = {
                     username: req.session.username,
@@ -195,7 +196,7 @@ module.exports = function (app) {
                     if (err) return res.send(500, { error: err });
                     return res.send("Saved the project");
                 });
-                console.log(res);
+                console.log(req.body);
             }
 
             /* Werke niet vanwege upsert
