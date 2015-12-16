@@ -4,7 +4,7 @@
 module.exports = function (app) {
     "use strict";
     require('body-parser');
-    require("express-session");
+    var session = require("express-session");
     var nodemailer = require('nodemailer');
 
     var mongoose = require('mongoose');
@@ -158,9 +158,9 @@ module.exports = function (app) {
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
-            console.log(req.body.projectName);
+
             //Voor unit test
-            if (req.body.username !== undefined || req.body.username !== null || req.body.username !== "") {
+            if (req.body.username !== undefined) {
                 req.session.username = req.body.username;
                 req.session.loggedin = true;
             }
@@ -177,7 +177,6 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
-                //console.log(req.body.name);
                 res.status(400);
                 res.send("No project name found");
             } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
@@ -186,7 +185,7 @@ module.exports = function (app) {
             } else {
                 var project = {
                     username: req.session.username,
-                    projectName: req.body.name,
+                    projectName: req.body.projectName,
                     code: req.body.code,
                     date: datetime
                 };
@@ -195,7 +194,6 @@ module.exports = function (app) {
                     if (err) return res.send(500, { error: err });
                     return res.send("Saved the project");
                 });
-                console.log(res);
             }
 
             /* Werke niet vanwege upsert
@@ -211,6 +209,18 @@ module.exports = function (app) {
             */
         });
 
+        app.post('/projectTest/checkName', function(req,res) {
+            Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
+                if(projects.length === 0) {
+                    res.status(200);
+                    res.send("Doesn't exist");
+                } else {
+                    res.status(200);
+                    res.send("Exists");
+                }
+            });
+        });
+
         app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
             if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
                 //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
@@ -219,8 +229,7 @@ module.exports = function (app) {
                         console.log(err);
                         res.status(500);
                         res.send("Problem finding projects");
-                    }
-                    console.log(projects);                                      //Anders stuur het resultaat terug
+                    }                                      //Anders stuur het resultaat terug
                     res.status(200);
                     res.send(projects);
                 });

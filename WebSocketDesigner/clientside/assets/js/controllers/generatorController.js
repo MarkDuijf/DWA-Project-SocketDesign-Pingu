@@ -30,25 +30,47 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     });
   };
 
-  $scope.saveProject = function() {
+  $scope.saveProject = function(askForConfirmation) {
     if($scope.projectName !== "") {
       var data = {
         code: editor.getSession().getValue(),
-        name: $scope.projectName
+        projectName: $scope.projectName
       };
-      $http.post("/projectTest", data).
-          success(function (data) {
-            console.log("Succes! " + data);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "Your project has been saved.";
-            $scope.isErrorMessage = false;
-          }).
-          error(function (data, status) {
-            console.log("ERROR:", data, status);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "There was an error saving your project.";
-            $scope.isErrorMessage = true;
-          });
+
+
+      if(askForConfirmation===false) {
+        saveIt();
+      } else {
+        $http.post("/projectTest/checkName", data).
+            success(function (data) {
+              if (data === "Exists") {
+                $(function () {
+                  $('#saveConfirmation').modal('show');
+                });
+              } else {
+                saveIt();
+              }
+            }).
+            error(function (data, status) {
+              console.log("ERROR:", data, status);
+            });
+      }
+
+      function saveIt() {
+        $http.post("/projectTest", data).
+            success(function (data) {
+              console.log("Succes! " + data);
+              $scope.showHomeMessage = true;
+              $scope.homeMessage = "Your project has been saved.";
+              $scope.isErrorMessage = false;
+            }).
+            error(function (data, status) {
+              console.log("ERROR:", data, status);
+              $scope.showHomeMessage = true;
+              $scope.homeMessage = "There was an error saving your project.";
+              $scope.isErrorMessage = true;
+            });
+      }
     } else {
       $scope.showHomeMessage = true;
       $scope.homeMessage = "You didn't enter a project name.";
@@ -83,7 +105,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   $scope.getTest = function() {
     $http.get('/projectTest').
     success(function(data) {
-      console.log("Succes! " + data);
           $scope.beschikbareCode = data;
           $(function () {
             $('#codeModal').modal('show');
@@ -97,8 +118,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     })
   };
 
-  $scope.setCode = function(code) {
+  $scope.setCode = function(code, name) {
     editor.getSession().setValue(code);
+    $scope.projectName = name;
     $(function () {
       $('#codeModal').modal('hide');
     });
