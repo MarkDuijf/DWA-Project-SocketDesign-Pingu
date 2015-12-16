@@ -26,9 +26,10 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
-                expect(res.text).to.equal("Error saving data, missing/wrong data");
+                expect(res.text).to.equal("Projectname is too long or too short");
                 done();
             });
+        console.log(save);
     });
 
     xit("een te lange projectnaam geweigerd worden", function(done) {

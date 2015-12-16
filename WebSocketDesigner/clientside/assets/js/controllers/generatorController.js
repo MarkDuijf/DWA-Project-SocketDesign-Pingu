@@ -60,7 +60,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
   };
   $scope.hideMessage = function () {
     $scope.showHomeMessage = false;
-  }
+  };
 
   //Test functie, moet later weg
   $scope.getDownload = function() {
@@ -72,7 +72,7 @@ theApp.controller('generatorController', ['$scope', '$http', '$location', functi
         error(function (data, status) {
           console.log("ERROR:", data, status);
         });
-  }
+  };
 
   //Code van ID 4 opvragen voor test doeleinden
   $scope.getTest = function() {
@@ -168,7 +168,7 @@ var traverse = function(input){
           traverse(input[i] );
         }
     }
-}
+};
 
 $scope.Generate = function () {
   try {
