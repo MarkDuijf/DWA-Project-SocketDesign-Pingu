@@ -72,7 +72,7 @@ server:
     <div class="modal-dialog maxLengthDialog" role="document">
         <div class="modal-content">
             <div class="modal-body maxLengthBody">
-                <p ng-repeat="data in beschikbareCode" ng-click="setCode(data.code)" class="codeKiesveld">{{data.projectname}}</p>
+                <div ng-repeat="data in beschikbareCode" ng-click="setCode(data.code, data.projectName)" class="codeKiesveld">{{data.projectName}}</div>
             </div>
         </div>
     </div>
@@ -90,7 +90,21 @@ server:
                 <input ng-model="projectName" type="text" class="form-control" id="projectName">
             </div>
             <div class="modal-footer">
-                <button id="saveButton" type="submit" class="btn btn-primary" ng-click="saveProject()" data-dismiss="modal">Save</button>
+                <button id="saveButton" type="submit" class="btn btn-primary" ng-click="saveProject(true)" data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="saveConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog maxLengthDialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>The existing project will be overwritten, are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmSave" type="submit" class="btn btn-primary" ng-click="saveProject(false)" data-dismiss="modal">Yes</button>
+                <button id="refuseSave" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
