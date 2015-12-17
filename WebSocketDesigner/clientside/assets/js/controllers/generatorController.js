@@ -173,7 +173,6 @@ $scope.Generate = function () {
     var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
-    console.log(esprima.tokenize(input));
     input = jsyaml.safeLoad(input);
     errorHandling(input);
     traverse(input);
