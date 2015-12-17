@@ -28,6 +28,45 @@ require('./routes/mongoRoutes')(app);
 //Alle code voor het downloaden van een zip bestand met een project
 require('./routes/downloadRoutes')(app);
 
+var User = require('./models/user');
+var Project = require('./models/project');
+
+app.get('/myAccount', function(req, res) {
+    if(req.session.loggedin !== true) {
+        res.status(400);
+        res.send("Not logged in");
+    } else if(req.session.loggedin === true) {
+        //TODO misschien wachtwoord in de session zetten?
+        User.findOne({username: req.session.username}, function(err, user) {
+            if(err) {
+                console.log(err);
+                res.status(500);
+                res.send("Error finding user");
+            } else {
+                var data = {
+                    username: user.username,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    projects: null
+                };
+
+                Project.find({username: req.session.username}, function(err, projects){
+                    if(err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Error finding projects");
+                    } else {
+                        data.projects = projects;
+                        res.status(200);
+                        res.send(data);
+                    }
+                });
+            }
+        });
+    }
+});
+
 //All socket.io code
 io.on('connection', function (socket) {
     "use strict";

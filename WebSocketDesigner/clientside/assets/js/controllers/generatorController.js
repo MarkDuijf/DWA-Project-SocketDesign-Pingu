@@ -1,5 +1,4 @@
-theApp.controller('generatorController', function ($scope, $http, $location, $routeParams, FileSaver, Blob) {
-
+theApp.controller('generatorController', function ($scope, $http, $location, $routeParams, FileSaver, Blob, LoginFactory) {
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
@@ -140,6 +139,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       'app.use(express.static(path.join(__dirname)));\n' +
       'server.listen(' + info.port + ');\n\n';
   };
+
   //Meerdere socketberichten = for-loop + 2 variablen(zie try)
   var generateServerSocket = function(messageArray){
     return '//This is the socket.io code for the server\n' +
