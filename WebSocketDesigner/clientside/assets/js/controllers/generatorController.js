@@ -21,6 +21,20 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   $scope.client = {};
   $scope.server = {};
   $scope.info = {};
+
+  if ($routeParams.id !== undefined) {
+    //Request server en check de username van het project met de session username, stuur project met code terug als ze hetzelfde zijn
+    editor.getSession().setValue("Trying to fetch the project!");
+    $http.get("/projectTest/"+$routeParams.id).
+        success(function (data) {
+          console.log("Project succes!");
+          $scope.setCode(data.name, data.code);
+        }).
+        error(function (data, status) {
+          console.log("Project error:", data, status);
+          editor.getSession().setValue("No project found with this id and username combination.");
+        });
+  }
   
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=

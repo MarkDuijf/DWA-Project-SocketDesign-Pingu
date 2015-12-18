@@ -273,6 +273,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.projects = [];
 
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
+        console.log($scope.loggedIn);
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
     $http.get("/myAccount").
@@ -293,7 +294,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     }
 
     $scope.openProject = function(id) {
-        console.log(id);
-        $location.path("/codeGenerator/id");
+        $location.path("/codeGenerator/"+id);
     }
 });
