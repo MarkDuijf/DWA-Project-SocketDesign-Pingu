@@ -20,6 +20,16 @@ module.exports = function (app) {
         }
     });
 
+    app.get('/getLoggedIn', function(req, res) {
+        if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
+            res.status(200);
+            res.send("Logged in");
+        } else {
+            res.status(200);
+            res.send("Not logged in");
+        }
+    })
+
     mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
         app.get('/login', function(req, res) {

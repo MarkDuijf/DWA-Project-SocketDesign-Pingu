@@ -95,6 +95,24 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         }
 
+        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $sope.loggedIn zonder reden false is
+        if($scope.loggedIn !== true) {
+            $http.get("/getLoggedIn").
+                success(function (data) {
+                    console.log(data);
+                    if (data === "Logged in") {
+                        LoginFactory.setLogin(true);
+                        $scope.loggedIn = true;
+                    } else if (data === "Not logged in") {
+                        LoginFactory.setLogin(false);
+                        $scope.loggedIn = false;
+                    }
+                }).
+                error(function (data, status) {
+                    console.log("Account error:", data, status);
+                });
+        }
+
         //Gebruikt voor het registreren met de ingevoerde gegevens
         $scope.register = function () {
             var registerData = {

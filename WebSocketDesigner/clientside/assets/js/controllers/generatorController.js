@@ -28,7 +28,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $http.get("/projectTest/"+$routeParams.id).
         success(function (data) {
           console.log("Project succes!");
-          $scope.setCode(data.name, data.code);
+          $scope.setCode(data.code, data.name);
         }).
         error(function (data, status) {
           console.log("Project error:", data, status);
