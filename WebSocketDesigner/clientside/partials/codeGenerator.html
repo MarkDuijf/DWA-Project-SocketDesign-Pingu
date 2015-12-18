@@ -13,56 +13,33 @@
     <center><button class="btn btn-validate btn-default generateButtons" id="generatorDownloadButton" ng-click="getDownload()">Download</button></center>
     <pre id="editor">
 info:
-    title:
-    description:
+    title: socketIOTest
     port: 3000
-    namespace:
 client:
     chat:
         join:
-            summary: De user post iets in de chat
-            description: weet ik veeeeeeel
             parameters:
-                - name: username
-                  required: true
-                  type: string
-                  description:
-
+                name: username
+                koekenpan: true
+                vliegtuig: string
         message:
-            summary: Wanneer een user iets post moet een andere user het kunnen ontvangen
-            description: weet ik veeeeeeel
             parameters:
-                - name: username
-                  required: true
-                  type: string
-                  description:
-                - name: message
-                  required: true
-                  type: string
-                  description: n
+                name: test1
+                vliegtuig: pan2
+                koekenpan: zevental
             responses:
-                  type: emit            /to the client itself/broadcast (socket.to(id).emit.... zo respons je naar een client zelf)
-                  parameters:
-                    - name: message
-                      required: true
-                      type: string
-                      description:
-                    - name: username
-                      required: true
-                      type: string
-                      description:
-
+                to: all
+                parameters:
+                    name: usernaaaam
+                    langhaar: true
+                    bril: false
 server:
     chat:
         date:
-            summary: De server stuurt af en toe random de datum naar de client.. als voorbeeld
-            description: niet relevant
             parameters:
-                - name: date
-                  required: true
-                  type: date
-                  description: 10-11-2015
-
+                slappeband: true
+                werktijd: 16.45
+                slapen: tekort
     </pre>
     <pre id="generated">
     </pre>

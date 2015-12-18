@@ -6,7 +6,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
   var generated = ace.edit("generated");
   generated.setTheme("ace/theme/monokai");
-  generated.getSession().setMode("ace/mode/javascript");
+  generated.getSession().setMode("ace/mode/json");
   generated.$blockScrolling = Infinity;
 
   $scope.beschikbareCode = [];
@@ -203,23 +203,23 @@ var traverse = function(input){
 
 $scope.Generate = function () {
   try {
-    var parser = PEG.buildParser("start = ('a' / 'b')+");
-    var x = prompt("put in an a or b or combination");
-    console.log(parser.parse(x));
     var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
+    //var parser = PEG.buildParser("");
     input = jsyaml.safeLoad(input);
+    input = JSON.stringify(input, null, 4);
+    console.log(input);
     errorHandling(input);
     traverse(input);
-    //console.log(JSON.stringify(esprima.parse(test), null, 4));
-    temp.push(generateServerCode($scope.info));
+    console.log(input);
+    //temp.push(generateServerCode($scope.info));
     //temp.push(generateServerSocket(output));
     //temp.push(generateClientSocket(output));
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
-    generated.setValue(output, 1);
+    generated.setValue(input, 1);
     $scope.error = null;
     }
     catch
