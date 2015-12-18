@@ -18,10 +18,10 @@
 
         <div class="form-group">
              <label for="email">Email:</label>
-             <input type="text" ng-model="email" class="form-control" id="email">
+             <input type="text" ng-model="email" class="form-control" id="email" disabled>
         </div>
         <button id="changeInfoButton" type="submit" class="btn btn-primary">Save Changes</button>
-        <button id="changeEmail" type="submit" class="btn btn-primary">Change Email</button>
+        <button id="changeEmail" type="submit" class="btn btn-primary" ng-click="emailConfirmation()">Change Email</button>
         <button id="changePassword" type="submit" class="btn btn-primary">Change Password</button>
     </form>
 
@@ -33,4 +33,44 @@
 
 <div ng-hide="gotInfo">
     <h2>Fetching data</h2>
+</div>
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="emailConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Are you sure you want to change your email address <b>{{email}}</b></p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmEmail" type="submit" class="btn btn-primary" ng-click="changeEmail()" data-dismiss="modal">Yes</button>
+                <button id="refuseEmail" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>A mail has been send to your email account with a confirmation code.</p>
+                <p>Please enter your new email address and the confirmation code.</p>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="newEmail">New email:</label>
+                        <input type="text" ng-model="newEmail" class="form-control" id="newEmail">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmationCode">Confirmation code:</label>
+                        <input type="text" ng-model="confirmationCode" class="form-control" id="confirmationCode">
+                    </div>
+                </form>
+                {{emailError}}
+            </div>
+            <div class="modal-footer">
+                <button id="updateEmail" type="submit" class="btn btn-primary" ng-click="confirmEmail()">Confirm</button>
+            </div>
+        </div>
+    </div>
 </div>

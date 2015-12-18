@@ -290,6 +290,10 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.email = "";
     $scope.projects = [];
 
+    $scope.newEmail = "";
+    $scope.confirmationCode = "";
+    $scope.emailError = "";
+
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
         console.log($scope.loggedIn);
         $location.path("/home");
@@ -313,5 +317,58 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
 
     $scope.openProject = function(id) {
         $location.path("/codeGenerator/"+id);
+    };
+
+    $scope.emailConfirmation = function() {
+        $(function () {
+            $('#emailConfirmation').modal('show')
+        })
+    };
+
+    $scope.changeEmail = function() {
+        $scope.emailError = "";
+        var data = {
+            email: $scope.email,
+            newEmail: $scope.newEmail,
+            confirmation: Math.random().toString(36).slice(2)
+        };
+        $http.post("/changeEmail", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+            });
+
+        $(function () {
+            $('#changeEmailModal').modal('show')
+        })
+    };
+
+    $scope.confirmEmail = function() {
+        $scope.emailError = "";
+        var data = {
+            email: $scope.email,
+            newEmail: $scope.newEmail,
+            confirmation: $scope.confirmationCode
+        };
+        $http.post("/confirmEmailChange", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $scope.email = data;
+                $scope.newEmail = "";
+                $scope.confirmationCode = "";
+                $(function () {
+                    $('#changeEmailModal').modal('hide')
+                })
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.emailError = "Something went wrong, please check the email and confirmation code.";
+            });
+
+        $(function () {
+            $('#changeEmailModal').modal('show')
+        })
     }
 });

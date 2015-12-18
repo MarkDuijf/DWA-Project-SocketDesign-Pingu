@@ -324,5 +324,26 @@ module.exports = function (app) {
                 });
             }
         });
+
+        app.post('/confirmEmailChange', function(req, res) {
+            var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //Regex voor een goed email adres
+            if(req.session.confirmationCode === req.body.confirmation && re.test(req.body.newEmail) === true) {
+                console.log("Email changed");
+                //TODO checken of email al bestaat
+                User.update({username: req.session.username, email: req.body.email}, {$set: { email: req.body.newEmail } }, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Update error");
+                    } else {
+                        res.status(200);
+                        res.send(req.body.newEmail);
+                    }
+                });
+            } else {
+                res.status(400);
+                res.send("Wrong confirmation code");
+            }
+        });
     });
 };
