@@ -20,6 +20,10 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/codeGenerator.html',
             controller: 'generatorController'
         }).
+            when('/codeGenerator/:id', {
+                templateUrl: 'partials/codeGenerator.html',
+                controller: 'generatorController'
+            }).
         when('/chatPage', {
             templateUrl: 'partials/chatPage.html',
             controller: 'chatController'
@@ -28,12 +32,26 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/helloworld.html',
             controller: ''
         }).
+            when('/myAccount', {
+                templateUrl: 'partials/myAccount.html',
+                controller: 'accountController'
+            }).
         otherwise({
             redirectTo: '/home'
         });
     }]);
 
-theApp.controller('homeController', function ($scope, $http, $routeParams, $timeout, usernameFactory) {
+theApp.factory('LoginFactory', function($http) {
+   var object = {};
+
+    object.setLogin = function(bool) {
+        object.loggedIn = bool;
+    };
+
+    return object;
+});
+
+theApp.controller('homeController', function ($scope, $http, $routeParams, $timeout, usernameFactory, LoginFactory) {
         $scope.registerData = {};
         $scope.registerData.firstName = "";
         $scope.registerData.lastName = "";
@@ -50,7 +68,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.contact.email = "";
         $scope.contact.message = "";
 
-        $scope.loggedIn = false;
+        $scope.loggedIn = LoginFactory.loggedIn;
         $scope.homeMessage = "No message";
         $scope.showHomeMessage = false;
         $scope.isErrorMessage = false;
@@ -146,6 +164,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.isErrorMessage = false;
                 usernameFactory = $scope.loginData.username;
                 console.log("logged in user is: " + usernameFactory);
+                    LoginFactory.setLogin(true);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -241,3 +260,40 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         ID: 'community-chat'
     }];
 }]);
+
+theApp.controller('accountController', function ($scope, $http, $routeParams, $location, LoginFactory) {
+    $scope.loggedIn = LoginFactory.loggedIn;
+    $scope.userData = {};
+    $scope.gotInfo = false;
+
+    $scope.username = "";
+    $scope.firstName = "";
+    $scope.lastName = "";
+    $scope.email = "";
+    $scope.projects = [];
+
+    if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
+        console.log($scope.loggedIn);
+        $location.path("/home");
+    } else if ($scope.loggedIn === true) {
+    $http.get("/myAccount").
+        success(function (data) {
+            console.log("Account succes!");
+            userData = data;
+            $scope.gotInfo = true;
+            $scope.username = data.username;
+            $scope.firstName = data.firstName;
+            $scope.lastName = data.lastName;
+            $scope.email = data.email;
+            $scope.projects = data.projects;
+        }).
+        error(function (data, status) {
+            console.log("Account error:", data, status);
+            $location.path("/home");
+        });
+    }
+
+    $scope.openProject = function(id) {
+        $location.path("/codeGenerator/"+id);
+    }
+});

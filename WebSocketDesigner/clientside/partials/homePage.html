@@ -4,8 +4,9 @@
         <header>
             <h2>Hey.</h2>
         </header>
-        <button id="logInButton" ng-click="openLoginModal()">Login</button>
-        <button id="registerButton" ng-click="openRegisterModal()">Register</button>
+        <button ng-hide="loggedIn" id="logInButton" ng-click="openLoginModal()">Login</button>
+        <button ng-hide="loggedIn" id="registerButton" ng-click="openRegisterModal()">Register</button>
+        <button ng-show="loggedIn" id="accountButton">My Account</button>
         <footer>
             <a href="#aboutus" class="button style2 down">More</a>
         </footer>

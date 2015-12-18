@@ -22,6 +22,11 @@ module.exports = function (app) {
 
     mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
+        app.get('/login', function(req, res) {
+            res.status(200);
+            res.send(req.session.loggedin);
+        });
+
         app.post('/login', function (req, res) {
             User.findOne({
                 username: req.body.username,
@@ -37,7 +42,7 @@ module.exports = function (app) {
                     //Als een gebruiker niet gevonden kan worden met de ingevoerde gebruikersnaam en wachtwoord
                     req.session.loggedin = false;
                     req.session.username = "";
-                    res.lstatus(404);
+                    res.status(404);
                     res.send("Wrong username/password");
                 } else if (user.activated === true) {
                     console.log("Correct");
@@ -158,7 +163,6 @@ module.exports = function (app) {
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
-
             //Voor unit test
             if (req.body.username !== undefined) {
                 req.session.username = req.body.username;
@@ -177,6 +181,7 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
+                //console.log(req.body.name);
                 res.status(400);
                 res.send("No project name found");
             } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
@@ -247,6 +252,66 @@ module.exports = function (app) {
                     res.status(200);
                     res.send(projects);
                 })
+            }
+        });
+
+        app.get('/projectTest/:id', function (req, res) {
+                Project.findOne({_id: req.params.id}, function (err, project) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Problem finding project");
+                    } else if(project.username === req.session.username) {
+                        var object = {
+                            name: project.projectName,
+                            code: project.code
+                        }
+                        res.status(200);
+                        res.send(object);
+                    } else if(project.username !== req.session.username) {
+                        var object = {
+                            name: "My Project",
+                            code: ""
+                        }
+                        res.status(400);
+                        res.send(object);
+                    }
+                });
+        });
+
+        app.get('/myAccount', function(req, res) {
+            if(req.session.loggedin !== true) {
+                res.status(400);
+                res.send("Not logged in");
+            } else if(req.session.loggedin === true) {
+                //TODO misschien wachtwoord in de session zetten?
+                User.findOne({username: req.session.username}, function(err, user) {
+                    if(err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Error finding user");
+                    } else {
+                        var data = {
+                            username: user.username,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            email: user.email,
+                            projects: null
+                        };
+
+                        Project.find({username: req.session.username}, function(err, projects){
+                            if(err) {
+                                console.log(err);
+                                res.status(500);
+                                res.send("Error finding projects");
+                            } else {
+                                data.projects = projects;
+                                res.status(200);
+                                res.send(data);
+                            }
+                        });
+                    }
+                });
             }
         });
     });
