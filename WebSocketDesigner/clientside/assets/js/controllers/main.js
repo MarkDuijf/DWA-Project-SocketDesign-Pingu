@@ -294,6 +294,11 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.confirmationCode = "";
     $scope.emailError = "";
 
+    $scope.passwordError = "";
+    $scope.confirmationCodePassword = "";
+    $scope.newPassword = "";
+    $scope.newPasswordR = "";
+
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
         console.log($scope.loggedIn);
         $location.path("/home");
@@ -370,5 +375,58 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         $(function () {
             $('#changeEmailModal').modal('show')
         })
-    }
+    };
+
+    $scope.passwordConfirmation = function() {
+        $(function () {
+            $('#passwordConfirmation').modal('show')
+        })
+    };
+
+    $scope.changePassword = function() {
+        $scope.passwordError = "";
+        var data = {
+            email: $scope.email,
+            confirmation: Math.random().toString(36).slice(2)
+        };
+        $http.post("/changeEmail", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+            });
+
+        $(function () {
+            $('#changePasswordModal').modal('show')
+        })
+    };
+
+    $scope.confirmPassword = function() {
+        $scope.emailError = "";
+        var data = {
+            newPass: $scope.newPassword,
+            newPassR: $scope.newPasswordR,
+            confirmation: $scope.confirmationCodePassword
+        };
+        $http.post("/confirmPasswordChange", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $scope.confirmationCodePassword = "";
+                $(function () {
+                    $('#changePasswordModal').modal('hide')
+                });
+                $scope.loggedIn = false;
+                LoginFactory.loggedIn = false;
+                $location.path("/home");
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.passwordError = "Please check your password and confirmation code";
+            });
+
+        $(function () {
+            $('#changePasswordModal').modal('show')
+        })
+    };
 });

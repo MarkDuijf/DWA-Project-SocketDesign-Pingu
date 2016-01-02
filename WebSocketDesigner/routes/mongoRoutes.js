@@ -345,5 +345,28 @@ module.exports = function (app) {
                 res.send("Wrong confirmation code");
             }
         });
+
+        app.post('/confirmPasswordChange', function(req, res) {
+            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "") {
+                console.log("Email changed");
+                //TODO checken of email al bestaat
+                User.update({username: req.session.username}, {$set: { password: req.body.newPass } }, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Update error");
+                    } else {
+                        req.session.loggedin = false;
+                        req.session.username = "";
+                        res.status(200);
+                        res.send(req.body.newPass);
+                    }
+                });
+            } else {
+                res.status(400);
+                res.send("Data error");
+            }
+        });
     });
+
 };
