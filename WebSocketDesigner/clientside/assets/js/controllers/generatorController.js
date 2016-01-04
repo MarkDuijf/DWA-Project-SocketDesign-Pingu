@@ -29,6 +29,10 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         success(function (data) {
           console.log("Project succes!");
           $scope.setCode(data.code, data.name);
+
+          $scope.showHomeMessage = true;
+          $scope.homeMessage = "Your project has been loaded!";
+          $scope.isErrorMessage = false;
         }).
         error(function (data, status) {
           console.log("Project error:", data, status);

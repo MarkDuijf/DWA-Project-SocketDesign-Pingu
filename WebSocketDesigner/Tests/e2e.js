@@ -25,13 +25,14 @@ describe("Selenium Tests - Login, Register and Contact", function() {
         browser.init(done);
     });
 
-    /*
     it("Should get an username/password doesn't exist error", function(done) {
         browser
             .url("http://localhost:13000")
+            .waitForVisible('#logInButton', 60000)
             .click('#logInButton')
+            .waitForVisible('#logInButtonForm', 60000)
             .click('#logInButtonForm')
-            .waitForVisible('#loginError', 10000)
+            .waitForVisible('#loginError', 60000)
             .getText("#loginError").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -43,6 +44,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
     it("Should register an user with the username Tester", function(done) {
         browser
             .url("http://localhost:13000")
+            .waitForVisible('#registerButton', 60000)
             .click('#registerButton')
             .setValue('#firstName', 'John')
             .setValue('#lastName', 'Doe')
@@ -50,7 +52,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .setValue('#password', 'abc123')
             .setValue('#email', 'iets@iets.nl')
             .click('#registerButtonForm')
-            .waitForVisible('#topMessage', 10000)
+            .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -62,6 +64,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
     it("Should give a not yet activated error for an user with the username Tester", function(done) {
         browser
             .url("http://localhost:13000")
+            .waitForVisible('#logInButton', 60000)
             .click('#logInButton')
             .setValue('#usernameLogin', 'Tester')
             .getValue('#usernameLogin').then(function(value) {
@@ -71,8 +74,9 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .getValue('#passwordLogin').then(function(value) {
                 expect(value).to.be.a("string");
             })
+            .waitForVisible('#logInButtonForm', 60000)
             .click('#logInButtonForm')
-            .waitForVisible('#loginError', 10000)
+            .waitForVisible('#loginError', 60000)
             .getText("#loginError").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -84,6 +88,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
     it("Should log the user called test in", function(done) {
         browser
             .url("http://localhost:13000")
+            .waitForVisible('#logInButton', 60000)
             .click('#logInButton')
             .setValue('#usernameLogin', 'test')
             .getValue('#usernameLogin').then(function(value) {
@@ -93,12 +98,27 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .getValue('#passwordLogin').then(function(value) {
                 expect(value).to.be.a("string");
             })
+            .waitForVisible('#logInButtonForm', 60000)
             .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 10000)
+            .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('You have been logged in');
+                done();
+            });
+    });
+
+    it("Should visit the my account page", function(done) {
+        browser
+            .url("http://localhost:13000")
+            .waitForVisible('#accountButton', 60000)
+            .click('#accountButton')
+            .waitForVisible('#accountInfoText', 60000)
+            .getText("#accountInfoText").then( function(result) {
+                console.log("Message is: ", result);
+                expect(result).to.be.a("string");
+                expect(result).to.have.string('Account Info');
                 done();
             });
     });
@@ -109,8 +129,9 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .setValue('#contactName', 'Naam')
             .setValue('#contactEmail', 'dwasdeu@gmail.com')
             .setValue('#contactMessage', 'Test message 123')
+            .waitForVisible('#contactButton', 60000)
             .click('#contactButton')
-            .waitForVisible('#topMessage', 10000)
+            .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -118,15 +139,16 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 done();
             });
     });
-     */
 
     it("Should save generator code", function(done) {
         browser
             .url("http://localhost:13000/#/codeGenerator")
+            .waitForVisible('#generatorSaveButton', 60000)
             .click('#generatorSaveButton')
             .setValue('#projectName', "E2E Project")
+            .waitForVisible('#saveButton', 60000)
             .click('#saveButton')
-            .waitForVisible('#topMessage', 10000)
+            .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
@@ -138,9 +160,26 @@ describe("Selenium Tests - Login, Register and Contact", function() {
     it("Should load the previously made generator code", function(done) {
         browser
             .url("http://localhost:13000/#/codeGenerator")
+            .waitForVisible('#generatorLoadButton', 60000)
             .click('#generatorLoadButton')
-            .waitForVisible('#codeModal', 15000)
+            .waitForVisible('#codeModal', 60000)
             .click(".codeKiesveld=E2E Project").then(function(result) {
+                done();
+            });
+    });
+
+    it("Should load an earlier project called E2E test from the account page", function(done) {
+        browser
+            .url("http://localhost:13000/")
+            .waitForVisible('#accountButton', 60000)
+            .click('#accountButton')
+            .waitForVisible(".codeKiesveld=E2E Project", 60000)
+            .click(".codeKiesveld=E2E Project")
+            .waitForVisible('#topMessage', 60000)
+            .getText("#topMessage").then( function(result) {
+                console.log("Message is: ", result);
+                expect(result).to.be.a("string");
+                expect(result).to.have.string('Your project has been loaded!');
                 done();
             });
     });
@@ -151,7 +190,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 if(err) { throw err; }
                 console.log("E2E Tester removed");
             });
-            Project.remove({projectname: 'E2E Project'}, function(err, result) {
+            Project.remove({username: 'test', projectName: 'E2E Project'}, function(err, result) {
                 if(err) {throw err;}
                 console.log("E2E Project removed")
             })
