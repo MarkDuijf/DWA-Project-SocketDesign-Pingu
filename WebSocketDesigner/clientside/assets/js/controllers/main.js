@@ -196,6 +196,19 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         };
 
+        $scope.logout = function() {
+            $http.post("/logout").
+                success(function (data) {
+                    console.log("Succes! " + data);
+                }).
+                error(function (data, status) {
+                    console.log("ERROR:", data, status);
+                });
+
+            $scope.loggedIn = false;
+            LoginFactory.loggedIn = false;
+        }
+
         //Gebruikt door het contactformulier
         $scope.sendMessage = function () {
             var messageData = {
@@ -389,7 +402,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             email: $scope.email,
             confirmation: Math.random().toString(36).slice(2)
         };
-        $http.post("/changeEmail", data).
+        $http.post("/changePassword", data).
             success(function (data) {
                 console.log("Succes! " + data);
             }).

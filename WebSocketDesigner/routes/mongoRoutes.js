@@ -74,6 +74,13 @@ module.exports = function (app) {
             });
         });
 
+        app.post('/logout', function (req, res) {
+            req.session.loggedIn = false;
+            req.session.username = "";
+            res.status(200);
+            res.send("Uitgelogd");
+        });
+
         //Gebruikt om een account te activeren, gebruikers krijgen na het registreren een mail met een link naar deze route
         app.post('/confirm', function (req, res) {
             User.findOne({
@@ -328,16 +335,21 @@ module.exports = function (app) {
         app.post('/confirmEmailChange', function(req, res) {
             var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //Regex voor een goed email adres
             if(req.session.confirmationCode === req.body.confirmation && re.test(req.body.newEmail) === true) {
-                console.log("Email changed");
-                //TODO checken of email al bestaat
-                User.update({username: req.session.username, email: req.body.email}, {$set: { email: req.body.newEmail } }, function (err, result) {
-                    if (err) {
-                        console.log(err);
-                        res.status(500);
-                        res.send("Update error");
+                User.find({email: req.body.newEmail}, function(err, results) {
+                    if(results.length > 0) {
+                        res.status(400);
+                        res.send("Email already exists");
                     } else {
-                        res.status(200);
-                        res.send(req.body.newEmail);
+                        User.update({username: req.session.username, email: req.body.email}, {$set: { email: req.body.newEmail } }, function (err, result) {
+                            if (err) {
+                                console.log(err);
+                                res.status(500);
+                                res.send("Update error");
+                            } else {
+                                res.status(200);
+                                res.send(req.body.newEmail);
+                            }
+                        });
                     }
                 });
             } else {
@@ -347,9 +359,7 @@ module.exports = function (app) {
         });
 
         app.post('/confirmPasswordChange', function(req, res) {
-            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "") {
-                console.log("Email changed");
-                //TODO checken of email al bestaat
+            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "" && req.body.newPass.length >= 3 && req.body.newPass.length <= 15) {
                 User.update({username: req.session.username}, {$set: { password: req.body.newPass } }, function (err, result) {
                     if (err) {
                         console.log(err);
