@@ -37,7 +37,7 @@ module.exports = function (app) {
                     //Als een gebruiker niet gevonden kan worden met de ingevoerde gebruikersnaam en wachtwoord
                     req.session.loggedin = false;
                     req.session.username = "";
-                    res.lstatus(404);
+                    res.status(404);
                     res.send("Wrong username/password");
                 } else if (user.activated === true) {
                     console.log("Correct");
@@ -196,7 +196,6 @@ module.exports = function (app) {
                     if (err) return res.send(500, { error: err });
                     return res.send("Saved the project");
                 });
-                console.log(req.body);
             }
 
             /* Werke niet vanwege upsert
