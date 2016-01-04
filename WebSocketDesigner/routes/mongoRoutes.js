@@ -74,6 +74,13 @@ module.exports = function (app) {
             });
         });
 
+        app.post('/logout', function (req, res) {
+            req.session.loggedIn = false;
+            req.session.username = "";
+            res.status(200);
+            res.send("Uitgelogd");
+        });
+
         //Gebruikt om een account te activeren, gebruikers krijgen na het registreren een mail met een link naar deze route
         app.post('/confirm', function (req, res) {
             User.findOne({

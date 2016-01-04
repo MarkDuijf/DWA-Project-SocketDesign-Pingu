@@ -7,6 +7,7 @@
         <button ng-hide="loggedIn" id="logInButton" ng-click="openLoginModal()">Login</button>
         <button ng-hide="loggedIn" id="registerButton" ng-click="openRegisterModal()">Register</button>
         <a href="/#/myAccount"><button ng-show="loggedIn" id="accountButton">My Account</button></a>
+        <button ng-show="loggedIn" ng-click="logout()" id="logOutButton">Log out</button>
         <footer>
             <a href="#aboutus" class="button style2 down">More</a>
         </footer>
