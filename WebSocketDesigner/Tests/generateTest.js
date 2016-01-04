@@ -10,7 +10,7 @@ var agent = supertest.agent(app);
 
 describe("Als ik op de generate button klik", function(){
 
-    beforeEach(module('theApp'));
+    //beforeEach(module('theApp'));
     it("moeten verkeerde YAML tags geweigerd worden", function(done){
         var generateController = require('../clientside/assets/js/controllers/generatorController');
         var generate = {
