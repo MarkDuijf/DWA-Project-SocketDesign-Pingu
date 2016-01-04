@@ -5,6 +5,7 @@ module.exports = function(app){
     var fs = require('fs');
     var archiver = require('archiver');
     var rmdir = require('rimraf');
+    var session = require("express-session");
 
     app.get('/downloadTest', function(req, res) {
         var dir = "testdir123"; //TODO naam genereren, iets van [username]_[projectname]

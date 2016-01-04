@@ -1,5 +1,4 @@
-theApp.controller('generatorController', function ($scope, $http, $location, $routeParams, FileSaver, Blob) {
-
+theApp.controller('generatorController', function ($scope, $http, $location, $routeParams, FileSaver, Blob, LoginFactory) {
   var editor = ace.edit("editor");
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
@@ -7,7 +6,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
   var generated = ace.edit("generated");
   generated.setTheme("ace/theme/monokai");
-  generated.getSession().setMode("ace/mode/javascript");
+  generated.getSession().setMode("ace/mode/json");
   generated.$blockScrolling = Infinity;
 
   $scope.beschikbareCode = [];
@@ -22,6 +21,20 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   $scope.client = {};
   $scope.server = {};
   $scope.info = {};
+
+  if ($routeParams.id !== undefined) {
+    //Request server en check de username van het project met de session username, stuur project met code terug als ze hetzelfde zijn
+    editor.getSession().setValue("Trying to fetch the project!");
+    $http.get("/projectTest/"+$routeParams.id).
+        success(function (data) {
+          console.log("Project succes!");
+          $scope.setCode(data.code, data.name);
+        }).
+        error(function (data, status) {
+          console.log("Project error:", data, status);
+          editor.getSession().setValue("No project found with this id and username combination.");
+        });
+  }
   
   $scope.saveInput = function(){
     //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
@@ -30,25 +43,47 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     });
   };
 
-  $scope.saveProject = function() {
+  $scope.saveProject = function(askForConfirmation) {
     if($scope.projectName !== "") {
       var data = {
         code: editor.getSession().getValue(),
-        name: $scope.projectName
+        projectName: $scope.projectName
       };
-      $http.post("/projectTest", data).
-          success(function (data) {
-            console.log("Succes! " + data);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "Your project has been saved.";
-            $scope.isErrorMessage = false;
-          }).
-          error(function (data, status) {
-            console.log("ERROR:", data, status);
-            $scope.showHomeMessage = true;
-            $scope.homeMessage = "There was an error saving your project.";
-            $scope.isErrorMessage = true;
-          });
+
+
+      if(askForConfirmation===false) {
+        saveIt();
+      } else {
+        $http.post("/projectTest/checkName", data).
+            success(function (data) {
+              if (data === "Exists") {
+                $(function () {
+                  $('#saveConfirmation').modal('show');
+                });
+              } else {
+                saveIt();
+              }
+            }).
+            error(function (data, status) {
+              console.log("ERROR:", data, status);
+            });
+      }
+
+      function saveIt() {
+        $http.post("/projectTest", data).
+            success(function (data) {
+              console.log("Succes! " + data);
+              $scope.showHomeMessage = true;
+              $scope.homeMessage = "Your project has been saved.";
+              $scope.isErrorMessage = false;
+            }).
+            error(function (data, status) {
+              console.log("ERROR:", data, status);
+              $scope.showHomeMessage = true;
+              $scope.homeMessage = "There was an error saving your project.";
+              $scope.isErrorMessage = true;
+            });
+      }
     } else {
       $scope.showHomeMessage = true;
       $scope.homeMessage = "You didn't enter a project name.";
@@ -83,7 +118,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   $scope.getTest = function() {
     $http.get('/projectTest').
     success(function(data) {
-      console.log("Succes! " + data);
           $scope.beschikbareCode = data;
           $(function () {
             $('#codeModal').modal('show');
@@ -97,8 +131,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     })
   };
 
-  $scope.setCode = function(code) {
+  $scope.setCode = function(code, name) {
     editor.getSession().setValue(code);
+    $scope.projectName = name;
     $(function () {
       $('#codeModal').modal('hide');
     });
@@ -118,6 +153,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       'app.use(express.static(path.join(__dirname)));\n' +
       'server.listen(' + info.port + ');\n\n';
   };
+
   //Meerdere socketberichten = for-loop + 2 variablen(zie try)
   var generateServerSocket = function(messageArray){
     return '//This is the socket.io code for the server\n' +
@@ -167,24 +203,23 @@ var traverse = function(input){
 
 $scope.Generate = function () {
   try {
-    var parser = PEG.buildParser("start = ('a' / 'b')+");
-    var x = prompt("put in an a or b or combination");
-    console.log(parser.parse(x));
     var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
-    console.log(esprima.tokenize(input));
+    //var parser = PEG.buildParser("");
     input = jsyaml.safeLoad(input);
+    input = JSON.stringify(input, null, 4);
+    console.log(input);
     errorHandling(input);
     traverse(input);
-    //console.log(JSON.stringify(esprima.parse(test), null, 4));
-    temp.push(generateServerCode($scope.info));
+    console.log(input);
+    //temp.push(generateServerCode($scope.info));
     //temp.push(generateServerSocket(output));
     //temp.push(generateClientSocket(output));
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
-    generated.setValue(output, 1);
+    generated.setValue(input, 1);
     $scope.error = null;
     }
     catch

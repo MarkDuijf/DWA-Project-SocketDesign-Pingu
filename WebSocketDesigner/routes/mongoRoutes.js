@@ -4,7 +4,7 @@
 module.exports = function (app) {
     "use strict";
     require('body-parser');
-    require("express-session");
+    var session = require("express-session");
     var nodemailer = require('nodemailer');
 
     var mongoose = require('mongoose');
@@ -20,8 +20,23 @@ module.exports = function (app) {
         }
     });
 
+    app.get('/getLoggedIn', function(req, res) {
+        if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
+            res.status(200);
+            res.send("Logged in");
+        } else {
+            res.status(200);
+            res.send("Not logged in");
+        }
+    })
+
     mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
+        app.get('/login', function(req, res) {
+            res.status(200);
+            res.send(req.session.loggedin);
+        });
+
         app.post('/login', function (req, res) {
             User.findOne({
                 username: req.body.username,
@@ -159,7 +174,7 @@ module.exports = function (app) {
         app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
             //Voor unit test
-            if (req.body.username !== undefined || req.body.username !== null || req.body.username !== "") {
+            if (req.body.username !== undefined) {
                 req.session.username = req.body.username;
                 req.session.loggedin = true;
             }
@@ -176,6 +191,7 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
+                //console.log(req.body.name);
                 res.status(400);
                 res.send("No project name found");
             } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
@@ -187,7 +203,7 @@ module.exports = function (app) {
             } else {
                 var project = {
                     username: req.session.username,
-                    projectName: req.body.name,
+                    projectName: req.body.projectName,
                     code: req.body.code,
                     date: datetime
                 };
@@ -211,6 +227,18 @@ module.exports = function (app) {
             */
         });
 
+        app.post('/projectTest/checkName', function(req,res) {
+            Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
+                if(projects.length === 0) {
+                    res.status(200);
+                    res.send("Doesn't exist");
+                } else {
+                    res.status(200);
+                    res.send("Exists");
+                }
+            });
+        });
+
         app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
             if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
                 //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
@@ -219,8 +247,7 @@ module.exports = function (app) {
                         console.log(err);
                         res.status(500);
                         res.send("Problem finding projects");
-                    }
-                    console.log(projects);                                      //Anders stuur het resultaat terug
+                    }                                      //Anders stuur het resultaat terug
                     res.status(200);
                     res.send(projects);
                 });
@@ -237,5 +264,109 @@ module.exports = function (app) {
                 })
             }
         });
+
+        app.get('/projectTest/:id', function (req, res) {
+                Project.findOne({_id: req.params.id}, function (err, project) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Problem finding project");
+                    } else if(project.username === req.session.username) {
+                        var object = {
+                            name: project.projectName,
+                            code: project.code
+                        }
+                        res.status(200);
+                        res.send(object);
+                    } else if(project.username !== req.session.username) {
+                        var object = {
+                            name: "My Project",
+                            code: ""
+                        }
+                        res.status(400);
+                        res.send(object);
+                    }
+                });
+        });
+
+        app.get('/myAccount', function(req, res) {
+            if(req.session.loggedin !== true) {
+                res.status(400);
+                res.send("Not logged in");
+            } else if(req.session.loggedin === true) {
+                //TODO misschien wachtwoord in de session zetten?
+                User.findOne({username: req.session.username}, function(err, user) {
+                    if(err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Error finding user");
+                    } else {
+                        var data = {
+                            username: user.username,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            email: user.email,
+                            projects: null
+                        };
+
+                        Project.find({username: req.session.username}, function(err, projects){
+                            if(err) {
+                                console.log(err);
+                                res.status(500);
+                                res.send("Error finding projects");
+                            } else {
+                                data.projects = projects;
+                                res.status(200);
+                                res.send(data);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+        app.post('/confirmEmailChange', function(req, res) {
+            var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //Regex voor een goed email adres
+            if(req.session.confirmationCode === req.body.confirmation && re.test(req.body.newEmail) === true) {
+                console.log("Email changed");
+                //TODO checken of email al bestaat
+                User.update({username: req.session.username, email: req.body.email}, {$set: { email: req.body.newEmail } }, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Update error");
+                    } else {
+                        res.status(200);
+                        res.send(req.body.newEmail);
+                    }
+                });
+            } else {
+                res.status(400);
+                res.send("Wrong confirmation code");
+            }
+        });
+
+        app.post('/confirmPasswordChange', function(req, res) {
+            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "") {
+                console.log("Email changed");
+                //TODO checken of email al bestaat
+                User.update({username: req.session.username}, {$set: { password: req.body.newPass } }, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Update error");
+                    } else {
+                        req.session.loggedin = false;
+                        req.session.username = "";
+                        res.status(200);
+                        res.send(req.body.newPass);
+                    }
+                });
+            } else {
+                res.status(400);
+                res.send("Data error");
+            }
+        });
     });
+
 };

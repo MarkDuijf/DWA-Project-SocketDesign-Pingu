@@ -1,6 +1,6 @@
 //var socket = io.connect(window.location.protocol + '//' + window.location.host);
 
-theApp.controller('chatController', ['$scope', '$location', function ($scope) {
+theApp.controller('chatController', ['$scope', '$location', function ($scope, LoginFactory) {
     //$scope.test = function () {
     //    socket.emit('testemit');
     //    console.log('testfunctie')

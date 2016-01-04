@@ -20,6 +20,10 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/codeGenerator.html',
             controller: 'generatorController'
         }).
+            when('/codeGenerator/:id', {
+                templateUrl: 'partials/codeGenerator.html',
+                controller: 'generatorController'
+            }).
         when('/chatPage', {
             templateUrl: 'partials/chatPage.html',
             controller: 'chatController'
@@ -28,12 +32,26 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/helloworld.html',
             controller: ''
         }).
+            when('/myAccount', {
+                templateUrl: 'partials/myAccount.html',
+                controller: 'accountController'
+            }).
         otherwise({
             redirectTo: '/home'
         });
     }]);
 
-theApp.controller('homeController', function ($scope, $http, $routeParams, $timeout, usernameFactory) {
+theApp.factory('LoginFactory', function($http) {
+   var object = {};
+
+    object.setLogin = function(bool) {
+        object.loggedIn = bool;
+    };
+
+    return object;
+});
+
+theApp.controller('homeController', function ($scope, $http, $routeParams, $timeout, usernameFactory, LoginFactory) {
         $scope.registerData = {};
         $scope.registerData.firstName = "";
         $scope.registerData.lastName = "";
@@ -50,7 +68,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.contact.email = "";
         $scope.contact.message = "";
 
-        $scope.loggedIn = false;
+        $scope.loggedIn = LoginFactory.loggedIn;
         $scope.homeMessage = "No message";
         $scope.showHomeMessage = false;
         $scope.isErrorMessage = false;
@@ -75,6 +93,24 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.homeMessage = "Couldn't activate this account.";
                 $scope.isErrorMessage = true;
             });
+        }
+
+        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $sope.loggedIn zonder reden false is
+        if($scope.loggedIn !== true) {
+            $http.get("/getLoggedIn").
+                success(function (data) {
+                    console.log(data);
+                    if (data === "Logged in") {
+                        LoginFactory.setLogin(true);
+                        $scope.loggedIn = true;
+                    } else if (data === "Not logged in") {
+                        LoginFactory.setLogin(false);
+                        $scope.loggedIn = false;
+                    }
+                }).
+                error(function (data, status) {
+                    console.log("Account error:", data, status);
+                });
         }
 
         //Gebruikt voor het registreren met de ingevoerde gegevens
@@ -146,6 +182,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.isErrorMessage = false;
                 usernameFactory = $scope.loginData.username;
                 console.log("logged in user is: " + usernameFactory);
+                    LoginFactory.setLogin(true);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -241,3 +278,155 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         ID: 'community-chat'
     }];
 }]);
+
+theApp.controller('accountController', function ($scope, $http, $routeParams, $location, LoginFactory) {
+    $scope.loggedIn = LoginFactory.loggedIn;
+    $scope.userData = {};
+    $scope.gotInfo = false;
+
+    $scope.username = "";
+    $scope.firstName = "";
+    $scope.lastName = "";
+    $scope.email = "";
+    $scope.projects = [];
+
+    $scope.newEmail = "";
+    $scope.confirmationCode = "";
+    $scope.emailError = "";
+
+    $scope.passwordError = "";
+    $scope.confirmationCodePassword = "";
+    $scope.newPassword = "";
+    $scope.newPasswordR = "";
+
+    if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
+        console.log($scope.loggedIn);
+        $location.path("/home");
+    } else if ($scope.loggedIn === true) {
+    $http.get("/myAccount").
+        success(function (data) {
+            console.log("Account succes!");
+            userData = data;
+            $scope.gotInfo = true;
+            $scope.username = data.username;
+            $scope.firstName = data.firstName;
+            $scope.lastName = data.lastName;
+            $scope.email = data.email;
+            $scope.projects = data.projects;
+        }).
+        error(function (data, status) {
+            console.log("Account error:", data, status);
+            $location.path("/home");
+        });
+    }
+
+    $scope.openProject = function(id) {
+        $location.path("/codeGenerator/"+id);
+    };
+
+    $scope.emailConfirmation = function() {
+        $(function () {
+            $('#emailConfirmation').modal('show')
+        })
+    };
+
+    $scope.changeEmail = function() {
+        $scope.emailError = "";
+        var data = {
+            email: $scope.email,
+            newEmail: $scope.newEmail,
+            confirmation: Math.random().toString(36).slice(2)
+        };
+        $http.post("/changeEmail", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+            });
+
+        $(function () {
+            $('#changeEmailModal').modal('show')
+        })
+    };
+
+    $scope.confirmEmail = function() {
+        $scope.emailError = "";
+        var data = {
+            email: $scope.email,
+            newEmail: $scope.newEmail,
+            confirmation: $scope.confirmationCode
+        };
+        $http.post("/confirmEmailChange", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $scope.email = data;
+                $scope.newEmail = "";
+                $scope.confirmationCode = "";
+                $(function () {
+                    $('#changeEmailModal').modal('hide')
+                })
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.emailError = "Something went wrong, please check the email and confirmation code.";
+            });
+
+        $(function () {
+            $('#changeEmailModal').modal('show')
+        })
+    };
+
+    $scope.passwordConfirmation = function() {
+        $(function () {
+            $('#passwordConfirmation').modal('show')
+        })
+    };
+
+    $scope.changePassword = function() {
+        $scope.passwordError = "";
+        var data = {
+            email: $scope.email,
+            confirmation: Math.random().toString(36).slice(2)
+        };
+        $http.post("/changeEmail", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+            });
+
+        $(function () {
+            $('#changePasswordModal').modal('show')
+        })
+    };
+
+    $scope.confirmPassword = function() {
+        $scope.emailError = "";
+        var data = {
+            newPass: $scope.newPassword,
+            newPassR: $scope.newPasswordR,
+            confirmation: $scope.confirmationCodePassword
+        };
+        $http.post("/confirmPasswordChange", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $scope.confirmationCodePassword = "";
+                $(function () {
+                    $('#changePasswordModal').modal('hide')
+                });
+                $scope.loggedIn = false;
+                LoginFactory.loggedIn = false;
+                $location.path("/home");
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.passwordError = "Please check your password and confirmation code";
+            });
+
+        $(function () {
+            $('#changePasswordModal').modal('show')
+        })
+    };
+});

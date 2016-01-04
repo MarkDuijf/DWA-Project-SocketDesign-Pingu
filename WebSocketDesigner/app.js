@@ -28,6 +28,11 @@ require('./routes/mongoRoutes')(app);
 //Alle code voor het downloaden van een zip bestand met een project
 require('./routes/downloadRoutes')(app);
 
+var User = require('./models/user');
+var Project = require('./models/project');
+
+
+
 //All socket.io code
 io.on('connection', function (socket) {
     "use strict";
