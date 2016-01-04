@@ -7,6 +7,8 @@ module.exports = function(app){
     var rmdir = require('rimraf');
     var session = require("express-session");
 
+    //TODO downloads map maken als die nog niet bestaat
+
     app.get('/downloadTest', function(req, res) {
         var dir = "testdir123"; //TODO naam genereren, iets van [username]_[projectname]
         fs.mkdir("downloads/"+dir, function(err) {

@@ -31,8 +31,6 @@ require('./routes/downloadRoutes')(app);
 var User = require('./models/user');
 var Project = require('./models/project');
 
-
-
 //All socket.io code
 io.on('connection', function (socket) {
     "use strict";

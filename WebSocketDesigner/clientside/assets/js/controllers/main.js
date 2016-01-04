@@ -402,7 +402,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             email: $scope.email,
             confirmation: Math.random().toString(36).slice(2)
         };
-        $http.post("/changeEmail", data).
+        $http.post("/changePassword", data).
             success(function (data) {
                 console.log("Succes! " + data);
             }).
