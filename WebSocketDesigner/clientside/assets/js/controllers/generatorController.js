@@ -9,7 +9,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   generated.getSession().setMode("ace/mode/json");
   generated.$blockScrolling = Infinity;
 
-  $scope.loggedIn = LoginFactory.loggedIn;
+  //TODO uitcommenten
+  //$scope.loggedIn = LoginFactory.loggedIn;
+  $scope.loggedIn = true;
 
   if($scope.loggedIn !== true) {
     $http.get("/getLoggedIn").
@@ -259,22 +261,34 @@ var parsePort = function(input){
 }
 
 var parseClient = function(input){
+  console.log(input);
   if(Object.keys(input).length > 10){
-    throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.')
+    throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.');
   }
   for(var clientScope = 0; clientScope < Object.keys(input).length; clientScope++){
-    parseMessage(Object.keys(input)[clientScope]);
+    parseMessage(input[Object.keys(input)[clientScope]]);
     if(Object.keys(input)[clientScope] !== "message" + (clientScope+1)){
-      throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message' + (clientScope+1));
+      throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message\'' + (clientScope+1) + '\'');
     }
   }
 }
 
 var parseServer = function(input){
-
+  if(Object.keys(input).length > 10){
+    throw new Error('The number of used tags in \'server\' exceeds the maximum of 10 tags.');
+  }
+  for(var serverScope = 0; serverScope < Object.keys(input).length; serverScope++){
+    parseMessage(input[Object.keys(input)[serverScope]]);
+    if(Object.keys(input)[serverScope] !== "message" + (serverScope+1)){
+      throw new Error('The \'' + Object.keys(input)[serverScope] + '\' tag, that is used in \'server\', is not usable at this point. Please use \'message' + (serverScope+1) + '\'');
+    }
+  }
 }
 
 var parseMessage = function(input){
+  for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
+    
+  }
 }
 
 var parseParameters = function(input){
