@@ -1,6 +1,6 @@
 [
   { "username": "test",
-    "password": "test",
+    "password": "ad57484016654da87125db86f4227ea3",
     "email": "DWASDEU@gmail.com",
     "firstName": "socketDesigner",
     "lastName": "EUDevision",
@@ -8,7 +8,7 @@
     "activated": true
   },
   { "username": "demo",
-    "password": "demo",
+    "password": "ad57484016654da87125db86f4227ea3",
     "email": "dwasdeu@gmail.com",
     "firstName": "demoFirst",
     "lastName": "demoLast",
@@ -16,7 +16,7 @@
     "activated": false
   },
   { "username": "MarkD",
-    "password": "test",
+    "password": "ad57484016654da87125db86f4227ea3",
     "email": "dwaSDEU@gmail.com",
     "firstName": "Mark",
     "lastName": "Duijf",
