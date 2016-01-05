@@ -98,3 +98,7 @@
     height: 300px;
     overflow-y: auto;
 }
+
+#myAccountPage > h2 {
+    text-align: center;
+}

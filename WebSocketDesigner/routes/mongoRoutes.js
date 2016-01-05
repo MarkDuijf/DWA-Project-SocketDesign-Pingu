@@ -55,7 +55,6 @@ module.exports = function (app) {
                     res.status(404);
                     res.send("Wrong username/password");
                 } else if (user.activated === true) {
-                    console.log("Correct");
                     req.session.loggedin = true;
                     req.session.username = req.body.username;
                     res.status(200);
@@ -105,7 +104,7 @@ module.exports = function (app) {
                                 res.status(500);
                                 res.send("Couldn't set activated to true");
                             } else {
-                                console.log(result);
+                                //console.log(result);
                                 res.status(200);
                                 res.send("The account has been activated");
                             }
@@ -161,7 +160,7 @@ module.exports = function (app) {
                                         if (error) {
                                             return console.log(error);
                                         }
-                                        console.log('Message sent: ' + info.response);
+                                        //console.log('Message sent: ' + info.response);
                                     });
                                 }
                             });
@@ -178,7 +177,7 @@ module.exports = function (app) {
         });
 
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
-        app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
+        app.post('/projects', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
             //Voor unit test
             if (req.body.username !== undefined) {
@@ -234,7 +233,7 @@ module.exports = function (app) {
             */
         });
 
-        app.post('/projectTest/checkName', function(req,res) {
+        app.post('/projects/checkName', function(req,res) {
             Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
                 if(projects.length === 0) {
                     res.status(200);
@@ -246,7 +245,7 @@ module.exports = function (app) {
             });
         });
 
-        app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
+        app.get('/projects', function (req, res) {                       //Ophalen van alle projecten uit de database
             if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
                 //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
                 Project.find({}, function (err, projects) {
@@ -265,14 +264,14 @@ module.exports = function (app) {
                         res.status(500);
                         res.send("Problem finding projects");
                     }
-                    console.log(projects);                                      //Anders stuur het resultaat terug
+                    //console.log(projects);                                      //Anders stuur het resultaat terug
                     res.status(200);
                     res.send(projects);
                 })
             }
         });
 
-        app.get('/projectTest/:id', function (req, res) {
+        app.get('/projects/:id', function (req, res) {
                 Project.findOne({_id: req.params.id}, function (err, project) {
                     if (err) {
                         console.log(err);

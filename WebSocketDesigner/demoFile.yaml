@@ -41,6 +41,3 @@ client:
         messageName: roomServerMessage
         data:
         description: response message to everyone in a room
-
-server:
-  message1:
