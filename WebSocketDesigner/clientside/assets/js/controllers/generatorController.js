@@ -178,59 +178,116 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   };
 
 //Parsing Functions
-var parseInfo = function(){ 
+var parseMainScope = function(input){
+  if(input.client == undefined){
+    throw new Error('the \'client\' tag has not been defined in the scope.');
+  }
+  if(input.info == undefined){
+    throw new Error('the \'info\' tag has not been defined in the main scope');
+  }
+  for(var mainScope = 0; mainScope < Object.keys(input).length; mainScope++){
+    switch(Object.keys(input)[mainScope]){
+      case "client":
+        parseClient(input.client);
+        break;
+      case "server":
+        parseServer(input.server);
+        break;
+      case "info":
+        parseInfo(input.info);
+        break;
+      default:
+        throw new Error('The \'' + Object.keys(input)[mainScope] + '\' tag does not exist in the main scope.');
+    }
+  }
+}
+
+var parseInfo = function(input){ 
+  for(var infoScope = 0; infoScope < Object.keys(input).length; infoScope++){
+    switch(Object.keys(input)[infoScope]){
+      case "title":
+        parseTitle(input.title);
+        break;
+      case "port":
+        parsePort(input.port);
+        break;
+      default:
+        throw new Error('the \'' + Object.keys(input)[infoScope] + '\' tag in \'info\' does not exist.');
+    }
+  }
+}
+
+var parseTitle = function(input){
+  if(input.length <= 25){
+    //TODO lengte is goed, return data?
+  }
+  else{
+    throw new Error('the title length is ' + input.length + ', which is longer than the maximum of 25');
+  }
+}
+
+var parsePort = function(input){
+  if(typeof input == "number"){
+    if(input <= 65535 && input >= 2000){
+      //TODO type is number en is niet te hoog/laag
+    }
+    else{
+      throw new Error('the chosen port, ' + input + ', is not usable. Please use a port between 2000 and 65535');
+    }
+  }
+  else{
+    throw new Error('The given port value is not a number. Please choose a value between 2000 and 655355');
+  }
+}
+
+var parseClient = function(input){
+  if(Object.keys(input).length > 10){
+    throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.')
+  }
+  for(var clientScope = 0; clientScope < Object.keys(input).length; clientScope++){
+    parseMessage(Object.keys(input)[clientScope]);
+    if(Object.keys(input)[clientScope] !== "message" + (clientScope+1)){
+      throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message' + (clientScope+1));
+    }
+  }
+}
+
+var parseServer = function(input){
 
 }
 
-var parseTitle = function(){
+var parseMessage = function(input){
+}
+
+var parseParameters = function(input){
 
 }
 
-var parsePort = function(){
+var parseMessageName = function(input){
 
 }
 
-var parseClient = function(){
+var parseData = function(input){
 
 }
 
-var parseServer = function(){
-  
-}
-
-var parseMessage = function(){
+var parseDescription = function(input){
 
 }
 
-var parseParameters = function(){
+var parseServerResponse = function(input){
 
 }
 
-var parseMessageName = function(){
+var parseDestination = function(input){
 
 }
 
-var parseData = function(){
+var parseClientName = function(input){
 
 }
 
-var parseDescription = function(){
-
-}
-
-var parseServerResponse = function(){
-
-}
-
-var parseDestination = function(){
-
-}
-
-var parseClientName = function(){
-
-}
-
-var parseRoomName = function(){
+var parseRoomName = function(input){
 
 }
 
@@ -241,6 +298,7 @@ $scope.Generate = function () {
     var temp = [];
     var output = '';
     input = jsyaml.safeLoad(input);
+    parseMainScope(input);
     input = JSON.stringify(input, null, 4);
     //temp.push(generateServerCode($scope.info));
     //temp.push(generateServerSocket(output));
