@@ -341,6 +341,25 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         $location.path("/codeGenerator/"+id);
     };
 
+    $scope.renameProject = function(project){
+        $scope.projectName = project.projectName;
+        $(function () {
+            $('#changeProjectNameModal').modal('show')
+        })
+    };
+
+    $scope.confirmNameChange = function(){
+        var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
+        $http.post("/changeName", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+            });
+    }
+
+
     $scope.emailConfirmation = function() {
         $(function () {
             $('#emailConfirmation').modal('show')

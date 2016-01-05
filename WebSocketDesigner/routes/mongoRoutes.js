@@ -376,6 +376,19 @@ module.exports = function (app) {
                 res.send("Data error");
             }
         });
+
+        app.post('/changeName', function(req, res){
+            Project.update({projectName: req.body.oldProjectName}, {$set: {projectName : req.body.newProjectName } }, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("Update error");
+                } else {
+                    res.status(200);
+                    res.send(req.body.newProjectName);
+                }
+            });
+        });
     });
 
 };
