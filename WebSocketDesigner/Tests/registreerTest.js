@@ -17,7 +17,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     xit('een fout e-mailadres geweigerd worden', function(done){
         var register = {
             username: 'SebastiaanVonk',
-            password: 'testtest',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'asdfg',
             firstName: 'Sebastiaan',
             lastName: 'Vonk',
@@ -40,7 +40,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     it('een goed e-mailadres geen problemen hebben', function(done){
         var register = {
             username: 'Mark',
-            password: 'DuijfDuijfDuijfDuijfDuijfDuijfDu',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'MarkDuif@student.han.nl',
             firstName: 'Mark',
             lastName: 'Duijf',
@@ -63,7 +63,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     xit('een gebruikt e-mailadres geweigerd worden', function(done){
         var register = {
             username: 'Mark',
-            password: 'Duijf',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'MarkDuif@student.han.nl',
             firstName: 'Mark',
             lastName: 'Duijf',
@@ -86,7 +86,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     xit('een te korte gebruikersnaam geweigerd worden', function(done){
         var register = {
             username: 'jo',
-            password: 'testtest',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'SebastiaanVonk@student.han.nl',
             firstName: 'Sebastiaan',
             lastName: 'Vonk',
@@ -109,7 +109,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     xit('een te lange gebruikersnaam geweigerd worden', function(done){
         var register = {
             username: 'VincentvanRossum',
-            password: 'testtest',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'VD.vanRossum@student.han.nl',
             firstName: 'Vincent',
             lastName: 'van Rossum',
@@ -132,7 +132,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     xit('een gebruiksnaam langer dan 3 en korter dan 15 tekens geaccepteerd worden', function(done){
         var register  = {
             username: 'SamvanGeijn',
-            password: 'testtest',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'samvanGeijn@student.han.nl',
             firstName: 'Sam',
             lastName: 'van Geijn',
@@ -155,7 +155,7 @@ describe('Als een gebruiker wil registreren moet', function(){
     xit('een gebruikersnaam die al gebruikt is geweigerd worden', function(done) {
         var register  = {
             username: 'SamvanGeijn',
-            password: 'testtest',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
             email: 'samvGeijn@student.han.nl',
             firstName: 'Sam',
             lastName: 'van Geijn',
