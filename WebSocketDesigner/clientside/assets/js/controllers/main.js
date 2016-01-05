@@ -176,8 +176,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 username: $scope.loginData.username,
                 password: password.toString(CryptoJS.enc.Base64)
             };
-            console.log(CryptoJS.MD5($scope.loginData.password));
-            console.log(CryptoJS.MD5("Message"));
             $http.post("/login", loginData).
             success(function (data) {
                 //console.log("Succes! " + data);

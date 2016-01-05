@@ -18,9 +18,9 @@ var userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
-        validate: [     // controle of het wachtwoord minimaal 3 en maximaal 15 tekens lang is
+        validate: [     // controle of het wachtwoord minimaal 3 en maximaal 32 tekens lang is
             function(password) {
-                //return password.length >= 3 && password.length <= 15;
+                //return password.length >= 3 && password.length <= 32;
                 return password.length === 32;
             },
             "Password is too long or too short"

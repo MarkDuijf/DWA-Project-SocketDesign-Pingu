@@ -7,7 +7,7 @@ var projects = require('./testProjects');
 var User = require('../user');
 var Project = require('../project');
 
-mongoose.connect('mongodb://localhost/' + dbName, function(){                   //Inserts testusers in the database
+mongoose.connect('mongodb://server5.tezzt.nl/' + dbName, function(){                   //Inserts testusers in the database
     User.findOne({}, function(err, result) {
         if (err) throw err;
         if (result == null) {
