@@ -176,32 +176,62 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       '});\n'
   };
 
-   var errorHandling = function(input){
-//     if(input.info.port == null || input.info.port == undefined){
-//       throw new Error('Port is not specified in the Info');
-//     }
-//     if(typeof input.info.port != 'number' || input.info.port > 65535){
-//       throw new Error('please put in a port number between 1 and 65535');
-//     }
- };
+//Parsing Functions
+var parseInfo = function(){ 
 
-var traverse = function(input){
-  for (i in input) {
-      if (typeof(input[i])=="object") {
-          if(i == 'client'){
-            $scope.client = input[i];
-          }
-          if(i == 'server'){
-            $scope.server = input[i];
-          }
-          if(i == 'info'){
-            $scope.info = input[i];
-          }
-          traverse(input[i] );
-        }
-    }
-};
+}
 
+var parseTitle = function(){
+
+}
+
+var parsePort = function(){
+
+}
+
+var parseClient = function(){
+
+}
+
+var parseServer = function(){
+  
+}
+
+var parseMessage = function(){
+
+}
+
+var parseParameters = function(){
+
+}
+
+var parseMessageName = function(){
+
+}
+
+var parseData = function(){
+
+}
+
+var parseDescription = function(){
+
+}
+
+var parseServerResponse = function(){
+
+}
+
+var parseDestination = function(){
+
+}
+
+var parseClientName = function(){
+
+}
+
+var parseRoomName = function(){
+
+}
 
 
 $scope.Generate = function () {
@@ -209,13 +239,8 @@ $scope.Generate = function () {
     var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
-    //var parser = PEG.buildParser("");
     input = jsyaml.safeLoad(input);
     input = JSON.stringify(input, null, 4);
-    console.log(input);
-    errorHandling(input);
-    traverse(input);
-    console.log(input);
     //temp.push(generateServerCode($scope.info));
     //temp.push(generateServerSocket(output));
     //temp.push(generateClientSocket(output));
