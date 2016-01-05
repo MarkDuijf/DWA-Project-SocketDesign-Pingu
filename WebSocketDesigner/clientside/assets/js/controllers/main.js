@@ -82,24 +82,24 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
             $http.post("/confirm", confirmData).
             success(function (data) {
-                console.log("Confirmation succes! " + data);
+                //console.log("Confirmation succes! " + data);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Your account has been activated.";
                 $scope.isErrorMessage = false;
             }).
             error(function (data, status) {
-                console.log("Confirmation error:", data, status);
+                //console.log("Confirmation error:", data, status);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Couldn't activate this account.";
                 $scope.isErrorMessage = true;
             });
         }
 
-        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $sope.loggedIn zonder reden false is
+        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $scope.loggedIn zonder reden false is
         if($scope.loggedIn !== true) {
             $http.get("/getLoggedIn").
                 success(function (data) {
-                    console.log(data);
+                    //console.log(data);
                     if (data === "Logged in") {
                         LoginFactory.setLogin(true);
                         $scope.loggedIn = true;
@@ -115,18 +115,19 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
         //Gebruikt voor het registreren met de ingevoerde gegevens
         $scope.register = function () {
+            var password = CryptoJS.MD5($scope.registerData.password);
             var registerData = {
                 email: $scope.registerData.email,
                 firstName: $scope.registerData.firstName,
                 lastName: $scope.registerData.lastName,
                 username: $scope.registerData.username,
-                password: $scope.registerData.password,
+                password: password.toString(CryptoJS.enc.Base64),
                 confirmationLink: Math.random().toString(36).slice(2)
             };
 
             $http.post("/register", registerData).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
                 $scope.isErrorMessage = false;
@@ -147,17 +148,18 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         };
         $scope.sendConfirmationMail = function () {
+            var password = CryptoJS.MD5($scope.registerData.password);
             var emailData = {
                 email: $scope.registerData.email,
                 firstName: $scope.registerData.firstName,
                 lastName: $scope.registerData.lastName,
                 username: $scope.registerData.username,
-                password: $scope.registerData.password
+                password: password.toString(CryptoJS.enc.Base64)
             };
 
             $http.post("/email", emailData).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -169,19 +171,22 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
         //Gebruikt om een gebruiker in te loggen, kijkt via de server of de ingevoerde gegevens bestaan/kloppen
         $scope.login = function () {
+            var password = CryptoJS.MD5($scope.loginData.password);
             var loginData = {
                 username: $scope.loginData.username,
-                password: $scope.loginData.password
+                password: password.toString(CryptoJS.enc.Base64)
             };
+            console.log(CryptoJS.MD5($scope.loginData.password));
+            console.log(CryptoJS.MD5("Message"));
             $http.post("/login", loginData).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $scope.loggedIn = true;
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "You have been logged in (this is a placeholder)";
                 $scope.isErrorMessage = false;
                 usernameFactory = $scope.loginData.username;
-                console.log("logged in user is: " + usernameFactory);
+                //console.log("logged in user is: " + usernameFactory);
                     LoginFactory.setLogin(true);
             }).
             error(function (data, status) {
@@ -199,7 +204,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.logout = function() {
             $http.post("/logout").
                 success(function (data) {
-                    console.log("Succes! " + data);
+                    //console.log("Succes! " + data);
                 }).
                 error(function (data, status) {
                     console.log("ERROR:", data, status);
@@ -218,7 +223,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             };
             $http.post("/contact", messageData).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $scope.loggedIn = true;
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Message has been sent!";
@@ -240,7 +245,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.openLoginModal = function () {
             $(function () {
                 $('#loginModal').modal('show');
-                console.log(usernameFactory);
+                //console.log(usernameFactory);
 
             })
         };
@@ -313,12 +318,11 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.newPasswordR = "";
 
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
-        console.log($scope.loggedIn);
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
     $http.get("/myAccount").
         success(function (data) {
-            console.log("Account succes!");
+            //console.log("Account succes!");
             userData = data;
             $scope.gotInfo = true;
             $scope.username = data.username;
@@ -372,7 +376,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         };
         $http.post("/confirmEmailChange", data).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $scope.email = data;
                 $scope.newEmail = "";
                 $scope.confirmationCode = "";
@@ -404,7 +408,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         };
         $http.post("/changePassword", data).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -417,14 +421,17 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
 
     $scope.confirmPassword = function() {
         $scope.emailError = "";
+        var password = CryptoJS.MD5($scope.newPassword);
+        var passwordR = CryptoJS.MD5($scope.newPasswordR);
         var data = {
-            newPass: $scope.newPassword,
-            newPassR: $scope.newPasswordR,
+            newPass: password.toString(CryptoJS.enc.Base64),
+            newPassR: passwordR.toString(CryptoJS.enc.Base64),
             confirmation: $scope.confirmationCodePassword
         };
+        console.log(password.toString(CryptoJS.enc.Base64) + " " + passwordR.toString(CryptoJS.enc.Base64));
         $http.post("/confirmPasswordChange", data).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $scope.confirmationCodePassword = "";
                 $(function () {
                     $('#changePasswordModal').modal('hide')

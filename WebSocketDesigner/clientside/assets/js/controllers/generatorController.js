@@ -9,6 +9,25 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   generated.getSession().setMode("ace/mode/json");
   generated.$blockScrolling = Infinity;
 
+  $scope.loggedIn = LoginFactory.loggedIn;
+
+  if($scope.loggedIn !== true) {
+    $http.get("/getLoggedIn").
+        success(function (data) {
+          //console.log(data);
+          if (data === "Logged in") {
+            LoginFactory.setLogin(true);
+            $scope.loggedIn = true;
+          } else if (data === "Not logged in") {
+            LoginFactory.setLogin(false);
+            $scope.loggedIn = false;
+          }
+        }).
+        error(function (data, status) {
+          console.log("Account error:", data, status);
+        });
+  }
+
   $scope.beschikbareCode = [];
   $scope.projectName = "My Project";
 
@@ -25,9 +44,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   if ($routeParams.id !== undefined) {
     //Request server en check de username van het project met de session username, stuur project met code terug als ze hetzelfde zijn
     editor.getSession().setValue("Trying to fetch the project!");
-    $http.get("/projectTest/"+$routeParams.id).
+    $http.get("/projects/"+$routeParams.id).
         success(function (data) {
-          console.log("Project succes!");
+          //console.log("Project succes!");
           $scope.setCode(data.code, data.name);
 
           $scope.showHomeMessage = true;
@@ -41,7 +60,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   }
   
   $scope.saveInput = function(){
-    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
     $(function () {
       $('#saveModal').modal('show');
     });
@@ -58,7 +76,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       if(askForConfirmation===false) {
         saveIt();
       } else {
-        $http.post("/projectTest/checkName", data).
+        $http.post("/projects/checkName", data).
             success(function (data) {
               if (data === "Exists") {
                 $(function () {
@@ -74,9 +92,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       }
 
       function saveIt() {
-        $http.post("/projectTest", data).
+        $http.post("/projects", data).
             success(function (data) {
-              console.log("Succes! " + data);
+              //console.log("Succes! " + data);
               $scope.showHomeMessage = true;
               $scope.homeMessage = "Your project has been saved.";
               $scope.isErrorMessage = false;
@@ -119,8 +137,8 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   };
 
   //Code van ID 4 opvragen voor test doeleinden
-  $scope.getTest = function() {
-    $http.get('/projectTest').
+  $scope.getProjects = function() {
+    $http.get('/projects').
     success(function(data) {
           $scope.beschikbareCode = data;
           $(function () {
