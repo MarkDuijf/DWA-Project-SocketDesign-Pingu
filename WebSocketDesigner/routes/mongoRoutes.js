@@ -395,7 +395,6 @@ module.exports = function (app) {
         });
 
         app.post('/deleteProject', function(req, res){
-            console.log(req.body.project.projectName);
             Project.remove({projectName: req.body.project.projectName, username: req.session.username}, function(err) {
                 if (err) {
                     console.log(err);
@@ -403,6 +402,7 @@ module.exports = function (app) {
                     res.send("Delete error");
                 } else{
                     res.status(200);
+                    res.send("deleted");
                 }
             })
         })

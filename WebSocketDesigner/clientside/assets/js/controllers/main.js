@@ -352,6 +352,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
 
     $scope.renameProject = function(project){
         $scope.projectName = project.projectName;
+        $scope.newName = project.projectName;
         $(function () {
             $('#changeProjectNameModal').modal('show')
         })
@@ -382,16 +383,17 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
 
     $scope.confirmDeleteProject = function(){
         var data = {project: $scope.project};
-        $http.post('/deleteProject', data).
+        $http.post("/deleteProject", data).
             success(function (data) {
                 console.log("Succes! " + data);
                 $(function () {
                     $('#deleteProjectModal').modal('hide')
-                });
+                })
                 $scope.refreshAccount();
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
+                $scope.nameChangeError = 'Check the length of you projetname';
             });
     };
 
