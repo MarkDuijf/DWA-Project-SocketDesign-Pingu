@@ -1,9 +1,5 @@
 var theApp = angular.module("generatorApp", ['ngRoute', 'ngFileSaver']);
 
-theApp.factory('usernameFactory', function () {
-    return username;
-});
-
 //Declaratie providers en hun controllers
 theApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -20,10 +16,10 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/codeGenerator.html',
             controller: 'generatorController'
         }).
-            when('/codeGenerator/:id', {
-                templateUrl: 'partials/codeGenerator.html',
-                controller: 'generatorController'
-            }).
+        when('/codeGenerator/:id', {
+            templateUrl: 'partials/codeGenerator.html',
+            controller: 'generatorController'
+        }).
         when('/chatPage', {
             templateUrl: 'partials/chatPage.html',
             controller: 'chatController'
@@ -32,22 +28,30 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/helloworld.html',
             controller: ''
         }).
-            when('/myAccount', {
-                templateUrl: 'partials/myAccount.html',
-                controller: 'accountController'
-            }).
+        when('/myAccount', {
+            templateUrl: 'partials/myAccount.html',
+            controller: 'accountController'
+        }).
         otherwise({
             redirectTo: '/home'
         });
     }]);
 
 theApp.factory('LoginFactory', function($http) {
-   var object = {};
+    var object = {};
 
     object.setLogin = function(bool) {
         object.loggedIn = bool;
     };
 
+    return object;
+});
+
+theApp.factory('usernameFactory', function ($http) {
+    var object = {};
+    object.setUsername = function(userName) {
+        object.userName = userName;
+    };
     return object;
 });
 
@@ -69,6 +73,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.contact.message = "";
 
         $scope.loggedIn = LoginFactory.loggedIn;
+        $scope.loggedInUser = usernameFactory.userName;
         $scope.homeMessage = "No message";
         $scope.showHomeMessage = false;
         $scope.isErrorMessage = false;
@@ -82,13 +87,13 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
             $http.post("/confirm", confirmData).
             success(function (data) {
-                //console.log("Confirmation succes! " + data);
+                console.log("Confirmation succes! " + data);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Your account has been activated.";
                 $scope.isErrorMessage = false;
             }).
             error(function (data, status) {
-                //console.log("Confirmation error:", data, status);
+                console.log("Confirmation error:", data, status);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Couldn't activate this account.";
                 $scope.isErrorMessage = true;
@@ -98,36 +103,37 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $scope.loggedIn zonder reden false is
         if($scope.loggedIn !== true) {
             $http.get("/getLoggedIn").
-                success(function (data) {
-                    //console.log(data);
-                    if (data === "Logged in") {
-                        LoginFactory.setLogin(true);
-                        $scope.loggedIn = true;
-                    } else if (data === "Not logged in") {
-                        LoginFactory.setLogin(false);
-                        $scope.loggedIn = false;
-                    }
-                }).
-                error(function (data, status) {
-                    console.log("Account error:", data, status);
-                });
+            success(function (data) {
+                console.log(data.loggedIn);
+                if (data.loggedIn === "Logged in") {
+                    LoginFactory.setLogin(true);
+                    usernameFactory.setUsername(data.username);
+                    $scope.loggedInUser = data.username;
+                    $scope.loggedIn = true;
+                } else if (data.loggedIn === "Not logged in") {
+                    LoginFactory.setLogin(false);
+                    $scope.loggedIn = false;
+                }
+            }).
+            error(function (data, status) {
+                console.log("Account error:", data, status);
+            });
         }
 
         //Gebruikt voor het registreren met de ingevoerde gegevens
         $scope.register = function () {
-            var password = CryptoJS.MD5($scope.registerData.password);
             var registerData = {
                 email: $scope.registerData.email,
                 firstName: $scope.registerData.firstName,
                 lastName: $scope.registerData.lastName,
                 username: $scope.registerData.username,
-                password: password.toString(CryptoJS.enc.Base64),
+                password: $scope.registerData.password,
                 confirmationLink: Math.random().toString(36).slice(2)
             };
 
             $http.post("/register", registerData).
             success(function (data) {
-                //console.log("Succes! " + data);
+                console.log("Succes! " + data);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
                 $scope.isErrorMessage = false;
@@ -148,18 +154,17 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         };
         $scope.sendConfirmationMail = function () {
-            var password = CryptoJS.MD5($scope.registerData.password);
             var emailData = {
                 email: $scope.registerData.email,
                 firstName: $scope.registerData.firstName,
                 lastName: $scope.registerData.lastName,
                 username: $scope.registerData.username,
-                password: password.toString(CryptoJS.enc.Base64)
+                password: $scope.registerData.password
             };
 
             $http.post("/email", emailData).
             success(function (data) {
-                //console.log("Succes! " + data);
+                console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -171,21 +176,21 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
         //Gebruikt om een gebruiker in te loggen, kijkt via de server of de ingevoerde gegevens bestaan/kloppen
         $scope.login = function () {
-            var password = CryptoJS.MD5($scope.loginData.password);
             var loginData = {
                 username: $scope.loginData.username,
-                password: password.toString(CryptoJS.enc.Base64)
+                password: $scope.loginData.password
             };
             $http.post("/login", loginData).
             success(function (data) {
-                //console.log("Succes! " + data);
+                console.log("Succes! " + data);
                 $scope.loggedIn = true;
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "You have been logged in (this is a placeholder)";
                 $scope.isErrorMessage = false;
-                usernameFactory = $scope.loginData.username;
-                //console.log("logged in user is: " + usernameFactory);
-                    LoginFactory.setLogin(true);
+                usernameFactory.setUsername($scope.loginData.username);  // $scope.loginData.username;
+                console.log("logged in user is: " + usernameFactory);
+                $scope.loggedInUser = $scope.loginData.username;
+                LoginFactory.setLogin(true);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -201,16 +206,18 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
         $scope.logout = function() {
             $http.post("/logout").
-                success(function (data) {
-                    //console.log("Succes! " + data);
-                }).
-                error(function (data, status) {
-                    console.log("ERROR:", data, status);
-                });
+            success(function (data) {
+                console.log("Succes! " + data);
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+            });
 
             $scope.loggedIn = false;
             LoginFactory.loggedIn = false;
-        }
+            $scope.loggedInUser = "";
+            usernameFactory.userName = "";
+        };
 
         //Gebruikt door het contactformulier
         $scope.sendMessage = function () {
@@ -221,7 +228,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             };
             $http.post("/contact", messageData).
             success(function (data) {
-                //console.log("Succes! " + data);
+                console.log("Succes! " + data);
                 $scope.loggedIn = true;
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Message has been sent!";
@@ -243,8 +250,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.openLoginModal = function () {
             $(function () {
                 $('#loginModal').modal('show');
-                //console.log(usernameFactory);
-
             })
         };
 
@@ -318,9 +323,9 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
-    $http.get("/myAccount").
+        $http.get("/myAccount").
         success(function (data) {
-            //console.log("Account succes!");
+            console.log("Account succes!");
             userData = data;
             $scope.gotInfo = true;
             $scope.username = data.username;
@@ -339,25 +344,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         $location.path("/codeGenerator/"+id);
     };
 
-    $scope.renameProject = function(project){
-        $scope.projectName = project.projectName;
-        $(function () {
-            $('#changeProjectNameModal').modal('show')
-        })
-    };
-
-    $scope.confirmNameChange = function(){
-        var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
-        $http.post("/changeName", data).
-            success(function (data) {
-                console.log("Succes! " + data);
-            }).
-            error(function (data, status) {
-                console.log("ERROR:", data, status);
-            });
-    }
-
-
     $scope.emailConfirmation = function() {
         $(function () {
             $('#emailConfirmation').modal('show')
@@ -372,12 +358,12 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             confirmation: Math.random().toString(36).slice(2)
         };
         $http.post("/changeEmail", data).
-            success(function (data) {
-                console.log("Succes! " + data);
-            }).
-            error(function (data, status) {
-                console.log("ERROR:", data, status);
-            });
+        success(function (data) {
+            console.log("Succes! " + data);
+        }).
+        error(function (data, status) {
+            console.log("ERROR:", data, status);
+        });
 
         $(function () {
             $('#changeEmailModal').modal('show')
@@ -392,19 +378,19 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             confirmation: $scope.confirmationCode
         };
         $http.post("/confirmEmailChange", data).
-            success(function (data) {
-                //console.log("Succes! " + data);
-                $scope.email = data;
-                $scope.newEmail = "";
-                $scope.confirmationCode = "";
-                $(function () {
-                    $('#changeEmailModal').modal('hide')
-                })
-            }).
-            error(function (data, status) {
-                console.log("ERROR:", data, status);
-                $scope.emailError = "Something went wrong, please check the email and confirmation code.";
-            });
+        success(function (data) {
+            console.log("Succes! " + data);
+            $scope.email = data;
+            $scope.newEmail = "";
+            $scope.confirmationCode = "";
+            $(function () {
+                $('#changeEmailModal').modal('hide')
+            })
+        }).
+        error(function (data, status) {
+            console.log("ERROR:", data, status);
+            $scope.emailError = "Something went wrong, please check the email and confirmation code.";
+        });
 
         $(function () {
             $('#changeEmailModal').modal('show')
@@ -424,12 +410,12 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             confirmation: Math.random().toString(36).slice(2)
         };
         $http.post("/changePassword", data).
-            success(function (data) {
-                //console.log("Succes! " + data);
-            }).
-            error(function (data, status) {
-                console.log("ERROR:", data, status);
-            });
+        success(function (data) {
+            console.log("Succes! " + data);
+        }).
+        error(function (data, status) {
+            console.log("ERROR:", data, status);
+        });
 
         $(function () {
             $('#changePasswordModal').modal('show')
@@ -438,29 +424,26 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
 
     $scope.confirmPassword = function() {
         $scope.emailError = "";
-        var password = CryptoJS.MD5($scope.newPassword);
-        var passwordR = CryptoJS.MD5($scope.newPasswordR);
         var data = {
-            newPass: password.toString(CryptoJS.enc.Base64),
-            newPassR: passwordR.toString(CryptoJS.enc.Base64),
+            newPass: $scope.newPassword,
+            newPassR: $scope.newPasswordR,
             confirmation: $scope.confirmationCodePassword
         };
-        console.log(password.toString(CryptoJS.enc.Base64) + " " + passwordR.toString(CryptoJS.enc.Base64));
         $http.post("/confirmPasswordChange", data).
-            success(function (data) {
-                //console.log("Succes! " + data);
-                $scope.confirmationCodePassword = "";
-                $(function () {
-                    $('#changePasswordModal').modal('hide')
-                });
-                $scope.loggedIn = false;
-                LoginFactory.loggedIn = false;
-                $location.path("/home");
-            }).
-            error(function (data, status) {
-                console.log("ERROR:", data, status);
-                $scope.passwordError = "Please check your password and confirmation code";
+        success(function (data) {
+            console.log("Succes! " + data);
+            $scope.confirmationCodePassword = "";
+            $(function () {
+                $('#changePasswordModal').modal('hide')
             });
+            $scope.loggedIn = false;
+            LoginFactory.loggedIn = false;
+            $location.path("/home");
+        }).
+        error(function (data, status) {
+            console.log("ERROR:", data, status);
+            $scope.passwordError = "Please check your password and confirmation code";
+        });
 
         $(function () {
             $('#changePasswordModal').modal('show')

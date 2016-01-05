@@ -21,15 +21,20 @@ module.exports = function (app) {
     });
 
     app.get('/getLoggedIn', function(req, res) {
+        var response = {};
         if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
+            response.loggedIn = "Logged in";
+            response.username = req.session.username;
             res.status(200);
-            res.send("Logged in");
+            res.send(response);
         } else {
+            response.loggedIn = "Not logged in";
             res.status(200);
-            res.send("Not logged in");
+            res.send(response);
         }
     })
-    mongoose.connect('mongodb://localhost/' + dbName, function(){
+
+    mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
         app.get('/login', function(req, res) {
             res.status(200);
@@ -54,6 +59,7 @@ module.exports = function (app) {
                     res.status(404);
                     res.send("Wrong username/password");
                 } else if (user.activated === true) {
+                    console.log("Correct");
                     req.session.loggedin = true;
                     req.session.username = req.body.username;
                     res.status(200);
@@ -103,7 +109,7 @@ module.exports = function (app) {
                                 res.status(500);
                                 res.send("Couldn't set activated to true");
                             } else {
-                                //console.log(result);
+                                console.log(result);
                                 res.status(200);
                                 res.send("The account has been activated");
                             }
@@ -146,7 +152,7 @@ module.exports = function (app) {
                                     res.status(201);
                                     res.send("Account registered");
 
-                                                                                                        // Email user
+                                    // Email user
                                     var mailOptions = {
                                         from: 'Socket Designer <dwasdeu@gmail.com>',                    // sender address
                                         to: req.body.email,                                             // list of receivers
@@ -159,7 +165,7 @@ module.exports = function (app) {
                                         if (error) {
                                             return console.log(error);
                                         }
-                                        //console.log('Message sent: ' + info.response);
+                                        console.log('Message sent: ' + info.response);
                                     });
                                 }
                             });
@@ -176,7 +182,7 @@ module.exports = function (app) {
         });
 
         //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
-        app.post('/projects', function (req, res) {                      // toevoegen van een project aan de database
+        app.post('/projectTest', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
             //Voor unit test
             if (req.body.username !== undefined) {
@@ -186,13 +192,13 @@ module.exports = function (app) {
 
             if (req.session.username === undefined || req.session.username === null || req.session.username === "") {
                 /*Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
-                project = {
-                    username: "test",
-                    projectname: req.body.name,
-                    code: req.body.code,
-                    date: datetime
-                };
-                */
+                 project = {
+                 username: "test",
+                 projectname: req.body.name,
+                 code: req.body.code,
+                 date: datetime
+                 };
+                 */
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
@@ -220,19 +226,19 @@ module.exports = function (app) {
             }
 
             /* Werke niet vanwege upsert
-            project.save(function (err) {
-                if (err) {
-                    res.status(401);
-                    res.send("Error saving data, missing/wrong data")
-                    return console.log(err);
-                }
-                res.status(200);
-                res.send("Toegevoegd");
-            });
-            */
+             project.save(function (err) {
+             if (err) {
+             res.status(401);
+             res.send("Error saving data, missing/wrong data")
+             return console.log(err);
+             }
+             res.status(200);
+             res.send("Toegevoegd");
+             });
+             */
         });
 
-        app.post('/projects/checkName', function(req,res) {
+        app.post('/projectTest/checkName', function(req,res) {
             Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
                 if(projects.length === 0) {
                     res.status(200);
@@ -244,7 +250,7 @@ module.exports = function (app) {
             });
         });
 
-        app.get('/projects', function (req, res) {                       //Ophalen van alle projecten uit de database
+        app.get('/projectTest', function (req, res) {                       //Ophalen van alle projecten uit de database
             if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
                 //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
                 Project.find({}, function (err, projects) {
@@ -263,35 +269,35 @@ module.exports = function (app) {
                         res.status(500);
                         res.send("Problem finding projects");
                     }
-                    //console.log(projects);                                      //Anders stuur het resultaat terug
+                    console.log(projects);                                      //Anders stuur het resultaat terug
                     res.status(200);
                     res.send(projects);
                 })
             }
         });
 
-        app.get('/projects/:id', function (req, res) {
-                Project.findOne({_id: req.params.id}, function (err, project) {
-                    if (err) {
-                        console.log(err);
-                        res.status(500);
-                        res.send("Problem finding project");
-                    } else if(project.username === req.session.username) {
-                        var object = {
-                            name: project.projectName,
-                            code: project.code
-                        }
-                        res.status(200);
-                        res.send(object);
-                    } else if(project.username !== req.session.username) {
-                        var object = {
-                            name: "My Project",
-                            code: ""
-                        }
-                        res.status(400);
-                        res.send(object);
+        app.get('/projectTest/:id', function (req, res) {
+            Project.findOne({_id: req.params.id}, function (err, project) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("Problem finding project");
+                } else if(project.username === req.session.username) {
+                    var object = {
+                        name: project.projectName,
+                        code: project.code
                     }
-                });
+                    res.status(200);
+                    res.send(object);
+                } else if(project.username !== req.session.username) {
+                    var object = {
+                        name: "My Project",
+                        code: ""
+                    }
+                    res.status(400);
+                    res.send(object);
+                }
+            });
         });
 
         app.get('/myAccount', function(req, res) {
@@ -357,7 +363,7 @@ module.exports = function (app) {
         });
 
         app.post('/confirmPasswordChange', function(req, res) {
-            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "" && req.body.newPass.length === 32) {
+            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "" && req.body.newPass.length >= 3 && req.body.newPass.length <= 15) {
                 User.update({username: req.session.username}, {$set: { password: req.body.newPass } }, function (err, result) {
                     if (err) {
                         console.log(err);
@@ -374,19 +380,6 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("Data error");
             }
-        });
-
-        app.post('/changeName', function(req, res){
-            Project.update({projectName: req.body.oldProjectName}, {$set: {projectName : req.body.newProjectName } }, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.status(500);
-                    res.send("Update error");
-                } else {
-                    res.status(200);
-                    res.send(req.body.newProjectName);
-                }
-            });
         });
     });
 

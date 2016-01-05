@@ -121,3 +121,7 @@
 #myAccountPage > h2 {
     text-align: center;
 }
+
+#codegeneratorlink {
+    color: #98c593;
+}
