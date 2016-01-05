@@ -4,7 +4,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var supertest = require('supertest');
-var app = require('../../app');
+var app = require('../app');
 var agent = supertest.agent(app);
 
 describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
