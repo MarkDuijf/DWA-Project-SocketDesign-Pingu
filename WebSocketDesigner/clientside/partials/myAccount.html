@@ -1,36 +1,55 @@
 <div id="myAccountPage" ng-show="gotInfo">
-<h2 id="accountInfoText">Account Info</h2>
-    <form role="form">
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" ng-model="username" class="form-control" id="username" disabled>
-        </div>
 
-        <div class="form-group">
-            <label for="firstName">First name:</label>
-            <input type="text" ng-model="firstName" class="form-control" id="firstName" disabled>
-        </div>
+    <section id="intro" class="main style1 dark fullscreen">
+        <div class="content container 75%">
+            <header>
+                <h2>Account Info.</h2>
+            </header>
+            <button ng-click="emailConfirmation()" id="changeEmail">Change email</button></a>
+            <button ng-click="passwordConfirmation()" id="changePassword">Change password</button>
+            <footer>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" ng-model="username" class="form-control" id="username" disabled>
+                    </div>
 
-        <div class="form-group">
-            <label for="lastName">Last name:</label>
-            <input type="text" ng-model="lastName" class="form-control" id="lastName" disabled>
-        </div>
+                    <div class="form-group">
+                        <label for="firstName">First name:</label>
+                        <input type="text" ng-model="firstName" class="form-control" id="firstName" disabled>
+                    </div>
 
-        <div class="form-group">
-             <label for="email">Email:</label>
-             <input type="text" ng-model="email" class="form-control" id="email" disabled>
-        </div>
-        <!--<button id="changeInfoButton" type="submit" class="btn btn-primary">Save Changes</button>-->
-        <button id="changeEmail" type="submit" class="btn btn-primary" ng-click="emailConfirmation()">Change Email</button>
-        <button id="changePassword" type="submit" class="btn btn-primary" ng-click="passwordConfirmation()">Change Password</button>
-    </form>
+                    <div class="form-group">
+                        <label for="lastName">Last name:</label>
+                        <input type="text" ng-model="lastName" class="form-control" id="lastName" disabled>
+                    </div>
 
-    <h2>My Projects</h2>
-    <div ng-show="projects.length === 0"><h5>You have no projects!</h5></div>
-    <div>
-        <div ng-repeat="project in projects" class="codeKiesveld" ng-click="openProject(project._id)">{{project.projectName}}</div>
-    </div>
-</div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" ng-model="email" class="form-control" id="email" disabled>
+                    </div>
+                </form>
+
+                <p><h2>My Projects</h2></p>
+                <div ng-show="projects.length === 0"><h5>You have no projects!</h5></div>
+                <div>
+                    <div ng-repeat="project in projects">
+                        <div class="codeKiesveld" ng-click="openProject(project._id)">
+                            <p class="projectNameAlign">{{project.projectName}}
+                            </p>
+                        </div>
+                        <div class="projectbuttonsAlign">
+                            <button class="btn btn-primary" ng-click="">Rename</button>
+                            <button class="btn btn-danger" ng-click="">Delete</button>
+                            <hr>
+                        </div>
+                    </div>
+
+                </div>
+            </footer>
+        </div>
+    </section>
+
 
 <div ng-hide="gotInfo">
     <h2>Fetching data</h2>

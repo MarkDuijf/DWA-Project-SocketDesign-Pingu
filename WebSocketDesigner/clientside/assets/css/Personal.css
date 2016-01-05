@@ -82,13 +82,26 @@
 }
 
 .codeKiesveld {
-    background-color: black;
-    color: white;
-    text-align: center;
+    background-color: white;
+    color: #39454b;
+    margin: 4px;
+    width: 75%;
+    float:left;
+    height: 40px;
 }
 
 .codeKiesveld:hover {
-    background-color: grey;
+    background-color: #EEEEEE;
+}
+
+.projectNameAlign{
+    text-align: left;
+    margin-left: 10px;
+}
+
+.projectbuttonsAlign{
+    float:left;
+    width:20%;
 }
 
 .maxLengthDialog {
