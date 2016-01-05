@@ -261,12 +261,11 @@ var parsePort = function(input){
 }
 
 var parseClient = function(input){
-  console.log(input);
   if(Object.keys(input).length > 10){
     throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.');
   }
   for(var clientScope = 0; clientScope < Object.keys(input).length; clientScope++){
-    parseMessage(input[Object.keys(input)[clientScope]], 'client');
+    parseMessage(input[Object.keys(input)[clientScope]], 'client', (clientScope+1));
     if(Object.keys(input)[clientScope] !== "message" + (clientScope+1)){
       throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message\'' + (clientScope+1) + '\'');
     }
@@ -278,25 +277,25 @@ var parseServer = function(input){
     throw new Error('The number of used tags in \'server\' exceeds the maximum of 10 tags.');
   }
   for(var serverScope = 0; serverScope < Object.keys(input).length; serverScope++){
-    parseMessage(input[Object.keys(input)[serverScope]], 'server');
+    parseMessage(input[Object.keys(input)[serverScope]], 'server', (serverScope+1));
     if(Object.keys(input)[serverScope] !== "message" + (serverScope+1)){
       throw new Error('The \'' + Object.keys(input)[serverScope] + '\' tag, that is used in \'server\', is not usable at this point. Please use \'message' + (serverScope+1) + '\'.');
     }
   }
 }
 
-var parseMessage = function(input, scope){
-  console.log(Object.keys(input));
+var parseMessage = function(input, scope, number){
   for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
     switch(Object.keys(input)[messageScope]){
       case "parameters":
+        parseParameters(input.parameters, scope, number);
         break;
       case "serverResponse":
         if(scope == "server"){
           throw new Error('The \'serverResponse\' tag is not usable in \'server\'. Please remove this tag.');
         }
         else{ 
-
+          parseServerResponse(input.serverResponse, scope, number);
         }
         break;
       default: 
@@ -310,12 +309,27 @@ var parseMessage = function(input, scope){
   }
 }
 
-var parseParameters = function(input){
-
+var parseParameters = function(input, scope, number){
+  for(var parameterScope = 0; parameterScope < Object.keys(input).length; parameterScope++){
+    switch(Object.keys(input)[parameterScope]){
+      case "messageName":
+        parseMessageName(input.messageName, scope, number);
+        break;
+      case "data":
+        parseData(input.data);
+        break;
+      case "description":
+        parseDescription(input.description);
+        break;
+      default: throw new Error('The \''+Object.keys(input)[parameterScope]+ '\' tag, which is used in \'' + scope + '/message' + number + '\', is not usable at this point. Please refer to the userguide for more information.');
+    }
+  }
 }
 
-var parseMessageName = function(input){
-
+var parseMessageName = function(input, scope, number){
+  if(input.length > 25){
+    throw new Error('The messageName used in \''+scope+'/message' + number +'\' is ' + input.length + ' characters long, which exceeds the maximum of 25 characters.');
+  }
 }
 
 var parseData = function(input){
@@ -326,8 +340,21 @@ var parseDescription = function(input){
 
 }
 
-var parseServerResponse = function(input){
-
+var parseServerResponse = function(input, scope, number){
+  var tempTo = "all";
+  for(var serverRScope = 0; serverRScope < Object.keys(input).length; serverRScope++){
+    switch(Object.keys(input)[serverRScope]){
+      case "to":
+        break;
+      case "clientname":
+        break;
+      case "roomname":
+        break;
+      case "parameters":
+        break;
+      default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverResponse\', is not usable here. Please refer to the userguide for more information.');
+    }
+  }
 }
 
 var parseDestination = function(input){
