@@ -266,7 +266,7 @@ var parseClient = function(input){
     throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.');
   }
   for(var clientScope = 0; clientScope < Object.keys(input).length; clientScope++){
-    parseMessage(input[Object.keys(input)[clientScope]]);
+    parseMessage(input[Object.keys(input)[clientScope]], 'client');
     if(Object.keys(input)[clientScope] !== "message" + (clientScope+1)){
       throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message\'' + (clientScope+1) + '\'');
     }
@@ -278,16 +278,35 @@ var parseServer = function(input){
     throw new Error('The number of used tags in \'server\' exceeds the maximum of 10 tags.');
   }
   for(var serverScope = 0; serverScope < Object.keys(input).length; serverScope++){
-    parseMessage(input[Object.keys(input)[serverScope]]);
+    parseMessage(input[Object.keys(input)[serverScope]], 'server');
     if(Object.keys(input)[serverScope] !== "message" + (serverScope+1)){
-      throw new Error('The \'' + Object.keys(input)[serverScope] + '\' tag, that is used in \'server\', is not usable at this point. Please use \'message' + (serverScope+1) + '\'');
+      throw new Error('The \'' + Object.keys(input)[serverScope] + '\' tag, that is used in \'server\', is not usable at this point. Please use \'message' + (serverScope+1) + '\'.');
     }
   }
 }
 
-var parseMessage = function(input){
+var parseMessage = function(input, scope){
+  console.log(Object.keys(input));
   for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
-    
+    switch(Object.keys(input)[messageScope]){
+      case "parameters":
+        break;
+      case "serverResponse":
+        if(scope == "server"){
+          throw new Error('The \'serverResponse\' tag is not usable in \'server\'. Please remove this tag.');
+        }
+        else{ 
+
+        }
+        break;
+      default: 
+      if(scope == "server"){
+      throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \''+scope+'\', is not usable at this point. Please use \'parameters\'.');
+      }   
+      else{
+        throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \''+scope+'\', is not usable at this point. Please use \'parameters\' or \'serverResponse\'.');
+      }
+    }
   }
 }
 

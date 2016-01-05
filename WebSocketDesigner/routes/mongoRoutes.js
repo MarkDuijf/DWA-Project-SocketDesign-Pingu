@@ -29,8 +29,7 @@ module.exports = function (app) {
             res.send("Not logged in");
         }
     })
-
-    mongoose.connect('mongodb://localhost/' + dbName, function () {
+    mongoose.connect('mongodb://server5.tezzt.nl/' + dbName, function(){
         // Gebruikt om een gebruiker in te loggen
         app.get('/login', function(req, res) {
             res.status(200);
