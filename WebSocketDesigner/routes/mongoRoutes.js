@@ -388,6 +388,19 @@ module.exports = function (app) {
                 }
             });
         });
+
+        app.post('/deleteProject', function(req, res){
+            console.log(req.body.project.projectName);
+            Project.remove({projectName: req.body.project.projectName, username: req.session.username}, function(err) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("Delete error");
+                } else{
+                    res.status(200);
+                }
+            })
+        })
     });
 
 };

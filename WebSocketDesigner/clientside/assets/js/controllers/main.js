@@ -315,24 +315,28 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.newPassword = "";
     $scope.newPasswordR = "";
 
+    $scope.refreshAccount = function(){
+        $http.get("/myAccount").
+            success(function (data) {
+                //console.log("Account succes!");
+                userData = data;
+                $scope.gotInfo = true;
+                $scope.username = data.username;
+                $scope.firstName = data.firstName;
+                $scope.lastName = data.lastName;
+                $scope.email = data.email;
+                $scope.projects = data.projects;
+            }).
+            error(function (data, status) {
+                console.log("Account error:", data, status);
+                $location.path("/home");
+            });
+    }
+
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
-    $http.get("/myAccount").
-        success(function (data) {
-            //console.log("Account succes!");
-            userData = data;
-            $scope.gotInfo = true;
-            $scope.username = data.username;
-            $scope.firstName = data.firstName;
-            $scope.lastName = data.lastName;
-            $scope.email = data.email;
-            $scope.projects = data.projects;
-        }).
-        error(function (data, status) {
-            console.log("Account error:", data, status);
-            $location.path("/home");
-        });
+     $scope.refreshAccount();
     }
 
     $scope.openProject = function(id) {
@@ -351,11 +355,38 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         $http.post("/changeName", data).
             success(function (data) {
                 console.log("Succes! " + data);
+                $(function () {
+                    $('#changeProjectNameModal').modal('hide')
+                })
+                $scope.refreshAccount();
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.nameChangeError = 'Check the length of you projetname';
+            });
+    };
+
+    $scope.deleteProject = function(project){
+        $scope.project = project;
+        $(function () {
+            $('#deleteProjectModal').modal('show')
+        })
+    };
+
+    $scope.confirmDeleteProject = function(){
+        var data = {project: $scope.project};
+        $http.post('/deleteProject', data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $(function () {
+                    $('#deleteProjectModal').modal('hide')
+                });
+                $scope.refreshAccount();
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
             });
-    }
+    };
 
 
     $scope.emailConfirmation = function() {
