@@ -313,7 +313,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.newPasswordR = "";
 
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
-        console.log($scope.loggedIn);
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
     $http.get("/myAccount").

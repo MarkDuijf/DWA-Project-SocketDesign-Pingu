@@ -1,5 +1,5 @@
 <div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
-<div class="generatorPage">
+<div class="generatorPage" ng-show="loggedIn">
     <div ng-show="error != null">
     <div style="color:white">Something went wrong!<br/>
     {{error}}
@@ -43,6 +43,10 @@ server:
     </pre>
     <pre id="generated">
     </pre>
+</div>
+
+<div ng-hide="loggedIn">
+    <h3>You must be logged in to use the generator</h3>
 </div>
 
 <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="codeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
