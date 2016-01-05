@@ -16,30 +16,28 @@ info:
     title: socketIOTest
     port: 3000
 client:
-    chat:
-        join:
+    message1:
+        parameters:
+            messageName: username
+            description: true
+            data: string
+    message2:
+        parameters:
+            messageName: test1
+            description: pan2
+            data: zevental
+        serverResponse:
+            to: all
             parameters:
-                name: username
-                koekenpan: true
-                vliegtuig: string
-        message:
-            parameters:
-                name: test1
-                vliegtuig: pan2
-                koekenpan: zevental
-            responses:
-                to: all
-                parameters:
-                    name: usernaaaam
-                    langhaar: true
-                    bril: false
+                messageName:
+                description: true
+                data: false
 server:
-    chat:
-        date:
-            parameters:
-                slappeband: true
-                werktijd: 16.45
-                slapen: tekort
+    message1:
+        parameters:
+            messageName: serverShutdown
+            description: Message for the server shutdown
+            data: The server will be shut down shortly
     </pre>
     <pre id="generated">
     </pre>
