@@ -41,7 +41,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   }
   
   $scope.saveInput = function(){
-    //TODO Code uit generator opslaan, als account systeem er is bij het goede account opslaan=
     $(function () {
       $('#saveModal').modal('show');
     });
