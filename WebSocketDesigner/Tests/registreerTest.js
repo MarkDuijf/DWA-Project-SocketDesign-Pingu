@@ -14,7 +14,7 @@ var User        = require('../models/user.js');
 
 describe('Als een gebruiker wil registreren moet', function(){
 
-    xit('een fout e-mailadres geweigerd worden', function(done){
+    it('een fout e-mailadres geweigerd worden', function(done){
         var register = {
             username: 'SebastiaanVonk',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -60,7 +60,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    xit('een gebruikt e-mailadres geweigerd worden', function(done){
+    it('een gebruikt e-mailadres geweigerd worden', function(done){
         var register = {
             username: 'Mark',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -83,7 +83,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    xit('een te korte gebruikersnaam geweigerd worden', function(done){
+    it('een te korte gebruikersnaam geweigerd worden', function(done){
         var register = {
             username: 'jo',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -106,7 +106,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    xit('een te lange gebruikersnaam geweigerd worden', function(done){
+    it('een te lange gebruikersnaam geweigerd worden', function(done){
         var register = {
             username: 'VincentvanRossum',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -129,7 +129,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    xit('een gebruiksnaam langer dan 3 en korter dan 15 tekens geaccepteerd worden', function(done){
+    it('een gebruiksnaam langer dan 3 en korter dan 15 tekens geaccepteerd worden', function(done){
         var register  = {
             username: 'SamvanGeijn',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -152,7 +152,7 @@ describe('Als een gebruiker wil registreren moet', function(){
         });
     });
 
-    xit('een gebruikersnaam die al gebruikt is geweigerd worden', function(done) {
+    it('een gebruikersnaam die al gebruikt is geweigerd worden', function(done) {
         var register  = {
             username: 'SamvanGeijn',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -171,6 +171,21 @@ describe('Als een gebruiker wil registreren moet', function(){
             .end(function(err,res) {
                 expect(err).to.be.null;
                 expect(res.text).to.equal("Username already exists");
+
+                mongoose.connect('mongodb://localhost/' + dbName, function(){
+                    User.remove({username: 'EricJans'}, function(err, result) {
+                        if(err) { throw err; }
+                    });
+                });
+
+                User.remove({username: 'Mark'}, function(err, result) {
+                    if(err) { throw err; }
+                });
+
+                User.remove({username: 'SamvanGeijn'}, function(err, result) {
+                    if(err) { throw err; }
+                });
+
                 done();
             });
     });
