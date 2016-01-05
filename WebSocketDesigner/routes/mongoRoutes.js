@@ -21,15 +21,20 @@ module.exports = function (app) {
     });
 
     app.get('/getLoggedIn', function(req, res) {
+        var response = {};
         if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
+            response.loggedIn = "Logged in";
+            response.username = req.session.username;
             res.status(200);
-            res.send("Logged in");
+            res.send(response);
         } else {
+            response.loggedIn = "Not logged in";
             res.status(200);
-            res.send("Not logged in");
+            res.send(response);
         }
     })
-    mongoose.connect('mongodb://server5.tezzt.nl/' + dbName, function(){
+
+    mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
         app.get('/login', function(req, res) {
             res.status(200);
@@ -375,6 +380,32 @@ module.exports = function (app) {
                 res.send("Data error");
             }
         });
+
+        app.post('/changeName', function(req, res){
+            Project.update({projectName: req.body.oldProjectName}, {$set: {projectName : req.body.newProjectName } }, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("Update error");
+                } else {
+                    res.status(200);
+                    res.send(req.body.newProjectName);
+                }
+            });
+        });
+
+        app.post('/deleteProject', function(req, res){
+            Project.remove({projectName: req.body.project.projectName, username: req.session.username}, function(err) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                    res.send("Delete error");
+                } else{
+                    res.status(200);
+                    res.send("deleted");
+                }
+            })
+        })
     });
 
 };

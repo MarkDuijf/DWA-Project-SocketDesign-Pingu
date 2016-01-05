@@ -1,9 +1,5 @@
 var theApp = angular.module("generatorApp", ['ngRoute', 'ngFileSaver']);
 
-theApp.factory('usernameFactory', function () {
-    return username;
-});
-
 //Declaratie providers en hun controllers
 theApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -42,12 +38,20 @@ theApp.config(['$routeProvider',
     }]);
 
 theApp.factory('LoginFactory', function($http) {
-   var object = {};
+    var object = {};
 
     object.setLogin = function(bool) {
         object.loggedIn = bool;
     };
 
+    return object;
+});
+
+theApp.factory('usernameFactory', function ($http) {
+    var object = {};
+    object.setUsername = function(userName) {
+        object.userName = userName;
+    };
     return object;
 });
 
@@ -69,6 +73,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.contact.message = "";
 
         $scope.loggedIn = LoginFactory.loggedIn;
+        $scope.loggedInUser = usernameFactory.userName;
         $scope.homeMessage = "No message";
         $scope.showHomeMessage = false;
         $scope.isErrorMessage = false;
@@ -98,19 +103,21 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $scope.loggedIn zonder reden false is
         if($scope.loggedIn !== true) {
             $http.get("/getLoggedIn").
-                success(function (data) {
-                    //console.log(data);
-                    if (data === "Logged in") {
-                        LoginFactory.setLogin(true);
-                        $scope.loggedIn = true;
-                    } else if (data === "Not logged in") {
-                        LoginFactory.setLogin(false);
-                        $scope.loggedIn = false;
-                    }
-                }).
-                error(function (data, status) {
-                    console.log("Account error:", data, status);
-                });
+            success(function (data) {
+                console.log(data.loggedIn);
+                if (data.loggedIn === "Logged in") {
+                    LoginFactory.setLogin(true);
+                    usernameFactory.setUsername(data.username);
+                    $scope.loggedInUser = data.username;
+                    $scope.loggedIn = true;
+                } else if (data.loggedIn === "Not logged in") {
+                    LoginFactory.setLogin(false);
+                    $scope.loggedIn = false;
+                }
+            }).
+            error(function (data, status) {
+                console.log("Account error:", data, status);
+            });
         }
 
         //Gebruikt voor het registreren met de ingevoerde gegevens
@@ -176,8 +183,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 username: $scope.loginData.username,
                 password: password.toString(CryptoJS.enc.Base64)
             };
-            console.log(CryptoJS.MD5($scope.loginData.password));
-            console.log(CryptoJS.MD5("Message"));
             $http.post("/login", loginData).
             success(function (data) {
                 //console.log("Succes! " + data);
@@ -185,9 +190,9 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "You have been logged in (this is a placeholder)";
                 $scope.isErrorMessage = false;
-                usernameFactory = $scope.loginData.username;
-                //console.log("logged in user is: " + usernameFactory);
-                    LoginFactory.setLogin(true);
+                usernameFactory.setUsername($scope.loginData.username);  // $scope.loginData.username;
+                $scope.loggedInUser = $scope.loginData.username;
+                LoginFactory.setLogin(true);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -212,7 +217,9 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
             $scope.loggedIn = false;
             LoginFactory.loggedIn = false;
-        }
+            $scope.loggedInUser = "";
+            usernameFactory.userName = "";
+        };
 
         //Gebruikt door het contactformulier
         $scope.sendMessage = function () {
@@ -245,8 +252,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.openLoginModal = function () {
             $(function () {
                 $('#loginModal').modal('show');
-                //console.log(usernameFactory);
-
             })
         };
 
@@ -317,29 +322,81 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.newPassword = "";
     $scope.newPasswordR = "";
 
+    $scope.refreshAccount = function(){
+        $http.get("/myAccount").
+            success(function (data) {
+                //console.log("Account succes!");
+                userData = data;
+                $scope.gotInfo = true;
+                $scope.username = data.username;
+                $scope.firstName = data.firstName;
+                $scope.lastName = data.lastName;
+                $scope.email = data.email;
+                $scope.projects = data.projects;
+            }).
+            error(function (data, status) {
+                console.log("Account error:", data, status);
+                $location.path("/home");
+            });
+    }
+
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
-    $http.get("/myAccount").
-        success(function (data) {
-            //console.log("Account succes!");
-            userData = data;
-            $scope.gotInfo = true;
-            $scope.username = data.username;
-            $scope.firstName = data.firstName;
-            $scope.lastName = data.lastName;
-            $scope.email = data.email;
-            $scope.projects = data.projects;
-        }).
-        error(function (data, status) {
-            console.log("Account error:", data, status);
-            $location.path("/home");
-        });
+     $scope.refreshAccount();
     }
 
     $scope.openProject = function(id) {
         $location.path("/codeGenerator/"+id);
     };
+
+    $scope.renameProject = function(project){
+        $scope.projectName = project.projectName;
+        $scope.newName = project.projectName;
+        $(function () {
+            $('#changeProjectNameModal').modal('show')
+        })
+    };
+
+    $scope.confirmNameChange = function(){
+        var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
+        $http.post("/changeName", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $(function () {
+                    $('#changeProjectNameModal').modal('hide')
+                })
+                $scope.refreshAccount();
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.nameChangeError = 'Check the length of you projetname';
+            });
+    };
+
+    $scope.deleteProject = function(project){
+        $scope.project = project;
+        $(function () {
+            $('#deleteProjectModal').modal('show')
+        })
+    };
+
+    $scope.confirmDeleteProject = function(){
+        var data = {project: $scope.project};
+        $http.post("/deleteProject", data).
+            success(function (data) {
+                console.log("Succes! " + data);
+                $(function () {
+                    $('#deleteProjectModal').modal('hide')
+                })
+                $scope.refreshAccount();
+            }).
+            error(function (data, status) {
+                console.log("ERROR:", data, status);
+                $scope.nameChangeError = 'Check the length of you projetname';
+            });
+    };
+
 
     $scope.emailConfirmation = function() {
         $(function () {

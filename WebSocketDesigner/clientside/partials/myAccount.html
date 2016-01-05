@@ -1,13 +1,13 @@
 <div id="myAccountPage" ng-show="gotInfo">
 
-    <section id="intro" class="main style1 dark fullscreen">
+    <section id="myAccountDiv" class="main style1 dark fullscreen">
         <div class="content container 75%">
             <header>
                 <h2>Account Info.</h2>
             </header>
             <button ng-click="emailConfirmation()" id="changeEmail">Change email</button></a>
             <button ng-click="passwordConfirmation()" id="changePassword">Change password</button>
-            <footer>
+            <footer class="formMyAccount">
                 <form role="form">
                     <div class="form-group">
                         <label for="username">Username:</label>
@@ -30,7 +30,7 @@
                     </div>
                 </form>
 
-                <p><h2>My Projects</h2></p>
+                <p><h2>My Projects.</h2></p>
                 <div ng-show="projects.length === 0"><h5>You have no projects!</h5></div>
                 <div>
                     <div ng-repeat="project in projects">
@@ -39,8 +39,8 @@
                             </p>
                         </div>
                         <div class="projectbuttonsAlign">
-                            <button class="btn btn-primary" ng-click="">Rename</button>
-                            <button class="btn btn-danger" ng-click="">Delete</button>
+                            <button class="btn btn-primary" ng-click="renameProject(project)">Rename</button>
+                            <button class="btn btn-danger" ng-click="deleteProject(project)">Delete</button>
                             <hr>
                         </div>
                     </div>
@@ -135,6 +135,42 @@
             </div>
             <div class="modal-footer">
                 <button id="updatePassword" type="submit" class="btn btn-primary" ng-click="confirmPassword()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changeProjectNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="newEmail">New project name:</label>
+                        <input type="text" ng-model="newName" class="form-control" id="newName">
+                    </div>
+
+                </form>
+                {{nameChangeError}}
+            </div>
+            <div class="modal-footer">
+                <button id="updateProjectName" type="submit" class="btn btn-primary" ng-click="confirmNameChange()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>Are you sure you want to delete this project?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDeleteProject" type="submit" class="btn btn-primary" ng-click="confirmDeleteProject()" data-dismiss="modal">Yes</button>
+                <button id="refuseDeleteProject" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
         </div>
     </div>
