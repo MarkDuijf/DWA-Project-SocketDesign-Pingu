@@ -9,6 +9,25 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   generated.getSession().setMode("ace/mode/json");
   generated.$blockScrolling = Infinity;
 
+  $scope.loggedIn = LoginFactory.loggedIn;
+
+  if($scope.loggedIn !== true) {
+    $http.get("/getLoggedIn").
+        success(function (data) {
+          console.log(data);
+          if (data === "Logged in") {
+            LoginFactory.setLogin(true);
+            $scope.loggedIn = true;
+          } else if (data === "Not logged in") {
+            LoginFactory.setLogin(false);
+            $scope.loggedIn = false;
+          }
+        }).
+        error(function (data, status) {
+          console.log("Account error:", data, status);
+        });
+  }
+
   $scope.beschikbareCode = [];
   $scope.projectName = "My Project";
 

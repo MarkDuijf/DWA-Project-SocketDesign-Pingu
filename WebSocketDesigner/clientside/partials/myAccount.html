@@ -26,6 +26,7 @@
     </form>
 
     <h2>My Projects</h2>
+    <div ng-show="projects.length === 0"><h5>You have no projects!</h5></div>
     <div>
         <div ng-repeat="project in projects" class="codeKiesveld" ng-click="openProject(project._id)">{{project.projectName}}</div>
     </div>
