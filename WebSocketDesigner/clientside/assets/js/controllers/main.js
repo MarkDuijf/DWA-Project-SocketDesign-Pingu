@@ -95,7 +95,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         }
 
-        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $sope.loggedIn zonder reden false is
+        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $scope.loggedIn zonder reden false is
         if($scope.loggedIn !== true) {
             $http.get("/getLoggedIn").
                 success(function (data) {
