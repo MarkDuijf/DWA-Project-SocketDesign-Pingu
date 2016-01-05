@@ -358,7 +358,7 @@ module.exports = function (app) {
         });
 
         app.post('/confirmPasswordChange', function(req, res) {
-            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "" && req.body.newPass.length >= 3 && req.body.newPass.length <= 15) {
+            if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "" && req.body.newPass.length === 32) {
                 User.update({username: req.session.username}, {$set: { password: req.body.newPass } }, function (err, result) {
                     if (err) {
                         console.log(err);
