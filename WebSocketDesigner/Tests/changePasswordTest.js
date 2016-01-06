@@ -123,8 +123,8 @@ describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
         var change = {
             username: 'test',
             password: 'test',
-            newPass: 'wachtwoord',
-            newPassR: 'wachtwoord'
+            newPass: '0d40d9aea2b3b5a149dc34495fff0a0a',
+            newPassR: '0d40d9aea2b3b5a149dc34495fff0a0a'
         };
 
         agent
