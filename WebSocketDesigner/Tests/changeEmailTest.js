@@ -19,7 +19,7 @@ describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
             .post('/confirmEmailChange')
             .send(change)
             .set('Content-Type', 'application/json')
-            .expect(400)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
@@ -39,7 +39,7 @@ describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
             .post('/confirmEmailChange')
             .send(change)
             .set('Content-Type', 'application/json')
-            .expect(400)
+            .expect(401)
             .expect('Content-Type', /text\/html/)
             .end(function(err,res) {
                 expect(err).to.be.null;
