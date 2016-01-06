@@ -53,7 +53,7 @@ theApp.factory('usernameFactory', function ($http) {
         object.userName = userName;
     };
     object.setfirstName = function(name) {
-        object.name = name;
+        object.firstName = name;
     };
     return object;
 });
@@ -227,6 +227,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             LoginFactory.loggedIn = false;
             $scope.loggedInUser = "";
             usernameFactory.userName = "";
+            usernameFactory.firstName = "";
         };
 
         //Gebruikt door het contactformulier

@@ -1878,6 +1878,8 @@
 	hr {
 		border: 0;
 		border-top: solid 1px #ddd;
+		width: 100%;
+		float: left;
 	}
 
 	blockquote {

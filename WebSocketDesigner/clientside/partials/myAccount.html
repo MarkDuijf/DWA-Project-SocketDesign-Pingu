@@ -5,7 +5,8 @@
             <header>
                 <h2>Account Info.</h2>
             </header>
-            <button ng-click="emailConfirmation()" id="changeEmail">Change email</button></a>
+            <button ng-click="emailConfirmation()" id="changeEmail">Change email</button>
+            </a>
             <button ng-click="passwordConfirmation()" id="changePassword">Change password</button>
             <footer class="formMyAccount">
                 <form role="form">
@@ -30,19 +31,22 @@
                     </div>
                 </form>
 
-                <p><h2>My Projects.</h2></p>
+                <p>
+
+                <h2>My Projects.</h2></p>
                 <div ng-show="projects.length === 0"><h5>You have no projects!</h5></div>
                 <div>
                     <div ng-repeat="project in projects">
-                        <a class="codeKiesveld" ng-click="openProject(project._id)">
-                            <p class="projectNameAlign">{{project.projectName}}</p>
-                        </a>
+                        <div class="codeKiesveld" ng-click="openProject(project._id)">
+                            <p class="projectNameAlign">{{project.projectName}}
+                            </p>
+                        </div>
                         <div class="projectbuttonsAlign">
                             <button class="btn btn-primary" ng-click="renameProject(project)">Rename</button>
                             <button class="btn btn-danger" ng-click="deleteProject(project)">Delete</button>
-                            <hr>
-                        </div>
 
+                        </div>
+                        <hr>
                     </div>
 
                 </div>
@@ -51,127 +55,150 @@
     </section>
 
 
-<div ng-hide="gotInfo">
-    <h2>Fetching data</h2>
-</div>
+    <div ng-hide="gotInfo">
+        <h2>Fetching data</h2>
+    </div>
 
-<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="emailConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>Are you sure you want to change your email address <b>{{email}}</b></p>
-            </div>
-            <div class="modal-footer">
-                <button id="confirmEmail" type="submit" class="btn btn-primary" ng-click="changeEmail()" data-dismiss="modal">Yes</button>
-                <button id="refuseEmail" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
+    <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="emailConfirmation" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Are you sure you want to change your email address <b>{{email}}</b></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmEmail" type="submit" class="btn btn-primary" ng-click="changeEmail()"
+                            data-dismiss="modal">Yes
+                    </button>
+                    <button id="refuseEmail" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>A mail has been send to your email address with a confirmation code.</p>
-                <p>Please enter your new email address and the confirmation code.</p>
-                <form role="form">
-                    <div class="form-group">
-                        <label for="newEmail">New email:</label>
-                        <input type="text" ng-model="newEmail" class="form-control" id="newEmail">
-                    </div>
+    <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>A mail has been send to your email address with a confirmation code.</p>
 
-                    <div class="form-group">
-                        <label for="confirmationCode">Confirmation code:</label>
-                        <input type="text" ng-model="confirmationCode" class="form-control" id="confirmationCode">
-                    </div>
-                </form>
-                {{emailError}}
-            </div>
-            <div class="modal-footer">
-                <button id="updateEmail" type="submit" class="btn btn-primary" ng-click="confirmEmail()">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>
+                    <p>Please enter your new email address and the confirmation code.</p>
 
-<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="passwordConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>Are you sure you want to change your password?</b></p>
-            </div>
-            <div class="modal-footer">
-                <button id="confirmPassword" type="submit" class="btn btn-primary" ng-click="changePassword()" data-dismiss="modal">Yes</button>
-                <button id="refusePassword" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="newEmail">New email:</label>
+                            <input type="text" ng-model="newEmail" class="form-control" id="newEmail">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmationCode">Confirmation code:</label>
+                            <input type="text" ng-model="confirmationCode" class="form-control" id="confirmationCode">
+                        </div>
+                    </form>
+                    {{emailError}}
+                </div>
+                <div class="modal-footer">
+                    <button id="updateEmail" type="submit" class="btn btn-primary" ng-click="confirmEmail()">Confirm
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>A mail has been send to your email address with a confirmation code.</p>
-                <p>Please enter your new password and the confirmation code.</p>
-                <form role="form">
-                    <div class="form-group">
-                        <label for="newEmail">New password:</label>
-                        <input type="password" ng-model="newPassword" class="form-control" id="newPassword">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="newEmail">Repeat new password:</label>
-                        <input type="password" ng-model="newPasswordR" class="form-control" id="newPasswordR">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirmationCode">Confirmation code:</label>
-                        <input type="text" ng-model="confirmationCodePassword" class="form-control" id="confirmationCodePassword">
-                    </div>
-                </form>
-                {{passwordError}}
-            </div>
-            <div class="modal-footer">
-                <button id="updatePassword" type="submit" class="btn btn-primary" ng-click="confirmPassword()">Confirm</button>
+    <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="passwordConfirmation" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Are you sure you want to change your password?</b></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmPassword" type="submit" class="btn btn-primary" ng-click="changePassword()"
+                            data-dismiss="modal">Yes
+                    </button>
+                    <button id="refusePassword" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changePasswordModal" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>A mail has been send to your email address with a confirmation code.</p>
 
-<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changeProjectNameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <label for="newEmail">New project name:</label>
-                        <input type="text" ng-model="newName" class="form-control" id="newName">
-                    </div>
+                    <p>Please enter your new password and the confirmation code.</p>
 
-                </form>
-                {{nameChangeError}}
-            </div>
-            <div class="modal-footer">
-                <button id="updateProjectName" type="submit" class="btn btn-primary" ng-click="confirmNameChange()">Confirm</button>
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="newEmail">New password:</label>
+                            <input type="password" ng-model="newPassword" class="form-control" id="newPassword">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newEmail">Repeat new password:</label>
+                            <input type="password" ng-model="newPasswordR" class="form-control" id="newPasswordR">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmationCode">Confirmation code:</label>
+                            <input type="text" ng-model="confirmationCodePassword" class="form-control"
+                                   id="confirmationCodePassword">
+                        </div>
+                    </form>
+                    {{passwordError}}
+                </div>
+                <div class="modal-footer">
+                    <button id="updatePassword" type="submit" class="btn btn-primary" ng-click="confirmPassword()">
+                        Confirm
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<div style="margin-top: 40px; overflow: scroll" class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>Are you sure you want to delete this project?</p>
-            </div>
-            <div class="modal-footer">
-                <button id="confirmDeleteProject" type="submit" class="btn btn-primary" ng-click="confirmDeleteProject()" data-dismiss="modal">Yes</button>
-                <button id="refuseDeleteProject" type="submit" class="btn btn-danger" data-dismiss="modal">No</button>
+    <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="changeProjectNameModal" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="newEmail">New project name:</label>
+                            <input type="text" ng-model="newName" class="form-control" id="newName">
+                        </div>
+
+                    </form>
+                    {{nameChangeError}}
+                </div>
+                <div class="modal-footer">
+                    <button id="updateProjectName" type="submit" class="btn btn-primary" ng-click="confirmNameChange()">
+                        Confirm
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
+    <div style="margin-top: 40px; overflow: scroll" class="modal fade" id="deleteProjectModal" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this project?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDeleteProject" type="submit" class="btn btn-primary"
+                            ng-click="confirmDeleteProject()" data-dismiss="modal">Yes
+                    </button>
+                    <button id="refuseDeleteProject" type="submit" class="btn btn-danger" data-dismiss="modal">No
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
