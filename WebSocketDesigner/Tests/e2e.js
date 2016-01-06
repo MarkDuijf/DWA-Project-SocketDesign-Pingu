@@ -94,14 +94,13 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .getValue('#usernameLogin').then(function(value) {
                 expect(value).to.be.a("string");
             })
-            .setValue('#passwordLogin', 'test')
+            .setValue('#passwordLogin', 'ww')
             .getValue('#passwordLogin').then(function(value) {
                 expect(value).to.be.a("string");
             })
             .waitForVisible('#logInButtonForm', 60000)
             .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 60000)
-            .getText("#topMessage").then( function(result) {
+            .waitForVisible('#logOutButton', 60000).then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('You have been logged in');
@@ -114,11 +113,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .url("http://localhost:13000")
             .waitForVisible('#accountButton', 60000)
             .click('#accountButton')
-            .waitForVisible('#accountInfoText', 60000)
-            .getText("#accountInfoText").then( function(result) {
-                console.log("Message is: ", result);
-                expect(result).to.be.a("string");
-                expect(result).to.have.string('Account Info');
+            .waitForVisible('#changeEmail', 60000).then( function(result) {
                 done();
             });
     });
@@ -180,6 +175,17 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Your project has been loaded!');
+                done();
+            });
+    });
+
+
+    it("Should log the user out", function(done) {
+        browser
+            .url("http://localhost:13000/")
+            .waitForVisible('#logOutButton', 60000)
+            .click('#logOutButton')
+            .waitForVisible("#logInButton", 60000).then( function(result) {
                 done();
             });
     });

@@ -35,7 +35,7 @@
                 <div>
                     <div ng-repeat="project in projects">
                         <div class="codeKiesveld" ng-click="openProject(project._id)">
-                            <p class="projectNameAlign">{{project.date.getHours()}} - {{project.projectName}}</p>
+                            <p class="projectNameAlign">{{project.date}} - {{project.projectName}}</p>
                         </div>
                         <div class="projectbuttonsAlign">
                             <button class="btn btn-primary" ng-click="renameProject(project)">Rename</button>
