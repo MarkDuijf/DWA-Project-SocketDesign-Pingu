@@ -304,11 +304,13 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         Title: 'CODE GENERATOR',
         LinkText: '/#/codeGenerator',
         ID: 'code-generator'
-    }, {
-        Title: 'COMMUNITY CHAT',
-        LinkText: '/#/chatPage',
-        ID: 'community-chat'
-    }];
+    },
+    //    {
+    //    Title: 'COMMUNITY CHAT',
+    //    LinkText: '/#/chatPage',
+    //    ID: 'community-chat'
+    //}
+    ];
 }]);
 
 theApp.controller('accountController', function ($scope, $http, $routeParams, $location, LoginFactory) {
@@ -397,7 +399,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             success(function (data) {
                 console.log("Succes! " + data);
                 $(function () {
-                    $('#deleteProjectModal').modal('hide')
+                    $('#deleteProjectModal').modal('hide');
                 })
                 $scope.refreshAccount();
             }).
