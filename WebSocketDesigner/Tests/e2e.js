@@ -100,8 +100,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             })
             .waitForVisible('#logInButtonForm', 60000)
             .click('#logInButtonForm')
-            .waitForVisible('#topMessage', 60000)
-            .getText("#topMessage").then( function(result) {
+            .waitForVisible('#logOutButton', 60000).then( function(result) {
                 console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('You have been logged in');

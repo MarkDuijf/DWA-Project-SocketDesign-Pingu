@@ -342,6 +342,15 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
                 $scope.lastName = data.lastName;
                 $scope.email = data.email;
                 $scope.projects = data.projects;
+                for(var i = 0; i < $scope.projects.length; i++) {
+                    var date = new Date($scope.projects[i].date);
+                    $scope.projects[i].date = date.toDateString();
+                    if(date.getDate() < 10) {
+                        $scope.projects[i].date = "0" + date.getDate() + "-" + date.getMonth() + 1 + "-" + date.getFullYear();
+                    } else {
+                        $scope.projects[i].date = date.getDate() + "-" + date.getMonth() + 1 + "-" + date.getFullYear();
+                    }
+                }
             }).
             error(function (data, status) {
                 console.log("Account error:", data, status);
