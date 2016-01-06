@@ -168,18 +168,32 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       'var io = require(\'socket.io\').listen(server);\n' +
       'var path = require(\'path\');\n\n' +
       'app.use(express.static(path.join(__dirname)));\n' +
-      'server.listen(' + input.port + ');\n\n';
+      'server.listen(' + input.port + ');\n\n//client sockets\n\n';
   };
 
   var generateClientSocketCode = function(input){
-    if(input.parameters.data == undefined){
+    if(input.parameters.data == undefined && input.serverResponse == undefined){
       return '//' + input.parameters.description + '\n'+
       'io.emit(\'' + input.parameters.messagename + '\');\n\n';
     }
-    else{
+    else if(input.parameters.data == undefined && input.serverResponse !== undefined){
+      return '//' + input.parameters.description + '\n'+
+      'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
+      '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(){\n    '+
+      '//placeholder text\n})\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse == undefined){
         return '//' + input.parameters.description + '\n'+
         'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
       }
+    else{
+      return '//' + input.parameters.description + '\n'+
+      'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
+      '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(data){\n    '+
+      '//placeholder text\n})\n';
+    }
   }
 
 
@@ -446,6 +460,7 @@ $scope.Generate = function () {
     {
       temp.push(generateClientSocketCode(tempData[0].data.client['message'+clientsocket]));
     }
+    for(var generateServerSocketCode = 0; Object.keys(tempData[0].data.server).length+1; server
     console.log(tempData);
     input = JSON.stringify(input, null, 4);
     for(var i = 0; i < temp.length; i++){
