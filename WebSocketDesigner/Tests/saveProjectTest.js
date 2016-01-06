@@ -19,7 +19,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         };
 
         agent
-            .post('/projectTest')
+            .post('/projects')
             .send(save)
             .set('Content-Type', 'application/json')
             .expect(401)
@@ -42,7 +42,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         };
 
         agent
-            .post('/projectTest')
+            .post('/projects')
             .send(save)
             .set('Content-Type', 'application/json')
             .expect(401)
@@ -64,7 +64,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         };
 
         agent
-            .post('/projectTest')
+            .post('/projects')
             .send(save)
             .set('Content-Type', 'application/json')
             .expect(200)
@@ -86,7 +86,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
         };
 
         agent
-            .post('/projectTest')
+            .post('/projects')
             .send(save)
             .set('Content-Type', 'application/json')
             .expect(400)

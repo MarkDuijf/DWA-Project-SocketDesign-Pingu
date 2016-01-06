@@ -80,15 +80,12 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       } else {
         $http.post("/projects/checkName", data).
             success(function (data) {
-              if (data === "Exists") {
-                $(function () {
-                  $('#saveConfirmation').modal('show');
-                });
-              } else {
-                saveIt();
-              }
+              saveIt();
             }).
             error(function (data, status) {
+              $(function () {
+                $('#saveConfirmation').modal('show');
+              });
               console.log("ERROR:", data, status);
             });
       }

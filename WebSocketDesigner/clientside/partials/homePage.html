@@ -2,8 +2,8 @@
 <section id="intro" class="main style1 dark fullscreen">
     <div class="content container 75%">
         <header>
-            <h2 ng-show="loggedIn" STYLE="text-transform: capitalize;">Welcome {{loggedInUser}}</h2>
-            <h2 ng-hide="loggedIn">Welcome to SocketDesign.IO</h2><br/>
+            <h2 ng-show="loggedIn" STYLE="text-transform: capitalize;">Welcome {{loggedInUserfirstName}}.</h2>
+            <h2 ng-hide="loggedIn">Welcome to SocketDesign.io</h2><br/>
             <h4 ng-show="loggedIn">You are now able to use <a id="codegeneratorlink" href="/#/codeGenerator">the design tool</a>.</h4>
             <h4 ng-hide="loggedIn">In order to use the Socket Design tool you have to login.</h4>
         </header>
@@ -11,9 +11,9 @@
         <button ng-hide="loggedIn" id="registerButton" ng-click="openRegisterModal()">Register</button>
         <a href="/#/myAccount"><button ng-show="loggedIn" id="accountButton">My Account</button></a>
         <button ng-show="loggedIn" ng-click="logout()" id="logOutButton">Log out</button>
-        <footer>
-            <a href="#aboutus" class="button style2 down">More</a>
-        </footer>
+        <!--<footer>-->
+            <!--<a href="#aboutus" class="button style2 down">More</a>-->
+        <!--</footer>-->
     </div>
 </section>
 
@@ -27,7 +27,7 @@
             In this project there is an US devision and an EU devision. Also there is an availability to save the inputted YAML code.
             The saved pieces of code can be reviewed at the profile page.</p>
     </div>
-    <a href="#GitHub" class="button style2 down anchored">Next</a>
+    <!--<a href="#GitHub" class="button style2 down anchored">Next</a>-->
 </section>
 
 <!-- Two -->
@@ -39,7 +39,7 @@
         <p>We are working on an online platform in which you can use the generator. At our github page you can see the whole structure of the website.
             You can visit our githup page <a href="https://github.com/MarkDuijf/DWA-Project-SocketDesign-Pingu" target="_blank"><b>here</b></a>.</p>
     </div>
-    <a href="#helloworld" class="button style2 down anchored">Next</a>
+    <!--<a href="#helloworld" class="button style2 down anchored">Next</a>-->
 </section>
 
 <!-- Work -->
@@ -52,7 +52,7 @@
             example YAML input and the generated client side and server side code.</p>
         <p><button ng-click="downloadDemo()">Download demo</button></p>
     </div>
-    <a href="#contact" class="button style2 down anchored">Next</a>
+    <!--<a href="#contact" class="button style2 down anchored">Next</a>-->
 </section>
 
 <!-- Contact -->
