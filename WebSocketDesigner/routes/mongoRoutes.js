@@ -357,7 +357,7 @@ module.exports = function (app) {
                 });
             } else {
                 res.status(400);
-                res.send("Wrong confirmation code");
+                res.send("Invalid email");
             }
         });
 
@@ -380,18 +380,22 @@ module.exports = function (app) {
                 res.send("Data error");
             }
         });
-
         app.post('/changeName', function(req, res){
-            Project.update({projectName: req.body.oldProjectName}, {$set: {projectName : req.body.newProjectName } }, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.status(500);
-                    res.send("Update error");
-                } else {
-                    res.status(200);
-                    res.send(req.body.newProjectName);
-                }
-            });
+            if(req.body.newProjectName.length < 3 || req.body.newProjectName.length > 15){
+                res.status(401);
+                res.send("Your project name is too long or too short");
+            } else {
+                Project.update({projectName: req.body.oldProjectName}, {$set: {projectName: req.body.newProjectName}}, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Update error");
+                    } else {
+                        res.status(200);
+                        res.send(req.body.newProjectName);
+                    }
+                });
+            }
         });
 
         app.post('/deleteProject', function(req, res){
