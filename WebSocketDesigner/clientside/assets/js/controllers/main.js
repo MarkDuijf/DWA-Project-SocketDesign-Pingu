@@ -16,22 +16,18 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/codeGenerator.html',
             controller: 'generatorController'
         }).
-            when('/codeGenerator/:id', {
-                templateUrl: 'partials/codeGenerator.html',
-                controller: 'generatorController'
-            }).
+        when('/codeGenerator/:id', {
+            templateUrl: 'partials/codeGenerator.html',
+            controller: 'generatorController'
+        }).
         when('/chatPage', {
             templateUrl: 'partials/chatPage.html',
             controller: 'chatController'
         }).
-        when('/helloworld', {
-            templateUrl: 'partials/helloworld.html',
-            controller: ''
+        when('/myAccount', {
+            templateUrl: 'partials/myAccount.html',
+            controller: 'accountController'
         }).
-            when('/myAccount', {
-                templateUrl: 'partials/myAccount.html',
-                controller: 'accountController'
-            }).
         otherwise({
             redirectTo: '/home'
         });
@@ -375,7 +371,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
                 console.log("Succes! " + data);
                 $(function () {
                     $('#changeProjectNameModal').modal('hide')
-                })
+                });
                 $scope.refreshAccount();
             }).
             error(function (data, status) {
@@ -398,7 +394,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
                 console.log("Succes! " + data);
                 $(function () {
                     $('#deleteProjectModal').modal('hide')
-                })
+                });
                 $scope.refreshAccount();
             }).
             error(function (data, status) {
