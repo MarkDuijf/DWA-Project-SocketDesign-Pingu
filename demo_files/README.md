@@ -8,7 +8,7 @@ Installation
 
 ```npm install```
 
-```node server.js```
+```node app.js```
 
 Point your browser to http://HOSTNAME:3000
 

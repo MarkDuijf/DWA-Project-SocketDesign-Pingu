@@ -25,6 +25,7 @@ module.exports = function (app) {
         if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
             response.loggedIn = "Logged in";
             response.username = req.session.username;
+            response.firstName = req.session.firstName;
             res.status(200);
             res.send(response);
         } else {
@@ -32,7 +33,7 @@ module.exports = function (app) {
             res.status(200);
             res.send(response);
         }
-    })
+    });
 
     mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
@@ -61,8 +62,9 @@ module.exports = function (app) {
                 } else if (user.activated === true) {
                     req.session.loggedin = true;
                     req.session.username = req.body.username;
+                    req.session.firstName = user.firstName;
                     res.status(200);
-                    res.send("Succes!");
+                    res.send(user.firstName);
                 } else if (user.activated === false) {
                     req.session.loggedin = false;
                     req.session.username = "";

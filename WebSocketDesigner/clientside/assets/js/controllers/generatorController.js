@@ -6,7 +6,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
   var generated = ace.edit("generated");
   generated.setTheme("ace/theme/monokai");
-  generated.getSession().setMode("ace/mode/json");
+  generated.getSession().setMode("ace/mode/javascript");
   generated.$blockScrolling = Infinity;
 
   //TODO uitcommenten
@@ -205,12 +205,15 @@ var parseMainScope = function(input){
   for(var mainScope = 0; mainScope < Object.keys(input).length; mainScope++){
     switch(Object.keys(input)[mainScope]){
       case "client":
+        tempData[0].data.client = {};
         parseClient(input.client);
         break;
       case "server":
+        tempData[0].data.server = {};
         parseServer(input.server);
         break;
       case "info":
+        tempData[0].data.info = {};
         parseInfo(input.info);
         break;
       default:
@@ -236,6 +239,7 @@ var parseInfo = function(input){
 
 var parseTitle = function(input){
   if(input.length <= 25){
+    tempData[0].data.info.title = input;
     //TODO lengte is goed, return data?
   }
   else{
@@ -247,6 +251,7 @@ var parsePort = function(input){
   if(typeof input == "number"){
     if(input <= 65535 && input >= 2000){
       //TODO type is number en is niet te hoog/laag
+      tempData[0].data.info.port = input;
     }
     else{
       throw new Error('the chosen port, ' + input + ', is not usable. Please use a port between 2000 and 65535');
@@ -285,7 +290,7 @@ var parseMessage = function(input, scope, number){
   for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
     switch(Object.keys(input)[messageScope]){
       case "parameters":
-        parseParameters(input.parameters, scope, number);
+        parseParameters(input.parameters, scope, number, false);
         break;
       case "serverResponse":
         if(scope == "server"){
@@ -306,11 +311,11 @@ var parseMessage = function(input, scope, number){
   }
 }
 
-var parseParameters = function(input, scope, number){
+var parseParameters = function(input, scope, number, serverResponse){
   for(var parameterScope = 0; parameterScope < Object.keys(input).length; parameterScope++){
     switch(Object.keys(input)[parameterScope]){
       case "messageName":
-        parseMessageName(input.messageName, scope, number);
+        parseMessageName(input.messageName, scope, number, serverResponse);
         break;
       case "data":
         parseData(input.data);
@@ -323,31 +328,48 @@ var parseParameters = function(input, scope, number){
   }
 }
 
-var parseMessageName = function(input, scope, number){
-  if(input.length > 25){
+var parseMessageName = function(input, scope, number, serverResponse){
+    if(input == null && serverResponse == false){
+    input = 'message' + number;
+    alert('There was no name assigned to \'' + scope +  '/message' + number +'\', the used name will be set to \'' + input + '\'.')
+  }
+  else if(input == null && serverResponse == true){
+    input = 'message' + number;
+    alert('There was no name assigned to \'' + scope +  '/message' + number +'/serverResponse/parameters/messagename\', so the used name will be set to \'' + input + '\'. It is highly recommended to give it the same name as \''+ scope + '/message' + number + '/parameters/messagename\'.')
+  }
+  else if(input.length > 25){
     throw new Error('The messageName used in \''+scope+'/message' + number +'\' is ' + input.length + ' characters long, which exceeds the maximum of 25 characters.');
   }
 }
 
 var parseData = function(input){
-
+  if(input !== null){
+    //TODO er is data, gebruiken.
+  }
 }
 
 var parseDescription = function(input){
-
+  if(input !== null){
+    //TODO er is een description, gebruiken*gebruikt als commentaar boven de functie*
+  }
 }
 
 var parseServerResponse = function(input, scope, number){
-  var tempTo = "all";
+  var tempTo = '';
   for(var serverRScope = 0; serverRScope < Object.keys(input).length; serverRScope++){
+    if(Object.keys(input)[serverRScope] !== "to" && serverRScope == 0){
+      throw new Error('The first used tag in \''+scope + '/message'+ number + '/serverResponse' + '\' should be \'to\', instead of \''+ Object.keys(input)[serverRScope] + '\'.');
+    }
     switch(Object.keys(input)[serverRScope]){
       case "to":
+        tempTo = input.to;
+        parseDestination(input.to);
         break;
       case "clientname":
-        break;
-      case "roomname":
+        parseClientName(input.clientname, tempTo, scope, number);
         break;
       case "parameters":
+        parseParameters(input.parameters, scope, number, true);
         break;
       default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverResponse\', is not usable here. Please refer to the userguide for more information.');
     }
@@ -355,33 +377,50 @@ var parseServerResponse = function(input, scope, number){
 }
 
 var parseDestination = function(input){
-
+  if(input == "all"){
+    //TODO send message to everyone
+  }
+  else{
+    //TODO send message to specific person
+  }
 }
 
-var parseClientName = function(input){
-
+var parseClientName = function(input, to, scope, number){
+  console.log(to);
+  if(to == "all"){
+    throw new Error('The \'clientname\' tag can not be used here since the \'to\' tag in \''+ scope + '/message' + number + '/serverResponse' + '\' has been set to \'' + to + '\'.');
+  }
+  if(input == "all"){
+    throw new Error('The used name \'all\' in \''+ scope + '/message' + number + '/serverResponse/clientname' +'\' is not usable. Please refer to the userguide for more information.');
+  }
+  else{
+    //TODO send message to specific person
+  }
 }
 
-var parseRoomName = function(input){
+// var parseRoomName = function(input){
 
-}
+// }
 
+
+var tempData = [];
 
 $scope.Generate = function () {
   try {
+    var username = "petertje";
+    tempData.push({username: username, data: {}});
     var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
     input = jsyaml.safeLoad(input);
     parseMainScope(input);
+    temp.push(generateServerCode(tempData[0].data.info));
+    console.log(tempData);
     input = JSON.stringify(input, null, 4);
-    //temp.push(generateServerCode($scope.info));
-    //temp.push(generateServerSocket(output));
-    //temp.push(generateClientSocket(output));
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
-    generated.setValue(input, 1);
+    generated.setValue(output, 1);
     $scope.error = null;
     }
     catch
