@@ -25,7 +25,6 @@ module.exports = function (app) {
         if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
             response.loggedIn = "Logged in";
             response.username = req.session.username;
-            response.firstName = req.session.firstName;
             res.status(200);
             res.send(response);
         } else {
@@ -33,7 +32,7 @@ module.exports = function (app) {
             res.status(200);
             res.send(response);
         }
-    });
+    })
 
     mongoose.connect('mongodb://localhost/' + dbName, function () {
         // Gebruikt om een gebruiker in te loggen
@@ -62,9 +61,8 @@ module.exports = function (app) {
                 } else if (user.activated === true) {
                     req.session.loggedin = true;
                     req.session.username = req.body.username;
-                    req.session.firstName = user.firstName;
                     res.status(200);
-                    res.send(user.firstName);
+                    res.send("Succes!");
                 } else if (user.activated === false) {
                     req.session.loggedin = false;
                     req.session.username = "";
@@ -82,7 +80,6 @@ module.exports = function (app) {
         app.post('/logout', function (req, res) {
             req.session.loggedIn = false;
             req.session.username = "";
-            req.session.firstName = "";
             res.status(200);
             res.send("Uitgelogd");
         });
@@ -193,6 +190,14 @@ module.exports = function (app) {
             }
 
             if (req.session.username === undefined || req.session.username === null || req.session.username === "") {
+                /*Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
+                project = {
+                    username: "test",
+                    projectname: req.body.name,
+                    code: req.body.code,
+                    date: datetime
+                };
+                */
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
@@ -235,10 +240,10 @@ module.exports = function (app) {
         app.post('/projects/checkName', function(req,res) {
             Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
                 if(projects.length === 0) {
-                    res.status(200);
+                    res.status(401);
                     res.send("Doesn't exist");
                 } else {
-                    res.status(409);
+                    res.status(200);
                     res.send("Exists");
                 }
             });
@@ -376,33 +381,20 @@ module.exports = function (app) {
             }
         });
         app.post('/changeName', function(req, res){
-            if(req.body.newProjectName !== "") {
-                Project.find({
-                    username: req.session.username,
-                    projectName: req.body.newProjectName
-                }, function (err, projects) {
-                    if (projects.length === 0) {
-                        Project.update({projectName: req.body.oldProjectName}, {$set: {projectName: req.body.newProjectName}}, function (err, result) {
-                            if (err) {
-                                console.log(err);
-                                res.status(500);
-                                res.send("Update error");
-                            } else {
-                                res.status(200);
-                                res.send(req.body.newProjectName);
-                            }
-                        });
-                    } else {
-                        res.status(409);
-                        res.send("This project name already exists");
-                    }
-                });
-            } else if(req.body.newProjectName.length < 3 || req.body.newProjectName.length > 15){
+            if(req.body.newProjectName.length < 3 || req.body.newProjectName.length > 15){
                 res.status(401);
                 res.send("Your project name is too long or too short");
             } else {
-                res.status(400);
-                res.send("You did not enter a name");
+                Project.update({projectName: req.body.oldProjectName}, {$set: {projectName: req.body.newProjectName}}, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500);
+                        res.send("Update error");
+                    } else {
+                        res.status(200);
+                        res.send(req.body.newProjectName);
+                    }
+                })
             }
         });
 
