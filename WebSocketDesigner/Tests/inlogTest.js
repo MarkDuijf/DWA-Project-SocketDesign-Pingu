@@ -27,7 +27,7 @@ var agent = supertest.agent(app);
         it('een nog niet geactiveerd account weigeren', function (done) {
             var login = {
                 username: 'demo',
-                password: 'demo'
+                password: 'ad57484016654da87125db86f4227ea3'
             };
 
             agent

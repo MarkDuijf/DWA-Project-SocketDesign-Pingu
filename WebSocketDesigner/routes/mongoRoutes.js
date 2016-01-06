@@ -240,7 +240,7 @@ module.exports = function (app) {
         app.post('/projects/checkName', function(req,res) {
             Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
                 if(projects.length === 0) {
-                    res.status(200);
+                    res.status(401);
                     res.send("Doesn't exist");
                 } else {
                     res.status(200);
