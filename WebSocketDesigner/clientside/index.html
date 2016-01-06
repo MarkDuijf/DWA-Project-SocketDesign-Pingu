@@ -50,7 +50,6 @@
     <!-- Nav -->
     <nav ng-controller="menuControl" id="nav">
         <ul>
-            <li ng-show="usernameFactory != null"><a>{{usernameFactory}}</a></li>
             <li ng-repeat="menu in menuItems"><a id="{{menu.ID}}" href="{{menu.LinkText}}">{{menu.Title}}</a></li>
         </ul>
     </nav>

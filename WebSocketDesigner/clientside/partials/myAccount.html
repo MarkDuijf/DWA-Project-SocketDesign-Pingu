@@ -34,9 +34,9 @@
                 <div ng-show="projects.length === 0"><h5>You have no projects!</h5></div>
                 <div>
                     <div ng-repeat="project in projects">
-                        <a class="codeKiesveld" ng-click="openProject(project._id)">
-                            <p class="projectNameAlign">{{project.date.getHours()}} - {{project.projectName}}</p>
-                        </a>
+                        <div class="codeKiesveld" ng-click="openProject(project._id)">
+                            <p class="projectNameAlign">{{project.date}} - {{project.projectName}}</p>
+                        </div>
                         <div class="projectbuttonsAlign">
                             <button class="btn btn-primary" ng-click="renameProject(project)">Rename</button>
                             <button class="btn btn-danger" ng-click="deleteProject(project)">Delete</button>
