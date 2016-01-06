@@ -52,6 +52,9 @@ theApp.factory('usernameFactory', function ($http) {
     object.setUsername = function(userName) {
         object.userName = userName;
     };
+    object.setfirstName = function(name) {
+        object.firstName = name;
+    };
     return object;
 });
 
@@ -74,6 +77,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
         $scope.loggedIn = LoginFactory.loggedIn;
         $scope.loggedInUser = usernameFactory.userName;
+        $scope.loggedInUserfirstName = usernameFactory.firstName;
         $scope.homeMessage = "No message";
         $scope.showHomeMessage = false;
         $scope.isErrorMessage = false;
@@ -108,7 +112,9 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 if (data.loggedIn === "Logged in") {
                     LoginFactory.setLogin(true);
                     usernameFactory.setUsername(data.username);
+                    usernameFactory.setfirstName(data.firstName);
                     $scope.loggedInUser = data.username;
+                    $scope.loggedInUserfirstName = data.firstName;
                     $scope.loggedIn = true;
                 } else if (data.loggedIn === "Not logged in") {
                     LoginFactory.setLogin(false);
@@ -191,6 +197,8 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.homeMessage = "You have been logged in (this is a placeholder)";
                 $scope.isErrorMessage = false;
                 usernameFactory.setUsername($scope.loginData.username);  // $scope.loginData.username;
+                usernameFactory.setfirstName(data);
+                $scope.loggedInUserfirstName = data;
                 $scope.loggedInUser = $scope.loginData.username;
                 LoginFactory.setLogin(true);
             }).
@@ -219,6 +227,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             LoginFactory.loggedIn = false;
             $scope.loggedInUser = "";
             usernameFactory.userName = "";
+            usernameFactory.firstName = "";
         };
 
         //Gebruikt door het contactformulier
@@ -353,6 +362,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.renameProject = function(project){
         $scope.projectName = project.projectName;
         $scope.newName = project.projectName;
+        $scope.nameChangeError = "";
         $(function () {
             $('#changeProjectNameModal').modal('show')
         })
@@ -370,7 +380,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
-                $scope.nameChangeError = 'Check the length of you projetname';
+                $scope.nameChangeError = data;
             });
     };
 
