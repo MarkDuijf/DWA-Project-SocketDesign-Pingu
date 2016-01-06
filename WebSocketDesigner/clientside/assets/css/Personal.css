@@ -91,8 +91,8 @@
     background-color: white;
     color: #39454b;
     margin: 4px;
-    width: 65%;
-    float:left;
+    width: 100%;
+    /*float:left;*/
     height: 40px;
 }
 
