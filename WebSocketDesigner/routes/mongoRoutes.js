@@ -193,14 +193,6 @@ module.exports = function (app) {
             }
 
             if (req.session.username === undefined || req.session.username === null || req.session.username === "") {
-                /*Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
-                project = {
-                    username: "test",
-                    projectname: req.body.name,
-                    code: req.body.code,
-                    date: datetime
-                };
-                */
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
@@ -243,7 +235,7 @@ module.exports = function (app) {
         app.post('/projects/checkName', function(req,res) {
             Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
                 if(projects.length === 0) {
-                    res.status(200);
+                    res.status(401);
                     res.send("Doesn't exist");
                 } else {
                     res.status(200);
@@ -385,16 +377,31 @@ module.exports = function (app) {
         });
 
         app.post('/changeName', function(req, res){
-            Project.update({projectName: req.body.oldProjectName}, {$set: {projectName : req.body.newProjectName } }, function (err, result) {
-                if (err) {
-                    console.log(err);
-                    res.status(500);
-                    res.send("Update error");
-                } else {
-                    res.status(200);
-                    res.send(req.body.newProjectName);
-                }
-            });
+            if(req.body.newProjectName !== "") {
+                Project.find({
+                    username: req.session.username,
+                    projectName: req.body.newProjectName
+                }, function (err, projects) {
+                    if (projects.length === 0) {
+                        Project.update({projectName: req.body.oldProjectName}, {$set: {projectName: req.body.newProjectName}}, function (err, result) {
+                            if (err) {
+                                console.log(err);
+                                res.status(500);
+                                res.send("Update error");
+                            } else {
+                                res.status(200);
+                                res.send(req.body.newProjectName);
+                            }
+                        });
+                    } else {
+                        res.status(409);
+                        res.send("This project name already exists");
+                    }
+                });
+            } else {
+                res.status(400);
+                res.send("You did not enter a name");
+            }
         });
 
         app.post('/deleteProject', function(req, res){

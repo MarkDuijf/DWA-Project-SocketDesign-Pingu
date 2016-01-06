@@ -361,6 +361,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.renameProject = function(project){
         $scope.projectName = project.projectName;
         $scope.newName = project.projectName;
+        $scope.nameChangeError = "";
         $(function () {
             $('#changeProjectNameModal').modal('show')
         })
@@ -378,7 +379,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
-                $scope.nameChangeError = 'Check the length of you projetname';
+                $scope.nameChangeError = data;
             });
     };
 
