@@ -357,9 +357,12 @@ module.exports = function (app) {
                         });
                     }
                 });
+            } else if(re.test(req.body.newEmail) === false) {
+                res.status(401);
+                res.send("Invalid email");
             } else {
                 res.status(400);
-                res.send("Invalid email");
+                res.send("wrong confirmation link");
             }
         });
 
