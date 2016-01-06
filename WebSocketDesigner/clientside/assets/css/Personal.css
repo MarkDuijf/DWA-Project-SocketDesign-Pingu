@@ -90,9 +90,9 @@
 .codeKiesveld {
     background-color: white;
     color: #39454b;
-    margin: 4px;
-    width: 100%;
-    /*float:left;*/
+    /*margin-right: 4px;*/
+    width: 65%;
+    float:left;
     height: 40px;
 }
 
@@ -103,12 +103,12 @@
 .projectNameAlign{
     text-align: left;
     margin-left: 10px;
-    color: black;
 }
 
 .projectbuttonsAlign{
     float:left;
-    width:30%;
+    margin-left: 4px;
+    margin-top: 2px;
 }
 
 .maxLengthDialog {

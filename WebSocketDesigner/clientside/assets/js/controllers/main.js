@@ -53,7 +53,7 @@ theApp.factory('usernameFactory', function ($http) {
         object.userName = userName;
     };
     object.setfirstName = function(name) {
-        object.name = name;
+        object.firstName = name;
     };
     return object;
 });
@@ -197,7 +197,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.homeMessage = "You have been logged in (this is a placeholder)";
                 $scope.isErrorMessage = false;
                 usernameFactory.setUsername($scope.loginData.username);  // $scope.loginData.username;
-                usernameFactory.setfirstName($scope.loginData.firstName);
+                usernameFactory.setfirstName(data);
                 $scope.loggedInUserfirstName = data;
                 $scope.loggedInUser = $scope.loginData.username;
                 LoginFactory.setLogin(true);
@@ -227,6 +227,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             LoginFactory.loggedIn = false;
             $scope.loggedInUser = "";
             usernameFactory.userName = "";
+            usernameFactory.firstName = "";
         };
 
         //Gebruikt door het contactformulier
