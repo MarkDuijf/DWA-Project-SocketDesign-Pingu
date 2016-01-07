@@ -22,15 +22,15 @@
 }
 
 .generatorPage {
-    min-width: 1310px;
-    background-image: url("images/generatorpagebackground.jpg");
-    background-size: cover;
+    /*min-width: 1310px;*/
+    /*background: url("images/overlay.png"), url("images/intro.jpg");*/
+    /*background-size: cover;*/
     height: 100%;
 }
 
 .generatorPage > pre {
-    top: -350px;
-    width: 45%;
+    /*top: -162px;*/
+    width: 80%;
     min-width: 600px;
     height: 100%;
     display: inline;
@@ -39,9 +39,14 @@
 }
 
 .generateButtons {
-    width: 8em;
-    margin: 10px;
-    white-space: initial;
+    /*width: 8em;*/
+    /*white-space: initial;*/
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top: 10px;*/
+    display: block;
+    margin-bottom: 10px;
+
 }
 
 
@@ -129,4 +134,12 @@
 
 #projectDate {
     float: left;
+}
+
+#generatepage {
+    background: url("images/overlay.png"), url("images/intro.jpg");
+    background-size: 256px 256px, cover;
+    background-attachment: fixed, fixed;
+    background-position: top left, bottom center;
+    background-repeat: repeat, no-repeat;
 }
