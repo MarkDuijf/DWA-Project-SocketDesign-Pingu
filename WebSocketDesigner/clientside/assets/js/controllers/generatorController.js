@@ -172,28 +172,85 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   };
 
   var generateClientSocketCode = function(input){
+    var retundata;
     if(input.parameters.data == undefined && input.serverResponse == undefined){
-      return '//' + input.parameters.description + '\n'+
+      returndata = '//' + input.parameters.description + '\n'+
       'io.emit(\'' + input.parameters.messagename + '\');\n\n';
     }
     else if(input.parameters.data == undefined && input.serverResponse !== undefined){
-      return '//' + input.parameters.description + '\n'+
+      returndata = '//' + input.parameters.description + '\n'+
       'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
       '//' + input.serverResponse.parameters.description + '\n' +
       'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(){\n    '+
-      '//placeholder text\n})\n';
+      '//placeholder text\n});\n\n';
     }
     else if(input.parameters.data !== undefined && input.serverResponse == undefined){
-        return '//' + input.parameters.description + '\n'+
+        returndata = '//' + input.parameters.description + '\n'+
         'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
       }
     else{
-      return '//' + input.parameters.description + '\n'+
+      returndata = '//' + input.parameters.description + '\n'+
       'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
       '//' + input.serverResponse.parameters.description + '\n' +
       'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(data){\n    '+
-      '//placeholder text\n})\n';
+      '//placeholder text\n});\n\n';
     }
+    return returndata;
+  }
+
+  var generateServerSocketCode = function(input, scope){
+    var returndata;
+    if(input.serverResponse !== undefined){
+      if(input.parameters.data !== undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname !== undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'});\n});\n\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname == undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'});\n});\n\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+      
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname !== undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.to('+input.serverResponse.clientname+').emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'}\n});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname == undefined){
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'}\n});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.to('+input.serverResponse.clientname+').emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    }
+  } 
+    else if(input.serverResponse == undefined && scope == "server"){
+      if(input.parameters.data == undefined && input.serverResponse == undefined){
+      returndata = '//' + input.parameters.description + '\n'+
+      'io.emit(\'' + input.parameters.messagename + '\');\n\n';
+    }
+      else if(input.parameters.data !== undefined){
+        returndata = '//' + input.parameters.description + '\n'+
+        'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
+      }
+    }
+    return returndata;
   }
 
 
@@ -262,7 +319,7 @@ var parsePort = function(input){
     }
   }
   else{
-    throw new Error('The given port value is not a number. Please choose a value between 2000 and 655355');
+    throw new Error('The given port value is not a number. Please choose a value between 2000 and 65535');
   }
 }
 
@@ -459,10 +516,11 @@ $scope.Generate = function () {
     for(var clientsocket = 1; clientsocket < Object.keys(tempData[0].data.client).length+1;clientsocket++ )
     {
       temp.push(generateClientSocketCode(tempData[0].data.client['message'+clientsocket]));
+      temp.push(generateServerSocketCode(tempData[0].data.client['message'+clientsocket], 'client'));
     }
-    for(var generateServerSocketCode = 0; Object.keys(tempData[0].data.server).length+1; server
-    console.log(tempData);
-    input = JSON.stringify(input, null, 4);
+    for(var serversocket = 1; serversocket < Object.keys(tempData[0].data.server).length+1; serversocket ++){
+      temp.push(generateServerSocketCode(tempData[0].data.client['message'+serversocket], 'server'));
+    }
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
