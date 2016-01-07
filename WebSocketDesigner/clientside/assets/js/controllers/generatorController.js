@@ -445,36 +445,4 @@ var parseClientName = function(input, to, scope, number){
 
 var tempData = [];
 
-$scope.Generate = function () {
-  try {
-    tempData = [];
-    var username = "petertje";
-    tempData.push({username: username, data: {}});
-    var input = editor.getSession().getValue();
-    var temp = [];
-    var output = '';
-    input = jsyaml.safeLoad(input);
-    parseMainScope(input);
-    temp.push(generateServerCode(tempData[0].data.info));
-    for(var clientsocket = 1; clientsocket < Object.keys(tempData[0].data.client).length+1;clientsocket++ )
-    {
-      temp.push(generateClientSocketCode(tempData[0].data.client['message'+clientsocket]));
-    }
-    for(var generateServerSocketCode = 0; Object.keys(tempData[0].data.server).length+1; server
-    console.log(tempData);
-    input = JSON.stringify(input, null, 4);
-    for(var i = 0; i < temp.length; i++){
-      output += temp[i];
-    }
-    //generated.setValue(output, 1);
-    $scope.error = null;
-    }
-    catch
-        (e) {
-      console.log(e);
-      scroll(0, 0);
-      //generated.setValue('', 1);
-      $scope.error = e.message;
-    }
-  };
 });
