@@ -4,10 +4,10 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   editor.getSession().setMode("ace/mode/yaml");
   editor.$blockScrolling = Infinity;
 
-  var generated = ace.edit("generated");
-  generated.setTheme("ace/theme/monokai");
-  generated.getSession().setMode("ace/mode/javascript");
-  generated.$blockScrolling = Infinity;
+  //var generated = ace.edit("generated");
+  //generated.setTheme("ace/theme/monokai");
+  //generated.getSession().setMode("ace/mode/javascript");
+  //generated.$blockScrolling = Infinity;
 
   //TODO uitcommenten
   //$scope.loggedIn = LoginFactory.loggedIn;
@@ -420,14 +420,14 @@ $scope.Generate = function () {
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
-    generated.setValue(output, 1);
+    //generated.setValue(output, 1);
     $scope.error = null;
     }
     catch
         (e) {
       console.log(e);
       scroll(0, 0);
-      generated.setValue('', 1);
+      //generated.setValue('', 1);
       $scope.error = e.message;
     }
   };
