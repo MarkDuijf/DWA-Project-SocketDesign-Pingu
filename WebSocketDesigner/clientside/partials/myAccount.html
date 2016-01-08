@@ -38,9 +38,8 @@
                             <p class="projectNameAlign">{{project.date}} - {{project.projectName}}</p>
                         </div>
                         <div class="projectbuttonsAlign">
-                            <button class="btn btn-primary" ng-click="renameProject(project)">Rename</button>
+                            <button class="btn btn-primary" class="renameButton" ng-click="renameProject(project)">Rename</button>
                             <button class="btn btn-danger" ng-click="deleteProject(project)">Delete</button>
-
                         </div>
                         <hr>
                     </div>
@@ -147,7 +146,7 @@
             <div class="modal-body">
                 <form role="form">
                     <div class="form-group">
-                        <label for="newEmail">New project name:</label>
+                        <label for="newName">New project name:</label>
                         <input type="text" ng-model="newName" class="form-control" id="newName">
                     </div>
 

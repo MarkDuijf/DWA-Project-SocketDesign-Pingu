@@ -25,6 +25,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
         browser.init(done);
     });
 
+    /*
     it("Should get an username/password doesn't exist error", function(done) {
         browser
             .url("http://localhost:13000")
@@ -84,6 +85,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
                 done();
             });
     });
+    */
 
     it("Should log the user called test in", function(done) {
         browser
@@ -101,9 +103,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .waitForVisible('#logInButtonForm', 60000)
             .click('#logInButtonForm')
             .waitForVisible('#logOutButton', 60000).then( function(result) {
-                console.log("Message is: ", result);
-                expect(result).to.be.a("string");
-                expect(result).to.have.string('You have been logged in');
                 done();
             });
     });
@@ -114,6 +113,89 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .waitForVisible('#accountButton', 60000)
             .click('#accountButton')
             .waitForVisible('#changeEmail', 60000).then( function(result) {
+                done();
+            });
+    });
+
+    it("Should save generator code", function(done) {
+        browser
+            .url("http://localhost:13000/#/codeGenerator")
+            .waitForVisible('#generatorSaveButton', 60000)
+            .click('#generatorSaveButton')
+            .waitForVisible('#projectName', 60000)
+            .setValue('#projectName', "E2E Project")
+            .waitForVisible('#saveButton', 60000)
+            .click('#saveButton')
+            .waitForVisible('#topMessage', 60000)
+            .getText("#topMessage").then( function(result) {
+                console.log("Message is: ", result);
+                expect(result).to.be.a("string");
+                expect(result).to.have.string('Your project has been saved.');
+                done();
+            });
+    });
+
+    it("Should load the previously made generator code", function(done) {
+        browser
+            .url("http://localhost:13000/#/codeGenerator")
+            .waitForVisible('#generatorLoadButton', 60000)
+            .click('#generatorLoadButton')
+            .waitForVisible('#codeModal', 60000)
+            .click(".codeKiesveld*=E2E Project").then(function(result) {
+                done();
+            });
+    });
+
+    it("Should load an earlier project called E2E test from the account page", function(done) {
+        browser
+            .url("http://localhost:13000/")
+            .waitForVisible('#accountButton', 60000)
+            .click('#accountButton')
+            .waitForVisible(".codeKiesveld*=E2E Project", 60000)
+            .click(".codeKiesveld*=E2E Project")
+            .waitForVisible('#topMessage', 60000)
+            .getText("#topMessage").then( function(result) {
+                console.log("Message is: ", result);
+                expect(result).to.be.a("string");
+                expect(result).to.have.string('Your project has been loaded!');
+                done();
+            });
+    });
+
+    it("Should rename the project called E2E test on the account page", function(done) {
+        browser
+            .url("http://localhost:13000/")
+            .waitForVisible('#accountButton', 60000)
+            .click('#accountButton')
+            .waitForVisible(".btn-primary*=Rename", 60000)
+            .click(".btn-primary*=Rename")
+            .waitForVisible('#newName', 60000)
+            .setValue('#newName', 'Renamed')
+            .click("#updateProjectName")
+            .waitForVisible(".codeKiesveld*=Renamed", 60000).then( function(result) {
+                done();
+            });
+    });
+
+    it("Should delete the project called Renamed on the account page", function(done) {
+        browser
+            .url("http://localhost:13000/")
+            .waitForVisible('#accountButton', 60000)
+            .click('#accountButton')
+            .waitForVisible(".btn-danger*=Delete", 60000)
+            .click(".btn-danger*=Delete")
+            .waitForVisible('#confirmDeleteProject', 60000)
+            .click("#confirmDeleteProject").then( function(result) {
+                done();
+            });
+    });
+
+    it("Should log the user out", function(done) {
+        browser
+            .url("http://localhost:13000/")
+            .waitForVisible('#logOutButton', 60000)
+            .click('#logOutButton')
+            .waitForVisible("#logInButton", 60000).then( function(result) {
                 done();
             });
     });
@@ -135,68 +217,13 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             });
     });
 
-    it("Should save generator code", function(done) {
-        browser
-            .url("http://localhost:13000/#/codeGenerator")
-            .waitForVisible('#generatorSaveButton', 60000)
-            .click('#generatorSaveButton')
-            .setValue('#projectName', "E2E Project")
-            .waitForVisible('#saveButton', 60000)
-            .click('#saveButton')
-            .waitForVisible('#topMessage', 60000)
-            .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
-                expect(result).to.be.a("string");
-                expect(result).to.have.string('Your project has been saved.');
-                done();
-            });
-    });
-
-    it("Should load the previously made generator code", function(done) {
-        browser
-            .url("http://localhost:13000/#/codeGenerator")
-            .waitForVisible('#generatorLoadButton', 60000)
-            .click('#generatorLoadButton')
-            .waitForVisible('#codeModal', 60000)
-            .click(".codeKiesveld=E2E Project").then(function(result) {
-                done();
-            });
-    });
-
-    it("Should load an earlier project called E2E test from the account page", function(done) {
-        browser
-            .url("http://localhost:13000/")
-            .waitForVisible('#accountButton', 60000)
-            .click('#accountButton')
-            .waitForVisible(".codeKiesveld=E2E Project", 60000)
-            .click(".codeKiesveld=E2E Project")
-            .waitForVisible('#topMessage', 60000)
-            .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
-                expect(result).to.be.a("string");
-                expect(result).to.have.string('Your project has been loaded!');
-                done();
-            });
-    });
-
-
-    it("Should log the user out", function(done) {
-        browser
-            .url("http://localhost:13000/")
-            .waitForVisible('#logOutButton', 60000)
-            .click('#logOutButton')
-            .waitForVisible("#logInButton", 60000).then( function(result) {
-                done();
-            });
-    });
-
     after(function(done) {
         mongoose.connect('mongodb://localhost/' + dbName, function(){
             User.remove({username: 'Tester'}, function(err, result) {
                 if(err) { throw err; }
                 console.log("E2E Tester removed");
             });
-            Project.remove({username: 'test', projectName: 'E2E Project'}, function(err, result) {
+            Project.remove({username: 'test', projectName: 'Renamed'}, function(err, result) {
                 if(err) {throw err;}
                 console.log("E2E Project removed")
             })

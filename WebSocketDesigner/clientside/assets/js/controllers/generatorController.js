@@ -175,41 +175,103 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         });
     };
 
-    var generateServerCode = function (input) {
-        return '//' + input.title + '\n' +
-            'var express = require(\'express\');\n' +
-            'var app = express();\n' +
-            'var server = require(\'http\').createServer(app);\n' +
-            'var io = require(\'socket.io\').listen(server);\n' +
-            'var path = require(\'path\');\n\n' +
-            'app.use(express.static(path.join(__dirname)));\n' +
-            'server.listen(' + input.port + ');\n\n//client sockets\n\n';
-    };
+  var generateServerCode = function(input){
+      return '//' + input.title + '\n' +
+      'var express = require(\'express\');\n' +
+      'var app = express();\n' +
+      'var server = require(\'http\').createServer(app);\n' +
+      'var io = require(\'socket.io\').listen(server);\n' +
+      'var path = require(\'path\');\n\n' +
+      'app.use(express.static(path.join(__dirname)));\n' +
+      'server.listen(' + input.port + ');\n\n//client sockets\n\n' +
+      'io.on(\'connection\', function(socket){';
+  };
 
-    var generateClientSocketCode = function (input) {
-        if (input.parameters.data == undefined && input.serverResponse == undefined) {
-            return '//' + input.parameters.description + '\n' +
-                'io.emit(\'' + input.parameters.messagename + '\');\n\n';
-        }
-        else if (input.parameters.data == undefined && input.serverResponse !== undefined) {
-            return '//' + input.parameters.description + '\n' +
-                'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
-                '//' + input.serverResponse.parameters.description + '\n' +
-                'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(){\n    ' +
-                '//placeholder text\n})\n';
-        }
-        else if (input.parameters.data !== undefined && input.serverResponse == undefined) {
-            return '//' + input.parameters.description + '\n' +
-                'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
-        }
-        else {
-            return '//' + input.parameters.description + '\n' +
-                'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
-                '//' + input.serverResponse.parameters.description + '\n' +
-                'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(data){\n    ' +
-                '//placeholder text\n})\n';
-        }
+  var closeServerCode = function(){
+    return '});';
+  }
+
+  var generateClientSocketCode = function(input){
+    var retundata;
+    if(input.parameters.data == undefined && input.serverResponse == undefined){
+      returndata = '//' + input.parameters.description + '\n'+
+      'io.emit(\'' + input.parameters.messagename + '\');\n\n';
     }
+    else if(input.parameters.data == undefined && input.serverResponse !== undefined){
+      returndata = '//' + input.parameters.description + '\n'+
+      'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
+      '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(){\n    '+
+      '//placeholder text\n});\n\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse == undefined){
+        returndata = '//' + input.parameters.description + '\n'+
+        'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
+      }
+    else{
+      returndata = '//' + input.parameters.description + '\n'+
+      'io.emit(\'' + input.parameters.messagename + '\');\n\n' +
+      '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.serverResponse.parameters.messagename + '\', function(data){\n    '+
+      '//placeholder text\n});\n\n';
+    }
+    return returndata;
+  }
+
+  var generateServerSocketCode = function(input, scope){
+    var returndata;
+    if(input.serverResponse !== undefined){
+      if(input.parameters.data !== undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname !== undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'});\n});\n\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname == undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'});\n});\n\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+
+    }
+    else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname !== undefined){
+      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.to('+input.serverResponse.clientname+').emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'}\n});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname == undefined){
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'}\n});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.to('+input.serverResponse.clientname+').emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    }
+    else if(input.parameters.data == undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
+      'io.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+      'io.broadcast.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    }
+  }
+    else if(input.serverResponse == undefined && scope == "server"){
+      if(input.parameters.data == undefined){
+      returndata = '//' + input.parameters.description + '\n'+
+      'io.broadcast.emit(\'' + input.parameters.messagename + '\');\n\n';
+    }
+      else if(input.parameters.data !== undefined){
+        returndata = '//' + input.parameters.description + '\n'+
+        'io.broadcast.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
+      }
+    }
+    return returndata;
+  }
 
 
 //Parsing Functions
@@ -267,19 +329,19 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         }
     }
 
-    var parsePort = function (input) {
-        if (typeof input == "number") {
-            if (input <= 65535 && input >= 2000) {
-                tempData[0].data.info.port = input;
-            }
-            else {
-                throw new Error('the chosen port, ' + input + ', is not usable. Please use a port between 2000 and 65535');
-            }
-        }
-        else {
-            throw new Error('The given port value is not a number. Please choose a value between 2000 and 655355');
-        }
+var parsePort = function(input){
+  if(typeof input == "number"){
+    if(input <= 65535 && input >= 2000){
+      tempData[0].data.info.port = input;
     }
+    else{
+      throw new Error('the chosen port, ' + input + ', is not usable. Please use a port between 2000 and 65535');
+    }
+  }
+  else{
+    throw new Error('The given port value is not a number. Please choose a value between 2000 and 65535');
+  }
+}
 
     var parseClient = function (input) {
         if (Object.keys(input).length > 10) {
@@ -459,38 +521,41 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         }
     }
 
-
     var tempData = [];
 
-    $scope.Generate = function () {
-        try {
-            tempData = [];
-            var username = "petertje";
-            tempData.push({username: username, data: {}});
-            var input = editor.getSession().getValue();
-            var temp = [];
-            var output = '';
-            input = jsyaml.safeLoad(input);
-            parseMainScope(input);
-            temp.push(generateServerCode(tempData[0].data.info));
-            for (var clientsocket = 1; clientsocket < Object.keys(tempData[0].data.client).length + 1; clientsocket++) {
-                temp.push(generateClientSocketCode(tempData[0].data.client['message' + clientsocket]));
-            }
-            //for(var generateServerSocketCode = 0; Object.keys(tempData[0].data.server).length+1;
-            console.log(tempData);
-            input = JSON.stringify(input, null, 4);
-            for (var i = 0; i < temp.length; i++) {
-                output += temp[i];
-            }
-            //generated.setValue(output, 1);
-            $scope.error = null;
-        }
-        catch
-            (e) {
-            console.log(e);
-            scroll(0, 0);
-            //generated.setValue('', 1);
-            $scope.error = e.message;
-        }
-    };
+$scope.Generate = function () {
+  try {
+    tempData = [];
+    var username = "petertje";
+    tempData.push({username: username, data: {}});
+    var input = editor.getSession().getValue();
+    var temp = [];
+    var output = '';
+    input = jsyaml.safeLoad(input);
+    parseMainScope(input);
+    temp.push(generateServerCode(tempData[0].data.info));
+    for(var clientsocket = 1; clientsocket < Object.keys(tempData[0].data.client).length+1;clientsocket++ )
+    {
+      temp.push(generateClientSocketCode(tempData[0].data.client['message'+clientsocket]));
+      temp.push(generateServerSocketCode(tempData[0].data.client['message'+clientsocket], 'client'));
+    }
+    for(var serversocket = 1; serversocket < Object.keys(tempData[0].data.server).length+1; serversocket ++){
+      temp.push(generateServerSocketCode(tempData[0].data.server['message'+serversocket], 'server'));
+    }
+    temp.push(closeServerCode());
+    for(var i = 0; i < temp.length; i++){
+      output += temp[i];
+    }
+    console.log(output);
+    //generated.setValue(output, 1);
+    $scope.error = null;
+    }
+    catch
+        (e) {
+      console.log(e);
+      scroll(0, 0);
+      //generated.setValue('', 1);
+      $scope.error = e.message;
+    }
+  };
 });
