@@ -168,8 +168,13 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       'var io = require(\'socket.io\').listen(server);\n' +
       'var path = require(\'path\');\n\n' +
       'app.use(express.static(path.join(__dirname)));\n' +
-      'server.listen(' + input.port + ');\n\n//client sockets\n\n';
+      'server.listen(' + input.port + ');\n\n//client sockets\n\n' +
+      'io.on(\'connection\', function(socket){';
   };
+
+  var closeServerCode = function(){
+    return '});';
+  }
 
   var generateClientSocketCode = function(input){
     var retundata;
@@ -241,13 +246,13 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     }
   } 
     else if(input.serverResponse == undefined && scope == "server"){
-      if(input.parameters.data == undefined && input.serverResponse == undefined){
+      if(input.parameters.data == undefined){
       returndata = '//' + input.parameters.description + '\n'+
-      'io.emit(\'' + input.parameters.messagename + '\');\n\n';
+      'io.broadcast.emit(\'' + input.parameters.messagename + '\');\n\n';
     }
       else if(input.parameters.data !== undefined){
         returndata = '//' + input.parameters.description + '\n'+
-        'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
+        'io.broadcast.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
       }
     }
     return returndata;
@@ -499,7 +504,6 @@ var parseClientName = function(input, to, scope, number){
   }
 }
 
-
 var tempData = [];
 
 $scope.Generate = function () {
@@ -519,11 +523,13 @@ $scope.Generate = function () {
       temp.push(generateServerSocketCode(tempData[0].data.client['message'+clientsocket], 'client'));
     }
     for(var serversocket = 1; serversocket < Object.keys(tempData[0].data.server).length+1; serversocket ++){
-      temp.push(generateServerSocketCode(tempData[0].data.client['message'+serversocket], 'server'));
+      temp.push(generateServerSocketCode(tempData[0].data.server['message'+serversocket], 'server'));
     }
+    temp.push(closeServerCode());
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
+    console.log(output);
     //generated.setValue(output, 1);
     $scope.error = null;
     }
