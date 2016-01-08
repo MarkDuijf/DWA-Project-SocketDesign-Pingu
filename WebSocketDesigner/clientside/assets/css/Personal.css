@@ -30,7 +30,7 @@
 
 .generatorPage > pre {
     /*top: -162px;*/
-    width: 80%;
+    width: 75%;
     min-width: 600px;
     height: 100%;
     display: inline;
@@ -46,9 +46,11 @@
     /*margin-top: 10px;*/
     display: block;
     margin-bottom: 10px;
-
 }
 
+.disabled {
+    background-color: #5B7658;
+}
 
 #messages {
     list-style-type: none;
@@ -142,4 +144,47 @@
     background-attachment: fixed, fixed;
     background-position: top left, bottom center;
     background-repeat: repeat, no-repeat;
+}
+
+.triangle-right.right {
+    left: -15%;
+    float: left;
+    margin-right: 40px;
+    background: #075698;
+    top: -160px;
+}
+.triangle-right {
+    position: relative;
+    padding: 15px;
+    margin: 1em 0 3em;
+    color: #fff;
+    background: #075698;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#2e88c4), to(#075698));
+    background: -moz-linear-gradient(#2e88c4, #075698);
+    background: -o-linear-gradient(#2e88c4, #075698);
+    background: linear-gradient(#2e88c4, #075698);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    width: 20%;
+}
+
+.triangle-right.right:after {
+    top: 16px;
+    right: -40px;
+    bottom: auto;
+    left: auto;
+    border-width: 15px 0 0 40px;
+    border-color: transparent #075698;
+}
+.triangle-right:after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 50px;
+    border-width: 20px 0 0 20px;
+    border-style: solid;
+    border-color: #075698 transparent;
+    display: block;
+    width: 0;
 }
