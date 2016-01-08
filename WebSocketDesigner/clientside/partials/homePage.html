@@ -6,6 +6,7 @@
             <h2 ng-hide="loggedIn">Welcome to SocketDesign.io</h2><br/>
             <h4 ng-show="loggedIn">You are now able to use <a id="codegeneratorlink" href="/#/codeGenerator">the design tool</a>.</h4>
             <h4 ng-hide="loggedIn">In order to use the Socket Design tool you have to login.</h4>
+            <h5 ng-show="loggedIn">You can find your previously saved projects at the bottom of the My Account page.</h5>
         </header>
         <button ng-hide="loggedIn" id="logInButton" ng-click="openLoginModal()">Login</button>
         <button ng-hide="loggedIn" id="registerButton" ng-click="openRegisterModal()">Register</button>

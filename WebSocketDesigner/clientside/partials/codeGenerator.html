@@ -1,16 +1,14 @@
 <div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
-<div class="generatorPage" ng-show="loggedIn">
+<div id="generatepage" class="generatorPage" ng-show="loggedIn">
     <div ng-show="error != null">
     <div style="color:white">Something went wrong!<br/>
     {{error}}
     </div>
     </div>
-    <center><button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate client-side code</button></center>
+    <!--<center><button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate client-side code</button></center>-->
     <!--TODO: de onderstaande knop heeft nog geen functie. De functie namen moeten misschien wat tactischer worden-->
-    <center><button class="btn btn-validate btn-default generateButtons" ng-click="">Generate server-side code</button></center>
-    <center><button class="btn btn-validate btn-default generateButtons" id="generatorSaveButton" ng-click="saveInput()">Save Project</button></center>
-    <center><button class="btn btn-validate btn-default generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button></center>
-    <center><button class="btn btn-validate btn-default generateButtons" id="generatorDownloadButton" ng-click="getDownload()">Download</button></center>
+    <!--<center><button class="btn btn-validate btn-default generateButtons" ng-click="">Generate server-side code</button></center>-->
+
     <pre id="editor">
 info:
     title: socketIOTest
@@ -39,8 +37,13 @@ server:
             description: Message for the server shutdown
             data: The server will be shut down shortly
     </pre>
-    <pre id="generated">
-    </pre>
+    <div style="border: 10px solid transparent;">
+        <button class="generateButtons" id="generatorSaveButton" ng-click="saveInput()">Save Project</button>
+        <button class="generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button>
+        <button class="generateButtons" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
+    </div>
+    <!--<pre id="generated">-->
+    <!--</pre>-->
 </div>
 
 <div ng-hide="loggedIn">
