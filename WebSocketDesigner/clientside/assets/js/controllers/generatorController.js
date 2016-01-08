@@ -169,7 +169,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       'var path = require(\'path\');\n\n' +
       'app.use(express.static(path.join(__dirname)));\n' +
       'server.listen(' + input.port + ');\n\n//client sockets\n\n' +
-      'io.on(\'connection\', function(socket){';
+      'io.on(\'connection\', function(socket){\n\n';
   };
 
   var closeServerCode = function(){
@@ -177,7 +177,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   }
 
   var generateClientSocketCode = function(input){
-    var retundata;
+    var returndata;
     if(input.parameters.data == undefined && input.serverResponse == undefined){
       returndata = '//' + input.parameters.description + '\n'+
       'io.emit(\'' + input.parameters.messagename + '\');\n\n';
@@ -355,7 +355,9 @@ var parseServer = function(input){
 }
 
 var parseMessage = function(input, scope, number){
+  var tempTags = [];
   for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
+    tempTags.push(Object.keys(input)[messageScope]);
     switch(Object.keys(input)[messageScope]){
       case "parameters":
         tempData[0].data[scope]['message' + number].parameters = {};
@@ -379,12 +381,18 @@ var parseMessage = function(input, scope, number){
       }
     }
   }
+    if(tempTags.indexOf('parameters') == -1){
+    throw new Error('The tag \'parameters\' is not used in \'' + scope + '/message' + number + '\'.');
+  }
 }
 
 var parseParameters = function(input, scope, number, serverResponse){
   if(serverResponse == false){
         tempData[0].data[scope]['message'+number].parameters = {};
       }
+  if(input == null){
+    throw new Error('The used \'parameter\' tag in \'' + scope + '/message' + number + '\' is empty. Please refer to the guidebook for more information.')
+  }
   for(var parameterScope = 0; parameterScope < Object.keys(input).length; parameterScope++){
     switch(Object.keys(input)[parameterScope]){
       case "messageName":
@@ -439,6 +447,7 @@ var parseData = function(input, scope, number, serverResponse){
 
 var parseDescription = function(input, scope, number, serverResponse){
   var description = 'Description of ' + scope + '/message' + number;
+  console.log(input);
   if(input !== null){
     if(serverResponse == true){
       tempData[0].data[scope]['message'+number].serverResponse.parameters.description = input;
@@ -458,8 +467,15 @@ var parseDescription = function(input, scope, number, serverResponse){
 }
 
 var parseServerResponse = function(input, scope, number){
+  var tempTags = [];
   var tempTo = '';
+
+  if(input == null){
+    throw new Error('The used \'serverResponse\' tag in \'' + scope + '/message' + number + '/serverResponse\' is empty. Please refer to the userguide for more information.');
+  }
   for(var serverRScope = 0; serverRScope < Object.keys(input).length; serverRScope++){
+    tempTags.push(Object.keys(input)[serverRScope]);
+    console.log(tempTags);
     if(Object.keys(input)[serverRScope] !== "to" && serverRScope == 0){
       throw new Error('The first used tag in \''+scope + '/message'+ number + '/serverResponse' + '\' should be \'to\', instead of \''+ Object.keys(input)[serverRScope] + '\'.');
     }
@@ -477,6 +493,12 @@ var parseServerResponse = function(input, scope, number){
         break;
       default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverResponse\', is not usable here. Please refer to the userguide for more information.');
     }
+  }
+  if(tempTags.indexOf('parameters') == -1){
+    throw new Error('The tag \'parameters\' is not used in \'' + scope + '/message' + number + '/serverResponse\'.');
+  }
+  if(tempTags.indexOf('clientname') == -1 && tempTo !== 'all'){
+    throw new Error('The used \'to\' tag in \'' + scope + '/message' + number + '/serverResponse\' requires you to use \'clientname\'. Please refer to the guidebook for more information,');
   }
 }
 
@@ -530,6 +552,7 @@ $scope.Generate = function () {
       output += temp[i];
     }
     console.log(output);
+    editor.getSession().setValue(output);
     //generated.setValue(output, 1);
     $scope.error = null;
     }
