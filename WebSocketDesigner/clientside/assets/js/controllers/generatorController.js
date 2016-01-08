@@ -158,7 +158,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.validateCode = function() {
         if ($scope.temperror === true){
             $scope.validatetext = "Er is een error gevonden help!";
-            $scope.validated = true;
         }
         else {
             $scope.validated = true;
