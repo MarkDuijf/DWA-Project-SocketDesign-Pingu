@@ -37,11 +37,24 @@ server:
             description: Message for the server shutdown
             data: The server will be shut down shortly
     </pre>
-    <div style="border: 10px solid transparent;">
+    <div style="min-width: 770px;border: 10px solid transparent;">
         <button class="generateButtons" id="generatorSaveButton" ng-click="saveInput()">Save Project</button>
         <button class="generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button>
-        <button class="generateButtons" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
-        <button class="generateButtons" id="generatorDownloadButton" ng-click="Generate()">testcode</button>
+        <button class="generateButtons" id="" ng-click="Generate()">testcode</button>
+        <button class="generateButtons" id="generatorValidateButton" ng-click="validateCode()">Validate</button>
+        <button ng-disabled="!stemperror && !validated" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
+        <p ng-hide="!validated" class="triangle-right right">{{validatetext}}</p>
+
+
+        <!--
+         De onderstaande code bevat 4 nieuwe knoppen, deze knoppen moeten geimplementeerd worden allen kan dat niet
+         omdat eric op dit moment nog bezig is met getDownload.
+         -->
+
+        <!--&lt;!&ndash;TODO:De onderstaande button heeft nog geen method&ndash;&gt;-->
+        <!--<button class="generateButtons" id="generatorValidateButton">Validate</button>-->
+        <!--&lt;!&ndash;TODO:De onderstaande knop krijgt een ng-disable met een boolean, pas als de code gevalideert is en geen errors geeft mag de download knop ingedrukt worden&ndash;&gt;-->
+        <!--<button class="generateButtons" id="generatorDownloadButton" ng-click="getDownload()">Download</button>-->
     </div>
     <!--<pre id="generated">-->
     <!--</pre>-->
