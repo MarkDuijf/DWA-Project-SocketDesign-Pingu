@@ -255,7 +255,7 @@ else if(input.parameters.data !== undefined && input.serverResponse.parameters.d
 else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
   returndata = '//' + input.serverResponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-    'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+    'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\');\n});\n\n';
 
   }
   else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
@@ -281,7 +281,7 @@ else if(input.parameters.data !== undefined && input.serverResponse.parameters.d
               'io.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
             }
           }
-          else if(input.serverResponse == undefined && scope == "server"){
+          else if(input.serverResponse == undefined){
             if(input.parameters.data == undefined){
               returndata = '//' + input.parameters.description + '\n'+
               'io.emit(\'' + input.parameters.messagename + '\');\n\n';
@@ -301,6 +301,9 @@ var parseMainScope = function (input) {
   }
   if (input.info == undefined) {
     throw new Error('the \'info\' tag has not been defined in the main scope');
+  }
+  if (input.server == undefined) {
+    tempData[0].data.server = false;
   }
   for (var mainScope = 0; mainScope < Object.keys(input).length; mainScope++) {
     switch (Object.keys(input)[mainScope]) {
@@ -323,7 +326,9 @@ var parseMainScope = function (input) {
 }
 
 var parseInfo = function (input) {
+  var temptags = [];
   for (var infoScope = 0; infoScope < Object.keys(input).length; infoScope++) {
+    temptags.push(Object.keys(input)[infoScope]);
     switch (Object.keys(input)[infoScope]) {
       case "title":
       parseTitle(input.title);
@@ -334,6 +339,12 @@ var parseInfo = function (input) {
       default:
       throw new Error('the \'' + Object.keys(input)[infoScope] + '\' tag in \'info\' does not exist.');
     }
+  }
+  if(temptags.indexOf('title') == -1){
+    parseTitle(null);
+  }
+  if(temptags.indexOf('port') == -1){
+    throw new Error('The \'port\' tag in \'info\' has not been defined. Please refer to the userguide for more information.');
   }
 }
 
@@ -395,6 +406,9 @@ var parseMessage = function(input, scope, number){
     tempTags.push(Object.keys(input)[messageScope]);
     switch(Object.keys(input)[messageScope]){
       case "parameters":
+      if(input.parameters == null){
+        throw new Error('The \'parameters\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.');
+      }
       tempData[0].data[scope]['message' + number].parameters = {};
       parseParameters(input.parameters, scope, number, false);
       break;
@@ -403,6 +417,9 @@ var parseMessage = function(input, scope, number){
         throw new Error('The \'serverResponse\' tag is not usable in \'server\'. Please remove this tag.');
       }
       else{ 
+        if(input.serverResponse == null){
+          throw new Error('The \'serverResponse\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.')
+        }
         tempData[0].data.client['message' + number].serverResponse = {};
         parseServerResponse(input.serverResponse, scope, number);
       }
@@ -422,6 +439,7 @@ var parseMessage = function(input, scope, number){
 }
 
 var parseParameters = function(input, scope, number, serverResponse){
+  var temptags = [];
   if(serverResponse == false){
     tempData[0].data[scope]['message'+number].parameters = {};
   }
@@ -429,6 +447,7 @@ var parseParameters = function(input, scope, number, serverResponse){
     throw new Error('The used \'parameter\' tag in \'' + scope + '/message' + number + '\' is empty. Please refer to the guidebook for more information.')
   }
   for(var parameterScope = 0; parameterScope < Object.keys(input).length; parameterScope++){
+    temptags.push(Object.keys(input)[parameterScope]);
     switch(Object.keys(input)[parameterScope]){
       case "messageName":
       parseMessageName(input.messageName, scope, number, serverResponse);
@@ -442,53 +461,11 @@ var parseParameters = function(input, scope, number, serverResponse){
       default: throw new Error('The \''+Object.keys(input)[parameterScope]+ '\' tag, which is used in \'' + scope + '/message' + number + '\', is not usable at this point. Please refer to the userguide for more information.');
     }
   }
-}
-
-var parseMessage = function (input, scope, number) {
-  for (var messageScope = 0; messageScope < Object.keys(input).length; messageScope++) {
-    switch (Object.keys(input)[messageScope]) {
-      case "parameters":
-      tempData[0].data[scope]['message' + number].parameters = {};
-      parseParameters(input.parameters, scope, number, false);
-      break;
-      case "serverResponse":
-      if (scope == "server") {
-        throw new Error('The \'serverResponse\' tag is not usable in \'server\'. Please remove this tag.');
-      }
-      else {
-        tempData[0].data.client['message' + number].serverResponse = {};
-        parseServerResponse(input.serverResponse, scope, number);
-      }
-      break;
-      default:
-      if (scope == "server") {
-        throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \'' + scope + '\', is not usable at this point. Please use \'parameters\'.');
-      }
-      else {
-        throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \'' + scope + '\', is not usable at this point. Please use \'parameters\' or \'serverResponse\'.');
-      }
-    }
+  if(temptags.indexOf('description') == -1){
+    parseDescription(null, scope, number, serverResponse);
   }
-}
-
-var parseParameters = function (input, scope, number, serverResponse) {
-  if (serverResponse == false) {
-    tempData[0].data[scope]['message' + number].parameters = {};
-  }
-  for (var parameterScope = 0; parameterScope < Object.keys(input).length; parameterScope++) {
-    switch (Object.keys(input)[parameterScope]) {
-      case "messageName":
-      parseMessageName(input.messageName, scope, number, serverResponse);
-      break;
-      case "data":
-      parseData(input.data, scope, number, serverResponse);
-      break;
-      case "description":
-      parseDescription(input.description, scope, number, serverResponse);
-      break;
-      default:
-      throw new Error('The \'' + Object.keys(input)[parameterScope] + '\' tag, which is used in \'' + scope + '/message' + number + '\', is not usable at this point. Please refer to the userguide for more information.');
-    }
+  if(temptags.indexOf('messageName') == -1){
+    parseMessageName(null, scope, number, serverResponse);
   }
 }
 
@@ -517,23 +494,6 @@ var parseMessageName = function (input, scope, number, serverResponse) {
 
 }
 
-var parseDescription = function(input, scope, number, serverResponse){
-  var description = 'Description of ' + scope + '/message' + number;
-  console.log(input);
-  if(input !== null){
-    if(serverResponse == true){
-      tempData[0].data[scope]['message'+number].serverResponse.parameters.description = input;
-    }
-    else{
-      tempData[0].data[scope]['message'+number].parameters.description = input;
-    }
-  }
-  else{
-    if(serverResponse == true){
-      tempData[0].data[scope]['message'+number].serverResponse.parameters.description = description;
-    }
-  }
-}
 var parseData = function (input, scope, number, serverResponse) {
   if (input !== null) {
     if (serverResponse == true) {
@@ -547,6 +507,7 @@ var parseData = function (input, scope, number, serverResponse) {
 
 var parseDescription = function (input, scope, number, serverResponse) {
   var description = 'Description of ' + scope + '/message' + number;
+  console.log(input);
   if (input !== null) {
     if (serverResponse == true) {
       tempData[0].data[scope]['message' + number].serverResponse.parameters.description = input;
@@ -601,30 +562,6 @@ var parseServerResponse = function(input, scope, number){
   }
 }
 
-var parseServerResponse = function (input, scope, number) {
-  var tempTo = '';
-  for (var serverRScope = 0; serverRScope < Object.keys(input).length; serverRScope++) {
-    if (Object.keys(input)[serverRScope] !== "to" && serverRScope == 0) {
-      throw new Error('The first used tag in \'' + scope + '/message' + number + '/serverResponse' + '\' should be \'to\', instead of \'' + Object.keys(input)[serverRScope] + '\'.');
-    }
-    switch (Object.keys(input)[serverRScope]) {
-      case "to":
-      tempTo = input.to;
-      parseDestination(input.to, scope, number);
-      break;
-      case "clientname":
-      parseClientName(input.clientname, tempTo, scope, number);
-      break;
-      case "parameters":
-      tempData[0].data[scope]['message' + number].serverResponse.parameters = {};
-      parseParameters(input.parameters, scope, number, true);
-      break;
-      default:
-      throw new Error('The \'' + Object.keys(input)[serverRScope] + '\' tag, which is used in \'' + scope + '/message' + number + '/serverResponse\', is not usable here. Please refer to the userguide for more information.');
-    }
-  }
-}
-
 var parseDestination = function (input, scope, number) {
   if (input == "all") {
     tempData[0].data[scope]['message' + number].serverResponse.to = input;
@@ -656,10 +593,12 @@ var generateCodeClient = function(tempData){
   {
     temp.push(generateClientSocketCode(tempData[0].data.client['message'+client], 'client'));
   }
+  if(tempData[0].data.server !== false){
   for(var server = 1; server < Object.keys(tempData[0].data.server).length+1; server++)
   {
     temp.push(generateClientSocketCode(tempData[0].data.server['message'+server], 'server'));
   }
+}
   for(var x = 0; x < temp.length; x++){
     output += temp[x];
   }
@@ -672,9 +611,11 @@ var generateCodeServer = function(){
   for(var client = 1; client < Object.keys(tempData[0].data.client).length+1; client++){
     temp.push(generateServerSocketCode(tempData[0].data.client['message'+client], 'client'));
   }
+  if(tempData[0].data.server !== false){
   for(var server = 1; server < Object.keys(tempData[0].data.server).length+1; server++){
     temp.push(generateServerSocketCode(tempData[0].data.server['message'+server], 'server'));
   }
+}
   for(var x = 0; x < temp.length; x++){
     output += temp[x];
   }
@@ -703,6 +644,7 @@ $scope.Generate = function () {
       output += temp[i];
     }
     editor.getSession().setValue(output);
+    editor.getSession().setMode("ace/mode/javascript");
     //generated.setValue(output, 1);
     $scope.error = null;
   }
