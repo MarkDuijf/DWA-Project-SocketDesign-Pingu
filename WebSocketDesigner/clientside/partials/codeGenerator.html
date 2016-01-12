@@ -84,6 +84,7 @@ server:
             <div class="modal-body">
                 <label for="projectName">Project name: </label>
                 <input ng-model="projectName" type="text" class="form-control" id="projectName">
+                <p class="redText" ng-hide="validated">Your code did not pass the validator (yet), but you can still save.</p>
             </div>
             <div class="modal-footer">
                 <button id="saveButton" type="submit" class="btn btn-primary" ng-click="saveProject(true)" data-dismiss="modal">Save</button>

@@ -8,19 +8,25 @@ module.exports = function(app){
     var session = require("express-session");
 
     //TODO downloads map maken als die nog niet bestaat
+    app.post('/downloadTest', function(req, res) {
+       req.session.code = req.body.code;
+        req.session.name = req.body.name;
+        res.status(200);
+        res.send("Succes!");
+    });
 
     app.get('/downloadTest', function(req, res) {
-        var dir = "testdir123"; //TODO naam genereren, iets van [username]_[projectname]
+        var dir = req.session.name; //TODO naam genereren, iets van [username]_[projectname]
         fs.mkdir("downloads/"+dir, function(err) {
             if (err) {
                 if (err.code == 'EEXIST') {
-                    maakBestand("bestand", 'var vari = 5; \n var n = vari * 5;');
+                    maakBestand("bestand", req.session.code);
                 } else {
                     res.status(500);
                     res.send('Failed to make the folder');
                 }
             } else {
-                maakBestand("bestand", 'var vari = 5; \n var n = vari * 5;'); //TODO bestand voor clientside en serverside en evt andere bestanden
+                maakBestand("bestand", req.session.code); //TODO bestand voor clientside en serverside en evt andere bestanden
             }
 
             function maakBestand(name, data) {

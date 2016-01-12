@@ -188,3 +188,7 @@
     display: block;
     width: 0;
 }
+
+.redText {
+    color: red;
+}

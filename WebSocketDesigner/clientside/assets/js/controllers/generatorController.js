@@ -39,6 +39,8 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.showHomeMessage = false;
     $scope.isErrorMessage = false;
 
+  $scope.codeTest = "";
+
     $scope.client = {};
     $scope.server = {};
     $scope.info = {};
@@ -60,6 +62,13 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
           editor.getSession().setValue("No project found with this id and username combination.");
         });
       }
+
+  editor.on('input', function() {
+    if($scope.validated) {
+      $scope.validated = false;
+      $scope.temperror = false;
+    }
+  });
 
       $scope.saveInput = function () {
         $(function () {
@@ -128,7 +137,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       }).
       success(function (data) {
         var blob = new Blob([data], {type: "application/zip"});
-        FileSaver.saveAs(blob, "Project.zip");
+        FileSaver.saveAs(blob, $scope.projectName+".zip");
       }).
       error(function (data, status) {
         console.log("ERROR:", data, status);
@@ -160,9 +169,19 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         $scope.validatetext = "Er is een error gevonden help!";
       }
       else {
-        $scope.validated = true;
-        $scope.validateclass = "";
-        $scope.validatetext = "Er is geen error gevonden dus t is prima atm!"
+        var data = {
+          name: $scope.projectName,
+          code: $scope.codeTest
+        };
+        $http.post("/downloadTest", data).
+            success(function (data) {
+              $scope.validated = true;
+              $scope.validateclass = "";
+              $scope.validatetext = "Er is geen error gevonden dus t is prima atm!"
+            }).
+            error(function (data, status) {
+              console.log("ERROR:", data, status);
+            });
       }
     };
 
@@ -643,6 +662,7 @@ $scope.Generate = function () {
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
+    $scope.codeTest = output;
     editor.getSession().setValue(output);
     editor.getSession().setMode("ace/mode/javascript");
     //generated.setValue(output, 1);
