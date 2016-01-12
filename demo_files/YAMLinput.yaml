@@ -1,0 +1,29 @@
+info:
+  title: Hello Chat
+  port: 8000
+
+client:
+  message1:
+    parameters:
+      messageName: globalMessage
+      description: sends a message to all users
+      data:
+    serverResponse:
+      to: all
+      parameters:
+        messageName: globalServerMessage
+        data:
+        description: response message to everyone
+
+  message2:
+    parameters:
+      messageName: clientMessage
+      description: sends a message to a specific person
+      data:
+    serverResponse:
+      to: client
+      clientname:
+      parameters:
+        messageName: clientServerMessage
+        data:
+        description: response message to a specific client
