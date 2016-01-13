@@ -71,7 +71,7 @@ describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
     it('moet een geldig emailadres geaccepteerd worden',function(done){
         var change = {
             email: 'DWASDEU@gmail.com',
-            newEmail: 'test@gmail.com'
+            newEmail: 'testtest@gmail.com'
         };
 
         agent
