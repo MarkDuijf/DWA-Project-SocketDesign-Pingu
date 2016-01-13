@@ -191,29 +191,28 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 }
 
 var generateClientSocketCode = function(input, scope){
-  console.log(input);
   var returndata;
   if(scope == "client"){
-  if(input.parameters.data == undefined && input.serverResponse == undefined){
+  if(input.parameters.data == undefined && input.serverresponse == undefined){
     returndata = '//' + input.parameters.description + '\n'+
     'socket.emit(\'' + input.parameters.messagename + '\');\n\n';
   }
-  else if(input.parameters.data == undefined && input.serverResponse !== undefined){
+  else if(input.parameters.data == undefined && input.serverresponse !== undefined){
     returndata = '//' + input.parameters.description + '\n'+
     'socket.emit(\'' + input.parameters.messagename + '\');\n\n' +
-    '//' + input.serverResponse.parameters.description + '\n' +
-    'socket.on(\'' + input.serverResponse.parameters.messagename + '\', function(){\n    '+
+    '//' + input.serverresponse.parameters.description + '\n' +
+    'socket.on(\'' + input.serverresponse.parameters.messagename + '\', function(){\n    '+
       '//placeholder text\n});\n\n';
 }
-else if(input.parameters.data !== undefined && input.serverResponse == undefined){
+else if(input.parameters.data !== undefined && input.serverresponse == undefined){
   returndata = '//' + input.parameters.description + '\n'+
   'socket.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
 }
-else if(input.parameters.data !== undefined && input.serverResponse !== undefined){
+else if(input.parameters.data !== undefined && input.serverresponse !== undefined){
   returndata = '//' + input.parameters.description + '\n'+
   'socket.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n' +
-  '//' + input.serverResponse.parameters.description + '\n' +
-  'socket.on(\'' + input.serverResponse.parameters.messagename + '\', function(data){\n    '+
+  '//' + input.serverresponse.parameters.description + '\n' +
+  'socket.on(\'' + input.serverresponse.parameters.messagename + '\', function(data){\n    '+
     '//placeholder text\n});\n\n';
 }
 else{
@@ -223,7 +222,7 @@ else{
 else if(scope == "server"){
   if(input.parameters.data == undefined){
     returndata = '//' + input.parameters.description + '\n' +
-    'socket.on(\'' + input.parameters.messageName + '\', function(){\n    ' +
+    'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
     '//placeholder text\n});\n\n';
   }
   else if(input.parameters.data !== undefined){
@@ -238,50 +237,53 @@ else if(scope == "server"){
 }
 return returndata;
 }
-
+//TODO add room
 var generateServerSocketCode = function(input, scope){
   var returndata;
-  if(input.serverResponse !== undefined){
-    if(input.parameters.data !== undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname !== undefined){
-      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+  if(input.serverresponse !== undefined){
+    if(input.parameters.data !== undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname !== undefined){
+      returndata = '//' + input.serverresponse.parameters.description + '\n' +
       'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-        'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'});\n});\n\n';
+        'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
 }
-else if(input.parameters.data !== undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname == undefined){
-  returndata = '//' + input.serverResponse.parameters.description + '\n' +
+else if(input.parameters.data !== undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined){
+  returndata = '//' + input.serverresponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-    'io.emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'});\n});\n\n';
+    'io.emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
 }
-else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
-  returndata = '//' + input.serverResponse.parameters.description + '\n' +
+else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined){
+  returndata = '//' + input.serverresponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-    'io.to('+ input.serverResponse.clientname +').emit(\'' + input.serverResponse.parameters.messagename + '\');\n});\n\n';
+    'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
 
   }
-  else if(input.parameters.data !== undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
-    returndata = '//' + input.serverResponse.parameters.description + '\n' +
+  else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined){
+    returndata = '//' + input.serverresponse.parameters.description + '\n' +
     'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-      'io.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+      'io.emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
     }
-    else if(input.parameters.data == undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname !== undefined){
-      returndata = '//' + input.serverResponse.parameters.description + '\n' +
+    else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname !== undefined){
+      returndata = '//' + input.serverresponse.parameters.description + '\n' +
       'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-        'io.to('+input.serverResponse.clientname+').emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'}\n});\n\n';
+        'io.to('+input.serverresponse.clientname+').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
       }
-      else if(input.parameters.data == undefined && input.serverResponse.parameters.data !== undefined && input.serverResponse.clientname == undefined){
+      else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined){
+      returndata = '//' + input.serverresponse.parameters.description + '\n' +  
         'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-          'io.emit(\'' + input.serverResponse.parameters.messagename + '\', {data: \'' + input.serverResponse.parameters.data + '\'}\n});\n\n';
+          'io.emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
         }
-        else if(input.parameters.data == undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname !== undefined){
+        else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined){
+          returndata = '//' + input.serverresponse.parameters.description + '\n' +  
           'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-            'io.to('+input.serverResponse.clientname+').emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+            'io.to('+input.serverresponse.clientname+').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
           }
-          else if(input.parameters.data == undefined && input.serverResponse.parameters.data == undefined && input.serverResponse.clientname == undefined){
+          else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined){
+            returndata = '//' + input.serverresponse.parameters.description + '\n' +  
             'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-              'io.emit(\'' + input.serverResponse.parameters.messagename + '\'});\n\n';
+              'io.emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
             }
           }
-          else if(input.serverResponse == undefined){
+          else if(input.serverresponse == undefined){
             if(input.parameters.data == undefined){
               returndata = '//' + input.parameters.description + '\n'+
               'io.emit(\'' + input.parameters.messagename + '\');\n\n';
@@ -296,6 +298,7 @@ else if(input.parameters.data !== undefined && input.serverResponse.parameters.d
 
 //Parsing Functions
 var parseMainScope = function (input) {
+  tempData[0].data.usedMessageNames = [];
   if (input.client == undefined) {
     throw new Error('the \'client\' tag has not been defined in the scope.');
   }
@@ -412,16 +415,16 @@ var parseMessage = function(input, scope, number){
       tempData[0].data[scope]['message' + number].parameters = {};
       parseParameters(input.parameters, scope, number, false);
       break;
-      case "serverResponse":
+      case "serverresponse":
       if(scope == "server"){
-        throw new Error('The \'serverResponse\' tag is not usable in \'server\'. Please remove this tag.');
+        throw new Error('The \'serverresponse\' tag is not usable in \'server\'. Please remove this tag.');
       }
       else{ 
-        if(input.serverResponse == null){
-          throw new Error('The \'serverResponse\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.')
+        if(input.serverresponse == null){
+          throw new Error('The \'serverresponse\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.')
         }
-        tempData[0].data.client['message' + number].serverResponse = {};
-        parseServerResponse(input.serverResponse, scope, number);
+        tempData[0].data.client['message' + number].serverresponse = {};
+        parseServerResponse(input.serverresponse, scope, number);
       }
       break;
       default: 
@@ -429,7 +432,7 @@ var parseMessage = function(input, scope, number){
         throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \''+scope+'\', is not usable at this point. Please use \'parameters\'.');
       }   
       else{
-        throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \''+scope+'\', is not usable at this point. Please use \'parameters\' or \'serverResponse\'.');
+        throw new Error('The \'' + Object.keys(input)[messageScope] + '\' tag, which is used in \''+scope+'\', is not usable at this point. Please use \'parameters\' or \'serverresponse\'.');
       }
     }
   }
@@ -438,9 +441,9 @@ var parseMessage = function(input, scope, number){
   }
 }
 
-var parseParameters = function(input, scope, number, serverResponse){
+var parseParameters = function(input, scope, number, serverresponse){
   var temptags = [];
-  if(serverResponse == false){
+  if(serverresponse == false){
     tempData[0].data[scope]['message'+number].parameters = {};
   }
   if(input == null){
@@ -449,55 +452,65 @@ var parseParameters = function(input, scope, number, serverResponse){
   for(var parameterScope = 0; parameterScope < Object.keys(input).length; parameterScope++){
     temptags.push(Object.keys(input)[parameterScope]);
     switch(Object.keys(input)[parameterScope]){
-      case "messageName":
-      parseMessageName(input.messageName, scope, number, serverResponse);
+      case "messagename":
+      parseMessageName(input.messagename, scope, number, serverresponse);
       break;
       case "data":
-      parseData(input.data, scope, number, serverResponse);
+      parseData(input.data, scope, number, serverresponse);
       break;
       case "description":
-      parseDescription(input.description, scope, number, serverResponse);
+      parseDescription(input.description, scope, number, serverresponse);
       break;
       default: throw new Error('The \''+Object.keys(input)[parameterScope]+ '\' tag, which is used in \'' + scope + '/message' + number + '\', is not usable at this point. Please refer to the userguide for more information.');
     }
   }
   if(temptags.indexOf('description') == -1){
-    parseDescription(null, scope, number, serverResponse);
+    parseDescription(null, scope, number, serverresponse);
   }
-  if(temptags.indexOf('messageName') == -1){
-    parseMessageName(null, scope, number, serverResponse);
+  if(temptags.indexOf('messagename') == -1){
+    parseMessageName(null, scope, number, serverresponse);
   }
 }
 
-var parseMessageName = function (input, scope, number, serverResponse) {
-  if (input == null && serverResponse == false) {
+var parseMessageName = function (input, scope, number, serverresponse) {
+  if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse == false){
+    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/parameters\' already exists. Please use a different name.');
+  }
+  else if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse !== false){
+    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/serverresponse/parameters\' already exists. Please use a different name.');
+  }
+  else{
+  tempData[0].data.usedMessageNames.push(input);
+}
+console.log(tempData[0].data.usedMessageNames);
+  if (input == null && serverresponse == false) {
     input = 'message' + number;
     tempData[0].data[scope]['message' + number].parameters.messagename = input;
     alert('There was no name assigned to \'' + scope + '/message' + number + '\', the used name will be set to \'' + input + '\'.')
   }
-  else if (input == null && serverResponse == true) {
+  else if (input == null && serverresponse == true) {
     console.log(tempData);
     input = 'message' + number;
-    tempData[0].data[scope]['message' + number].serverResponse.parameters.messagename = input;
-    alert('There was no name assigned to \'' + scope + '/message' + number + '/serverResponse/parameters/messagename\', so the used name will be set to \'' + input + '\'. It is highly recommended to give it the same name as \'' + scope + '/message' + number + '/parameters/messagename\'.')
+    tempData[0].data[scope]['message' + number].serverresponse.parameters.messagename = input;
+    alert('There was no name assigned to \'' + scope + '/message' + number + '/serverresponse/parameters/messagename\', so the used name will be set to \'' + input + '\'. It is highly recommended to give it the same name as \'' + scope + '/message' + number + '/parameters/messagename\'.')
   }
   else if (input.length > 25) {
     throw new Error('The messageName used in \'' + scope + '/message' + number + '\' is ' + input.length + ' characters long, which exceeds the maximum of 25 characters.');
   }
 
-  if (serverResponse == true && input !== null) {
-    tempData[0].data.client['message' + number].serverResponse.parameters.messagename = input;
+  if (serverresponse == true && input !== null) {
+    tempData[0].data.client['message' + number].serverresponse.parameters.messagename = input;
   }
-  else if (serverResponse == false && input !== null) {
+  else if (serverresponse == false && input !== null) {
     tempData[0].data[scope]['message' + number].parameters.messagename = input;
   }
 
 }
 
-var parseData = function (input, scope, number, serverResponse) {
+var parseData = function (input, scope, number, serverresponse) {
   if (input !== null) {
-    if (serverResponse == true) {
-      tempData[0].data[scope]['message' + number].serverResponse.parameters.data = input;
+    if (serverresponse == true) {
+      tempData[0].data[scope]['message' + number].serverresponse.parameters.data = input;
     }
     else {
       tempData[0].data[scope]['message' + number].parameters.data = input;
@@ -505,20 +518,19 @@ var parseData = function (input, scope, number, serverResponse) {
   }
 }
 
-var parseDescription = function (input, scope, number, serverResponse) {
+var parseDescription = function (input, scope, number, serverresponse) {
   var description = 'Description of ' + scope + '/message' + number;
-  console.log(input);
   if (input !== null) {
-    if (serverResponse == true) {
-      tempData[0].data[scope]['message' + number].serverResponse.parameters.description = input;
+    if (serverresponse == true) {
+      tempData[0].data[scope]['message' + number].serverresponse.parameters.description = input;
     }
     else {
       tempData[0].data[scope]['message' + number].parameters.description = input;
     }
   }
   else {
-    if (serverResponse == true) {
-      tempData[0].data[scope]['message' + number].serverResponse.parameters.description = description;
+    if (serverresponse == true) {
+      tempData[0].data[scope]['message' + number].serverresponse.parameters.description = description;
     }
     else {
       tempData[0].data[scope]['message' + number].parameters.description = description;
@@ -531,13 +543,12 @@ var parseServerResponse = function(input, scope, number){
   var tempTo = '';
 
   if(input == null){
-    throw new Error('The used \'serverResponse\' tag in \'' + scope + '/message' + number + '/serverResponse\' is empty. Please refer to the userguide for more information.');
+    throw new Error('The used \'serverresponse\' tag in \'' + scope + '/message' + number + '/serverresponse\' is empty. Please refer to the userguide for more information.');
   }
   for(var serverRScope = 0; serverRScope < Object.keys(input).length; serverRScope++){
     tempTags.push(Object.keys(input)[serverRScope]);
-    console.log(tempTags);
     if(Object.keys(input)[serverRScope] !== "to" && serverRScope == 0){
-      throw new Error('The first used tag in \''+scope + '/message'+ number + '/serverResponse' + '\' should be \'to\', instead of \''+ Object.keys(input)[serverRScope] + '\'.');
+      throw new Error('The first used tag in \''+scope + '/message'+ number + '/serverresponse' + '\' should be \'to\', instead of \''+ Object.keys(input)[serverRScope] + '\'.');
     }
     switch(Object.keys(input)[serverRScope]){
       case "to":
@@ -547,42 +558,51 @@ var parseServerResponse = function(input, scope, number){
       case "clientname":
       parseClientName(input.clientname, tempTo, scope, number);
       break;
+      case "roomnumber":
+      //parseRoomNumber(input.clientname, tempTo, scope, number);
+      break;
       case "parameters":
-      tempData[0].data[scope]['message'+number].serverResponse.parameters = {};
+      tempData[0].data[scope]['message'+number].serverresponse.parameters = {};
       parseParameters(input.parameters, scope, number, true);
       break;
-      default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverResponse\', is not usable here. Please refer to the userguide for more information.');
+      default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverresponse\', is not usable here. Please refer to the userguide for more information.');
     }
   }
   if(tempTags.indexOf('parameters') == -1){
-    throw new Error('The tag \'parameters\' is not used in \'' + scope + '/message' + number + '/serverResponse\'.');
+    throw new Error('The tag \'parameters\' is not used in \'' + scope + '/message' + number + '/serverresponse\'.');
   }
-  if(tempTags.indexOf('clientname') == -1 && tempTo !== 'all'){
-    throw new Error('The used \'to\' tag in \'' + scope + '/message' + number + '/serverResponse\' requires you to use \'clientname\'. Please refer to the guidebook for more information,');
+  if(tempTags.indexOf('clientname') == -1 && tempTo !== 'all' && tempTo !== 'room'){
+    throw new Error('The used \'to\' tag in \'' + scope + '/message' + number + '/serverresponse\' requires you to use \'clientname\'. Please refer to the guidebook for more information,');
+  }
+  if(tempTags.indexOf('roomnumber') == -1 && tempTo == 'room'){
+    throw new Error('The used \'to\' tag in \'' + scope + '/message' + number + '/serverresponse\' requires you to use \'roomnumber\'. Please refer to the guidebook for more information.');
   }
 }
 
 var parseDestination = function (input, scope, number) {
   if (input == "all") {
-    tempData[0].data[scope]['message' + number].serverResponse.to = input;
+    tempData[0].data[scope]['message' + number].serverresponse.to = input;
   }
   else if (input == "client") {
-    tempData[0].data[scope]['message' + number].serverResponse.to = input;
+    tempData[0].data[scope]['message' + number].serverresponse.to = input;
+  }
+  else if(input == "room"){
+    tempData[0].data[scope]['message' + number].serverresponse.to = input;
   }
   else {
-    throw new Error('The given value for \'to\' in \'' + scope + '/message' + number + '/serverResponse' + '\' is not usable here. Please refer to the userguide for more information.');
+    throw new Error('The given value for \'to\' in \'' + scope + '/message' + number + '/serverresponse' + '\' is not usable here. Please refer to the userguide for more information.');
   }
 }
 
 var parseClientName = function (input, to, scope, number) {
   if (to == "all") {
-    throw new Error('The \'clientname\' tag can not be used here since the \'to\' tag in \'' + scope + '/message' + number + '/serverResponse' + '\' has been set to \'' + to + '\'.');
+    throw new Error('The \'clientname\' tag can not be used here since the \'to\' tag in \'' + scope + '/message' + number + '/serverresponse' + '\' has been set to \'' + to + '\'.');
   }
   if (input == "all") {
-    throw new Error('The used name \'all\' in \'' + scope + '/message' + number + '/serverResponse/clientname' + '\' is not usable. Please refer to the userguide for more information.');
+    throw new Error('The used name \'all\' in \'' + scope + '/message' + number + '/serverresponse/clientname' + '\' is not usable. Please refer to the userguide for more information.');
   }
   else {
-    tempData[0].data[scope]['message' + number].serverResponse.clientname = input;
+    tempData[0].data[scope]['message' + number].serverresponse.clientname = input;
   }
 }
 
