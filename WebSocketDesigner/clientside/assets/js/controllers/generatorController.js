@@ -210,24 +210,39 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 }
 
 var generateClientSocketCode = function(input, scope){
+  console.log(scope);
   var returndata;
   if(scope == "client"){
   if(input.parameters.data == undefined && input.serverresponse == undefined){
     returndata = '//' + input.parameters.description + '\n'+
     'socket.emit(\'' + input.parameters.messagename + '\');\n\n';
   }
-  else if(input.parameters.data == undefined && input.serverresponse !== undefined){
+  else if(input.parameters.data == undefined && input.serverresponse !== undefined && input.serverresponse.parameters.data == undefined){
     returndata = '//' + input.parameters.description + '\n'+
     'socket.emit(\'' + input.parameters.messagename + '\');\n\n' +
-    '//' + inputl.serverresponse.parameters.description + '\n' +
+    '//' + input.serverresponse.parameters.description + '\n' +
     'socket.on(\'' + input.serverresponse.parameters.messagename + '\', function(){\n    '+
       '//placeholder text\n});\n\n';
 }
+  else if(input.parameters.data == undefined && input.serverresponse !== undefined && input.serverresponse.parameters.data !== undefined){
+        returndata = '//' + input.parameters.description + '\n'+
+    'socket.emit(\'' + input.parameters.messagename + '\');\n\n' +
+    '//' + input.serverresponse.parameters.description + '\n' +
+    'socket.on(\'' + input.serverresponse.parameters.messagename + '\', function(data){\n    '+
+      '//placeholder text\n});\n\n';
+  }
 else if(input.parameters.data !== undefined && input.serverresponse == undefined){
   returndata = '//' + input.parameters.description + '\n'+
   'socket.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
 }
-else if(input.parameters.data !== undefined && input.serverresponse !== undefined){
+else if(input.parameters.data !== undefined && input.serverresponse !== undefined && input.serverresponse.parameters.data == undefined){
+  returndata = '//' + input.parameters.description + '\n'+
+  'socket.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n' +
+  '//' + input.serverresponse.parameters.description + '\n' +
+  'socket.on(\'' + input.serverresponse.parameters.messagename + '\', function(){\n    '+
+    '//placeholder text\n});\n\n';
+}
+else if(input.parameters.data !== undefined && input.serverresponse !== undefined && input.serverresponse.parameters.data !== undefined){
   returndata = '//' + input.parameters.description + '\n'+
   'socket.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n' +
   '//' + input.serverresponse.parameters.description + '\n' +
@@ -238,14 +253,13 @@ else{
   returndata = '\n';
 } 
 }
-else if(scope == "server"){
+if(scope == "server"){
   if(input.parameters.data == undefined){
     returndata = '//' + input.parameters.description + '\n' +
     'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
     '//placeholder text\n});\n\n';
   }
   else if(input.parameters.data !== undefined){
-    console.log(input.parameters);
     returndata = '//' + input.parameters.description + '\n' +
     'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
     '//placeholder text\n});\n\n';    
@@ -276,43 +290,65 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
     'io.to(\''+input.serverresponse.roomname+'\').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
     }
-else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined){
+else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
   returndata = '//' + input.serverresponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
     'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
   }
-  else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined){
+  else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
     returndata = '//' + input.serverresponse.parameters.description + '\n' +
     'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
       'io.emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
     }
-    else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined){
+
+  else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname !== undefined){
+    returndata = '//' + input.serverresponse.parameters.description + '\n' +
+    'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
+      'io.to(\''+input.serverresponse.roomname+'\').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+    }
+    else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
   returndata = '//' + input.serverresponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-    'io.to('+ input.serverresponse.roomname +').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+    'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
   }
-    else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname !== undefined){
+    else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
       returndata = '//' + input.serverresponse.parameters.description + '\n' +
       'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
         'io.to('+input.serverresponse.clientname+').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
       }
-      else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined){
+
+    else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
+      returndata = '//' + input.serverresponse.parameters.description + '\n' +
+      'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+        'io.emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
+      }
+      else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname !== undefined){
+      returndata = '//' + input.serverresponse.parameters.description + '\n' +
+      'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+        'io.to(\''+input.serverresponse.roomname+'\').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
+      }
+      else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
       returndata = '//' + input.serverresponse.parameters.description + '\n' +  
         'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
           'io.emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
         }
-        else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined){
+        else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
           returndata = '//' + input.serverresponse.parameters.description + '\n' +  
           'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
             'io.to('+input.serverresponse.clientname+').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
           }
-          else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined){
+        else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname !== undefined){
+          returndata = '//' + input.serverresponse.parameters.description + '\n' +  
+          'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
+            'io.to('+input.serverresponse.roomname+').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+          }
+          else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
             returndata = '//' + input.serverresponse.parameters.description + '\n' +  
             'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
               'io.emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
             }
           }
-          else if(input.serverresponse == undefined){
+          else if(input.serverresponse == undefined && scope !== 'server'){
             if(input.parameters.data == undefined){
               returndata = '//' + input.parameters.description + '\n'+
               'io.on(\'' + input.parameters.messagename + '\');\n\n';
@@ -320,6 +356,16 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
             else if(input.parameters.data !== undefined){
               returndata = '//' + input.parameters.description + '\n'+
               'io.on(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
+            }
+          }
+          else if(input.serverresponse == undefined && scope == 'server'){
+            if(input.parameters.data == undefined){
+              returndata = '//' + data.parameters.description + '\n' +
+              'io.emit(\''+input.parameters.messagename + '\');\n\n';
+            }
+            else if(input.parameters.data !== undefined){
+              returndata = '//' + input.parameters.description + '\n' +
+              'io.emit(\'' + input.parameters.messagename + '\', {data: \'' + input.parameters.data + '\'});\n\n';
             }
           }
           return returndata;
@@ -511,7 +557,6 @@ var parseMessageName = function (input, scope, number, serverresponse) {
   else{
   tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames.push(input);
 }
-console.log(tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames);
   if (input == null && serverresponse == false) {
     input = 'message' + number;
     tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters.messagename = input;
