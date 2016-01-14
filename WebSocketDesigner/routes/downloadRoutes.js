@@ -91,4 +91,14 @@ module.exports = function(app){
             }
         });
     });
+
+    app.get('/downloadDemo', function(req, res) {
+        res.download('downloads/demo.zip', 'demo.zip', function(err){
+            if (err) {
+                console.log(err);
+            } else {
+                //Niks
+            }
+        });
+    });
 };

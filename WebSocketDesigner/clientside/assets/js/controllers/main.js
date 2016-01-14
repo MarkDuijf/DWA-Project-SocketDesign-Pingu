@@ -58,7 +58,7 @@ theApp.factory('usernameFactory', function ($http) {
     return object;
 });
 
-theApp.controller('homeController', function ($scope, $http, $routeParams, $timeout, usernameFactory, LoginFactory) {
+theApp.controller('homeController', function ($scope, $http, $routeParams, $timeout, usernameFactory, FileSaver, LoginFactory) {
         $scope.registerData = {};
         $scope.registerData.firstName = "";
         $scope.registerData.lastName = "";
@@ -109,20 +109,17 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             $http.get("/getLoggedIn").
             success(function (data) {
                 console.log(data.loggedIn);
-                if (data.loggedIn === "Logged in") {
                     LoginFactory.setLogin(true);
                     usernameFactory.setUsername(data.username);
                     usernameFactory.setfirstName(data.firstName);
                     $scope.loggedInUser = data.username;
                     $scope.loggedInUserfirstName = data.firstName;
                     $scope.loggedIn = true;
-                } else if (data.loggedIn === "Not logged in") {
-                    LoginFactory.setLogin(false);
-                    $scope.loggedIn = false;
-                }
             }).
             error(function (data, status) {
                 console.log("Account error:", data, status);
+                    LoginFactory.setLogin(false);
+                    $scope.loggedIn = false;
             });
         }
 
@@ -273,6 +270,24 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         //Verbergt de balk die onder de navigatiebalk verschijnen kan
         $scope.hideMessage = function () {
             $scope.showHomeMessage = false;
+        }
+
+        $scope.downloadDemo = function() {
+            $http({
+                url: '/downloadDemo',
+                method: "GET",
+                headers: {
+                    'Content-type': 'application/zip'
+                },
+                responseType: 'arraybuffer'
+            }).
+                success(function (data) {
+                    var blob = new Blob([data], {type: "application/zip"});
+                    FileSaver.saveAs(blob, "demo.zip");
+                }).
+                error(function (data, status) {
+                    console.log("ERROR:", data, status);
+                });
         }
     }
 );

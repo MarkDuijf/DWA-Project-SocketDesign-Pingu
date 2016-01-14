@@ -30,7 +30,7 @@ module.exports = function (app) {
             res.send(response);
         } else {
             response.loggedIn = "Not logged in";
-            res.status(200);
+            res.status(401);
             res.send(response);
         }
     });
