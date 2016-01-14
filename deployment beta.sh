@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 clear
 
 echo "CHECKING IF MONGODB IS INSTALLED"
@@ -35,13 +35,14 @@ fi
 echo "INSTALL GIT AND FIREFOX"
 apt-get install git -y
 apt-get install firefox -y
+apt-get install npm -y
 
 which node
 if [ $? -eq 0 ]; then
     	echo "NODE is allready installed"
 else
 	echo "NODE.JS DOWNLOAD AND UNPACKING"
-	cd /home/developer/Downloads
+	cd /tmp
 	wget https://nodejs.org/dist/v0.12.7/node-v0.12.7.tar.gz
 	tar -xvzf node-v0.12.7.tar.gz
 	echo "INSTALL G++ C-COMPILER"
@@ -60,8 +61,8 @@ npm install -g nodemon
 npm install -g mocha
 npm install -g selenium
 
-echo "GIT clone to /home/developer/project folder"
-mkdir /project/
+echo "GIT clone to /project/ folder"
+mkdir /project
 cd /project
 git clone https://github.com/MarkDuijf/DWA-Project-SocketDesign-Pingu.git
 
