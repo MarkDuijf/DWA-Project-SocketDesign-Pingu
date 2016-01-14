@@ -111,6 +111,19 @@
     background-color: #EEEEEE;
 }
 
+.codeKiesveldGenerator {
+    background-color: #5eA8e4;
+    color: #39454b;
+    width: 100%;
+    float:left;
+    height: 40px;
+    margin: 4px;
+}
+
+.codeKiesveldGenerator:hover {
+    background-color: #557EEE;
+}
+
 .projectNameAlign{
     text-align: left;
     margin-left: 10px;

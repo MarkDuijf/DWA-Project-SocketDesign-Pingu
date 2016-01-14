@@ -196,8 +196,8 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 $scope.homeMessage = "You have been logged in (this is a placeholder)";
                 $scope.isErrorMessage = false;
                 usernameFactory.setUsername($scope.loginData.username);  // $scope.loginData.username;
-                usernameFactory.setfirstName(data);
-                $scope.loggedInUserfirstName = data;
+                usernameFactory.setfirstName(data.firstName);
+                $scope.loggedInUserfirstName = data.firstName;
                 $scope.loggedInUser = $scope.loginData.username;
                 LoginFactory.setLogin(true);
             }).
