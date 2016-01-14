@@ -9,11 +9,13 @@ module.exports = function(app){
 
     //Puts the generated code and project name in a variable
     app.post('/downloadTest', function(req, res) {
+        console.log("Hallo?");
        req.session.clientCode = req.body.clientCode;
         req.session.serverCode = req.body.serverCode;
         req.session.name = req.body.name;
         res.status(200);
         res.send("Succes!");
+        console.log(req.session.clientCode);
     });
 
     //Sends a zipped file of the generated project for download the user
@@ -24,20 +26,22 @@ module.exports = function(app){
         fs.mkdir("downloads/"+dir, function(err) {
             if (err) {
                 if (err.code == 'EEXIST') {
-                    maakBestand("client", req.session.clientCode);
-                    maakBestand("server", req.session.serverCode);
+                    maakBestand("client.js", req.session.clientCode);
+                    maakBestand("server.js", req.session.serverCode);
+                    maakBestand("package.json", '"{ \n "name": '+ req.session.name + ', \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n "socket.io": "^1.3.7", \n } \n }"');
                 } else {
                     res.status(500);
                     res.send('Failed to make the folder');
                 }
             } else {
-                maakBestand("client", req.session.clientCode);
-                maakBestand("server", req.session.serverCode);
+                maakBestand("client.js", req.session.clientCode);
+                maakBestand("server.js", req.session.serverCode);
+                maakBestand("package.json", '"{ \n "name": "'+ req.session.name + '", \n "main": "server.js", \n "author": ' + req.session.firstName + ', \n "dependencies": { \n "socket.io": "^1.3.7", \n } \n } \n"');
                 //maakBestand("bestand", req.session.code);
             }
 
             function maakBestand(name, data) {
-                fs.writeFile("downloads/"+dir+"/"+name+".js", data, function (err) {
+                fs.writeFile("downloads/"+dir+"/"+name, data, function (err) {
                     if (err) {
                         console.log(err);
                         res.status(500);
@@ -45,8 +49,8 @@ module.exports = function(app){
                     } else {
                         console.log('It\'s saved!');
                         gemaakteBestanden++;
-                        //TODO wrtieZip() alleen uitvoeren als alle bestanden geschreven zijn (kan pas nadat we weten wat er allemaal in moet)
-                        if(gemaakteBestanden === 2) {
+
+                        if(gemaakteBestanden === 3) {
                             writeZip();
                         }
                     }
@@ -60,7 +64,7 @@ module.exports = function(app){
                 output.on('close', function () {
                     //console.log(archive.pointer() + ' total bytes');
                     console.log('archiver has been finalized and the output file descriptor has closed.');
-                    //downloadFile();
+                    downloadFile();
                 });
 
                 archive.on('error', function(err){
@@ -70,7 +74,7 @@ module.exports = function(app){
                 });
 
                 archive.pipe(output);
-                archive.glob("downloads/"+dir+'/*.js', { nodir: true }, { date: new Date() });
+                archive.glob("downloads/"+dir+'/**', { date: new Date() });
                 archive.finalize();
             }
 

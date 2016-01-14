@@ -13,6 +13,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     //$scope.loggedIn = LoginFactory.loggedIn;
     $scope.loggedIn = true;
 
+  $scope.clientCode = "";
+  $scope.serverCode = "";
+
     //Checks when the page loads if the user has a session on the server
     if ($scope.loggedIn !== true) {
       $http.get("/getLoggedIn").
@@ -166,25 +169,47 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.validateclass = "disabled";
     $scope.validatetext = "Er is geen error oid dus de download knop wordt enabled";
     $scope.temperror = false;
+
     $scope.validateCode = function() {
       try{
         var testing = [];
         testing.push({username: 'petertje', data: {}});
         var input = jsyaml.safeLoad(editor.getSession().getValue());
         parseMainScope(input, testing);
+
+        //Server code
+        var serverTemp = [];
+        var serverCode = '';
+        serverTemp.push(generateServerCode(testing));
+        serverTemp.push(generateCodeServer(testing));
+        serverTemp.push(closeServerCode());
+        for(var i = 0; i < serverTemp.length; i++){
+          serverCode += serverTemp[i];
+        }
+        $scope.serverCode = serverCode;
+
+        //Client code
+        var clientTemp = [];
+        var clientCode = '';
+        $scope.clientCode = generateCodeClient(testing);
       }
       catch(e){
+        console.log(testing);
         $scope.temperror = true;
         $scope.validatetext = e.message;
+        console.log(e);
       }
+
       if ($scope.temperror === true){
         $scope.validateclass = "disabled";
         $scope.validated = false;
       }
       else {
+        console.log("Ik post");
         var data = {
           name: $scope.projectName,
-          code: $scope.codeTest
+          clientCode: $scope.clientCode,
+          serverCode: $scope.serverCode
         };
         $http.post("/downloadTest", data).
             success(function (data) {
@@ -721,7 +746,7 @@ var generateCodeClient = function(tempData){
   return output;
 }
 
-var generateCodeServer = function(){
+var generateCodeServer = function(tempData){
   var temp = [];
   var output = '';
   for(var client = 1; client < Object.keys(tempData[getArrayindex(tempData, 'username', 'petertje')].data.client).length+1; client++){
@@ -768,6 +793,24 @@ $scope.Generate = function () {
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
+
+    /*Server code
+    var serverTemp = [];
+    var serverCode = '';
+    serverTemp.push(generateServerCode(tempData));
+    serverTemp.push(generateCodeServer(tempData));
+    serverTemp.push(closeServerCode());
+    for(var i = 0; i < serverTemp.length; i++){
+      serverCode += serverTemp[i];
+    }
+    $scope.serverCode = serverCode;
+
+    //Client code
+    var clientTemp = [];
+    var clientCode = '';
+    $scope.clientCode = generateCodeClient(tempData);
+    */
+
     $scope.codeTest = output;
     editor.getSession().setValue(output);
     editor.getSession().setMode("ace/mode/javascript");
