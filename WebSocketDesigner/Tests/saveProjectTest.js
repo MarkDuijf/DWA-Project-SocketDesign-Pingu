@@ -9,6 +9,27 @@ var app = require('../app');
 var agent = supertest.agent(app);
 
 describe("Als een gebruiker een project wil opslaan moet", function() {
+    it("een lege projectnaam geweigerd worden", function(done){
+        var save = {
+            username: "SebastiaanVonk",
+            projectName: "",
+            code: "Hier staat hele leuke code",
+            date: "2015-10-12"
+        };
+
+        agent
+            .post('/projects')
+            .send(save)
+            .set('Content-Type', 'application/json')
+            .expect(400)
+            .expect('Content-Type', /text\/html/)
+            .end(function(err,res) {
+                expect(err).to.be.null;
+                expect(res.text).to.equal("No project name found");
+                done();
+            });
+    })
+
     it("een te korte projectnaam geweigerd worden", function(done) {
 
         var save = {
