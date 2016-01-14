@@ -194,7 +194,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         $scope.clientCode = generateCodeClient(testing);
       }
       catch(e){
-        console.log(testing);
         $scope.temperror = true;
         $scope.validatetext = e.message;
         console.log(e);
@@ -205,7 +204,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         $scope.validated = false;
       }
       else {
-        console.log("Ik post");
         var data = {
           name: $scope.projectName,
           clientCode: $scope.clientCode,
@@ -248,7 +246,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 }
 
 var generateClientSocketCode = function(input, scope){
-  console.log(scope);
   var returndata;
   if(scope == "client"){
   if(input.parameters.data == undefined && input.serverresponse == undefined){
@@ -789,7 +786,6 @@ $scope.Generate = function () {
     temp.push('//Socket client\n\n');
     temp.push(generateCodeClient(tempData));
     temp.push(closeServerCode());
-    console.log(temp);
     for(var i = 0; i < temp.length; i++){
       output += temp[i];
     }
