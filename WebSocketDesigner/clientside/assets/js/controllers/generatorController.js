@@ -13,20 +13,18 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     //$scope.loggedIn = LoginFactory.loggedIn;
     $scope.loggedIn = true;
 
+    //Checks when the page loads if the user has a session on the server
     if ($scope.loggedIn !== true) {
       $http.get("/getLoggedIn").
       success(function (data) {
             //console.log(data);
-            if (data === "Logged in") {
-              LoginFactory.setLogin(true);
-              $scope.loggedIn = true;
-            } else if (data === "Not logged in") {
-              LoginFactory.setLogin(false);
-              $scope.loggedIn = false;
-            }
+            LoginFactory.setLogin(true);
+            $scope.loggedIn = true;
           }).
       error(function (data, status) {
         console.log("Account error:", data, status);
+            LoginFactory.setLogin(false);
+            $scope.loggedIn = false;
       });
     }
 
@@ -45,6 +43,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.server = {};
     $scope.info = {};
 
+    //Tries to open a project when there's an ID in the URL
     if ($routeParams.id !== undefined) {
         //Request server en check de username van het project met de session username, stuur project met code terug als ze hetzelfde zijn
         editor.getSession().setValue("Trying to fetch the project!");
@@ -63,19 +62,24 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         });
       }
 
+  //When a user changes something in the code editor this will activate the validation warning when saving
   editor.on('input', function() {
     if($scope.validated) {
       $scope.validated = false;
+      $scope.validateclass = "disabled";
       $scope.temperror = false;
     }
+    $scope.$apply();
   });
 
+      //Opens modal for saving the code
       $scope.saveInput = function () {
         $(function () {
           $('#saveModal').modal('show');
         });
       };
 
+      //Saves the project
       $scope.saveProject = function (askForConfirmation) {
         if ($scope.projectName !== "") {
           var data = {
@@ -125,7 +129,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         $scope.showHomeMessage = false;
       };
 
-    //Test functie, moet later weg
+    //Downloads the generated code
     $scope.getDownload = function () {
       $http({
         url: '/downloadTest',
@@ -144,7 +148,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       });
     };
 
-    //Code van ID 4 opvragen voor test doeleinden
+    //Gets the projects from the database
     $scope.getProjects = function () {
       $http.get('/projects').
       success(function (data) {

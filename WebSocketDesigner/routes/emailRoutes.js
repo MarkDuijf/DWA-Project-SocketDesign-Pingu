@@ -13,6 +13,7 @@ module.exports = function(app){
         }
     });
 
+    //Route used for sending a message via the contact form
     app.post('/contact', function(req, res) {
         var mailOptions = {
             from: 'Contact Form <dwasdeu@gmail.com>',                                                                                       // sender address
@@ -35,6 +36,7 @@ module.exports = function(app){
         });
     });
 
+    //Route used for sending a confirmation code to change a user's email
     app.post('/changeEmail', function(req, res) {
         req.session.confirmationCode = req.body.confirmation;
         var mailOptions = {
@@ -59,6 +61,7 @@ module.exports = function(app){
         });
     });
 
+    //Route used for sending a confirmation code to change a user's password
     app.post('/changePassword', function(req, res) {
         req.session.confirmationCode = req.body.confirmation;
         var mailOptions = {

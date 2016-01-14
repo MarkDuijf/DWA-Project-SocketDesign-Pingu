@@ -42,7 +42,7 @@ server:
         <button class="generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button>
         <button class="generateButtons" id="" ng-click="Generate()">testcode</button>
         <button class="generateButtons" id="generatorValidateButton" ng-click="validateCode()">Validate</button>
-        <button ng-disabled="!stemperror && !validated" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
+        <button ng-disabled="!validated" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
         <p ng-hide="!validated" class="triangle-right right">{{validatetext}}</p>
 
 
