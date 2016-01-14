@@ -31,8 +31,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.beschikbareCode = [];
     $scope.projectName = "My Project";
 
-    $scope.error = null;
-
     $scope.homeMessage = "No message";
     $scope.showHomeMessage = false;
     $scope.isErrorMessage = false;
@@ -169,8 +167,19 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.validatetext = "Er is geen error oid dus de download knop wordt enabled";
     $scope.temperror = false;
     $scope.validateCode = function() {
+      try{
+        var testing = [];
+        testing.push({username: 'petertje', data: {}});
+        var input = jsyaml.safeLoad(editor.getSession().getValue());
+        parseMainScope(input, testing);
+      }
+      catch(e){
+        $scope.temperror = true;
+        $scope.validatetext = e.message;
+      }
       if ($scope.temperror === true){
-        $scope.validatetext = "Er is een error gevonden help!";
+        $scope.validateclass = "disabled";
+        $scope.validated = false;
       }
       else {
         var data = {
@@ -739,16 +748,6 @@ function getArrayindex(array, key, value) {
     return null;
 }
 
-$scope.validateCode = function(){
-    var testing = [];
-    var username = "petertje";
-    testing.push({username: username, data: {}});
-    var input = editor.getSession().getValue();
-    input = jsyaml.safeLoad(input);
-    parseMainScope(input, testing);
-    testing = [];
-}
-
 $scope.Generate = function () {
   try {
     tempData = [];
@@ -773,14 +772,12 @@ $scope.Generate = function () {
     editor.getSession().setValue(output);
     editor.getSession().setMode("ace/mode/javascript");
     //generated.setValue(output, 1);
-    $scope.error = null;
   }
   catch
   (e) {
     console.log(e);
     scroll(0, 0);
       //generated.setValue('', 1);
-      $scope.error = e.message;
     }
   };
 });
