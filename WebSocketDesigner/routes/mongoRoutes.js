@@ -64,17 +64,12 @@ module.exports = function (app) {
                     req.session.username = req.body.username;
                     req.session.firstName = user.firstName;
                     res.status(200);
-                    res.send(user.firstName);
+                    res.send(user);
                 } else if (user.activated === false) {
                     req.session.loggedin = false;
                     req.session.username = "";
                     res.status(403);
                     res.send("Not yet activated");
-                } else {
-                    req.session.loggedin = false;
-                    req.session.username = "";
-                    res.status(500);
-                    res.send("Other reason");
                 }
             });
         });
