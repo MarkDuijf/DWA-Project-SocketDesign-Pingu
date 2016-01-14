@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 clear
 
 echo "CHECKING IF MONGODB IS INSTALLED"
