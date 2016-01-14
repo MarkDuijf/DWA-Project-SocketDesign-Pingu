@@ -376,7 +376,7 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
         }
 
 //Parsing Functions
-var parseMainScope = function (input) {
+var parseMainScope = function (input, tempData) {
   tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames = [];
   if (input.client == undefined) {
     throw new Error('the \'client\' tag has not been defined in the scope.');
@@ -391,15 +391,15 @@ var parseMainScope = function (input) {
     switch (Object.keys(input)[mainScope]) {
       case "client":
       tempData[getArrayindex(tempData, 'username', 'petertje')].data.client = {};
-      parseClient(input.client);
+      parseClient(input.client, tempData);
       break;
       case "server":
       tempData[getArrayindex(tempData, 'username', 'petertje')].data.server = {};
-      parseServer(input.server);
+      parseServer(input.server, tempData);
       break;
       case "info":
       tempData[getArrayindex(tempData, 'username', 'petertje')].data.info = {};
-      parseInfo(input.info);
+      parseInfo(input.info, tempData);
       break;
       default:
       throw new Error('The \'' + Object.keys(input)[mainScope] + '\' tag does not exist in the main scope.');
@@ -407,16 +407,16 @@ var parseMainScope = function (input) {
   }
 }
 
-var parseInfo = function (input) {
+var parseInfo = function (input, tempData) {
   var temptags = [];
   for (var infoScope = 0; infoScope < Object.keys(input).length; infoScope++) {
     temptags.push(Object.keys(input)[infoScope]);
     switch (Object.keys(input)[infoScope]) {
       case "title":
-      parseTitle(input.title);
+      parseTitle(input.title, tempData);
       break;
       case "port":
-      parsePort(input.port);
+      parsePort(input.port, tempData);
       break;
       default:
       throw new Error('the \'' + Object.keys(input)[infoScope] + '\' tag in \'info\' does not exist.');
@@ -430,7 +430,7 @@ var parseInfo = function (input) {
   }
 }
 
-var parseTitle = function (input) {
+var parseTitle = function (input, tempData) {
   if (input == null) {
     tempData[getArrayindex(tempData, 'username', 'petertje')].data.info.title = 'Basic server made with ExpressJS';
   }
@@ -442,7 +442,7 @@ var parseTitle = function (input) {
   }
 }
 
-var parsePort = function(input){
+var parsePort = function(input, tempData){
   if(typeof input == "number"){
     if(input <= 65535 && input >= 2000){
       tempData[getArrayindex(tempData, 'username', 'petertje')].data.info.port = input;
@@ -456,33 +456,33 @@ var parsePort = function(input){
   }
 }
 
-var parseClient = function (input) {
+var parseClient = function (input, tempData) {
   if (Object.keys(input).length > 10) {
     throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.');
   }
   for (var clientScope = 0; clientScope < Object.keys(input).length; clientScope++) {
     tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message' + (clientScope + 1)] = {};
-    parseMessage(input[Object.keys(input)[clientScope]], 'client', (clientScope + 1));
+    parseMessage(input[Object.keys(input)[clientScope]], 'client', (clientScope + 1), tempData);
     if (Object.keys(input)[clientScope] !== "message" + (clientScope + 1)) {
       throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message\'' + (clientScope + 1) + '\'');
     }
   }
 }
 
-var parseServer = function (input) {
+var parseServer = function (input, tempData) {
   if (Object.keys(input).length > 10) {
     throw new Error('The number of used tags in \'server\' exceeds the maximum of 10 tags.');
   }
   for (var serverScope = 0; serverScope < Object.keys(input).length; serverScope++) {
     tempData[getArrayindex(tempData, 'username', 'petertje')].data.server['message' + (serverScope + 1)] = {};
-    parseMessage(input[Object.keys(input)[serverScope]], 'server', (serverScope + 1));
+    parseMessage(input[Object.keys(input)[serverScope]], 'server', (serverScope + 1), tempData);
     if (Object.keys(input)[serverScope] !== "message" + (serverScope + 1)) {
       throw new Error('The \'' + Object.keys(input)[serverScope] + '\' tag, that is used in \'server\', is not usable at this point. Please use \'message' + (serverScope + 1) + '\'.');
     }
   }
 }
 
-var parseMessage = function(input, scope, number){
+var parseMessage = function(input, scope, number, tempData){
   var tempTags = [];
   for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
     tempTags.push(Object.keys(input)[messageScope]);
@@ -492,7 +492,7 @@ var parseMessage = function(input, scope, number){
         throw new Error('The \'parameters\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.');
       }
       tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters = {};
-      parseParameters(input.parameters, scope, number, false);
+      parseParameters(input.parameters, scope, number, false, tempData);
       break;
       case "serverresponse":
       if(scope == "server"){
@@ -503,7 +503,7 @@ var parseMessage = function(input, scope, number){
           throw new Error('The \'serverresponse\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.')
         }
         tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message' + number].serverresponse = {};
-        parseServerResponse(input.serverresponse, scope, number);
+        parseServerResponse(input.serverresponse, scope, number, tempData);
       }
       break;
       default: 
@@ -520,7 +520,7 @@ var parseMessage = function(input, scope, number){
   }
 }
 
-var parseParameters = function(input, scope, number, serverresponse){
+var parseParameters = function(input, scope, number, serverresponse, tempData){
   var temptags = [];
   if(serverresponse == false){
     tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message'+number].parameters = {};
@@ -532,13 +532,13 @@ var parseParameters = function(input, scope, number, serverresponse){
     temptags.push(Object.keys(input)[parameterScope]);
     switch(Object.keys(input)[parameterScope]){
       case "messagename":
-      parseMessageName(input.messagename, scope, number, serverresponse);
+      parseMessageName(input.messagename, scope, number, serverresponse, tempData);
       break;
       case "data":
-      parseData(input.data, scope, number, serverresponse);
+      parseData(input.data, scope, number, serverresponse, tempData);
       break;
       case "description":
-      parseDescription(input.description, scope, number, serverresponse);
+      parseDescription(input.description, scope, number, serverresponse, tempData);
       break;
       default: throw new Error('The \''+Object.keys(input)[parameterScope]+ '\' tag, which is used in \'' + scope + '/message' + number + '\', is not usable at this point. Please refer to the userguide for more information.');
     }
@@ -551,7 +551,7 @@ var parseParameters = function(input, scope, number, serverresponse){
   }
 }
 
-var parseMessageName = function (input, scope, number, serverresponse) {
+var parseMessageName = function (input, scope, number, serverresponse, tempData) {
   if(tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames.indexOf(input) !== -1 && serverresponse == false){
     throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/parameters\' already exists. Please use a different name.');
   }
@@ -585,7 +585,7 @@ var parseMessageName = function (input, scope, number, serverresponse) {
 
 }
 
-var parseData = function (input, scope, number, serverresponse) {
+var parseData = function (input, scope, number, serverresponse, tempData) {
   if (input !== null) {
     if (serverresponse == true) {
       tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.parameters.data = input;
@@ -596,7 +596,7 @@ var parseData = function (input, scope, number, serverresponse) {
   }
 }
 
-var parseDescription = function (input, scope, number, serverresponse) {
+var parseDescription = function (input, scope, number, serverresponse, tempData) {
   var description = 'Description of ' + scope + '/message' + number;
   if (input !== null) {
     if (serverresponse == true) {
@@ -616,7 +616,7 @@ var parseDescription = function (input, scope, number, serverresponse) {
   }
 }
 
-var parseServerResponse = function(input, scope, number){
+var parseServerResponse = function(input, scope, number, tempData){
   var tempTags = [];
   var tempTo = '';
 
@@ -631,17 +631,17 @@ var parseServerResponse = function(input, scope, number){
     switch(Object.keys(input)[serverRScope]){
       case "to":
       tempTo = input.to;
-      parseDestination(input.to, scope, number);
+      parseDestination(input.to, scope, number, tempData);
       break;
       case "clientname":
-      parseClientName(input.clientname, tempTo, scope, number);
+      parseClientName(input.clientname, tempTo, scope, number, tempData);
       break;
       case "roomname":
-      parseRoomName(input.roomname, tempTo, scope, number);
+      parseRoomName(input.roomname, tempTo, scope, number, tempData);
       break;
       case "parameters":
       tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message'+number].serverresponse.parameters = {};
-      parseParameters(input.parameters, scope, number, true);
+      parseParameters(input.parameters, scope, number, true, tempData);
       break;
       default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverresponse\', is not usable here. Please refer to the userguide for more information.');
     }
@@ -657,7 +657,7 @@ var parseServerResponse = function(input, scope, number){
   }
 }
 
-var parseDestination = function (input, scope, number) {
+var parseDestination = function (input, scope, number, tempData) {
   if (input == "all") {
     tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.to = input;
   }
@@ -672,7 +672,7 @@ var parseDestination = function (input, scope, number) {
   }
 }
 
-var parseClientName = function (input, to, scope, number) {
+var parseClientName = function (input, to, scope, number, tempData) {
   if (to == "all") {
     throw new Error('The \'clientname\' tag can not be used here since the \'to\' tag in \'' + scope + '/message' + number + '/serverresponse' + '\' has been set to \'' + to + '\'.');
   }
@@ -684,7 +684,7 @@ var parseClientName = function (input, to, scope, number) {
   }
 }
 
-var parseRoomName = function(input, to, scope, number){
+var parseRoomName = function(input, to, scope, number, tempData){
   if(input == "all"){
     throw new Error('The used roomname \'' + input + '\' in \'' + scope + '/message' + number + '/serverresponse\' is not a valid room name. Please use a different name');
   }
@@ -739,16 +739,26 @@ function getArrayindex(array, key, value) {
     return null;
 }
 
+$scope.validateCode = function(){
+    var testing = [];
+    var username = "petertje";
+    testing.push({username: username, data: {}});
+    var input = editor.getSession().getValue();
+    input = jsyaml.safeLoad(input);
+    parseMainScope(input, testing);
+    testing = [];
+}
+
 $scope.Generate = function () {
   try {
     tempData = [];
     var username = "petertje";
     tempData.push({username: username, data: {}});
-    var input = editor.getSession().getValue();
     var temp = [];
     var output = '';
+    var input = editor.getSession().getValue();
     input = jsyaml.safeLoad(input);
-    parseMainScope(input);
+    parseMainScope(input, tempData);
     temp.push(generateServerCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.info));
     temp.push('//Socket server\n\n');
     temp.push(generateCodeServer(tempData));
