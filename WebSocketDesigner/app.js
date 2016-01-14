@@ -19,30 +19,17 @@ app.use(session({
     secret: "sassas"
 }));
 
-//Alle code die iets te maken hebben met het versturen van een email, zoals het contactformulier
+//All the routes that require email, like the contact form
 require('./routes/emailRoutes')(app);
 
-//Alle code van routes die mongo nodig hebben om te werken, zoals inloggen, registreren en confirmeren
+//All the routes that require mongo to work correctly, like logging in, registering and confirming
 require('./routes/mongoRoutes')(app);
 
-//Alle code voor het downloaden van een zip bestand met een project
+//All the routes related to downloading, like the downloading of a project
 require('./routes/downloadRoutes')(app);
 
 var User = require('./models/user');
 var Project = require('./models/project');
-
-//All socket.io code
-io.on('connection', function (socket) {
-    "use strict";
-    console.log('a user connected');
-    socket.on('disconnect', function () {
-        console.log('user disconnected');
-    });
-
-    socket.on('chat message', function (msg) {
-        console.log('Ik heb een message binnen gekregen: ' + msg);
-    });
-});
 
 server.listen(13000, function () {
     "use strict";

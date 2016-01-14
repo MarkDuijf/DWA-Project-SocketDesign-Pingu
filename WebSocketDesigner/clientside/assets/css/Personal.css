@@ -52,6 +52,10 @@
     background-color: #5B7658;
 }
 
+.disabled:hover {
+    background-color: #5B7658;
+}
+
 #messages {
     list-style-type: none;
     margin: 0;
@@ -187,4 +191,8 @@
     border-color: #075698 transparent;
     display: block;
     width: 0;
+}
+
+.redText {
+    color: red;
 }

@@ -118,6 +118,8 @@ describe("Selenium Tests - Login, Register and Contact", function() {
     it("Should save generator code", function(done) {
         browser
             .url("http://localhost:13000/#/codeGenerator")
+            .waitForVisible('#generatorValidateButton', 60000)
+            .click("#generatorValidateButton")
             .waitForVisible('#generatorSaveButton', 60000)
             .click('#generatorSaveButton')
             .waitForVisible('#projectName', 60000)
@@ -133,13 +135,17 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             });
     });
 
-    it("Should load the previously made generator code", function(done) {
+    it("Should load the previously made generator code, validate it and then click the download button", function(done) {
         browser
             .url("http://localhost:13000/#/codeGenerator")
             .waitForVisible('#generatorLoadButton', 60000)
             .click('#generatorLoadButton')
             .waitForVisible('#codeModal', 60000)
-            .click(".codeKiesveld*=E2E Project").then(function(result) {
+            .click(".codeKiesveld*=E2E Project")
+            .waitForVisible('#generatorValidateButton', 60000)
+            .click("#generatorValidateButton")
+            .waitForVisible('#generatorDownloadButton', 60000)
+            .click("#generatorDownloadButton").then( function(result) {
                 done();
             });
     });
@@ -219,7 +225,7 @@ describe("Selenium Tests - Login, Register and Contact", function() {
         mongoose.connect('mongodb://localhost/' + dbName, function(){
             User.remove({username: 'Tester'}, function(err, result) {
                 if(err) { throw err; }
-                console.log("E2E Tester removed");
+                console.log("E2E User removed");
             });
             Project.remove({username: 'test', projectName: 'Renamed'}, function(err, result) {
                 if(err) {throw err;}

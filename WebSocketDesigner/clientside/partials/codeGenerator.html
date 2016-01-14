@@ -16,24 +16,24 @@ info:
 client:
     message1:
         parameters:
-            messageName: username
+            messagename: username
             description: true
             data: string
     message2:
         parameters:
-            messageName: test1
+            messagename: test1
             description: pan2
             data: zevental
-        serverResponse:
+        serverresponse:
             to: all
             parameters:
-                messageName:
+                messagename:
                 description: true
                 data: false
 server:
     message1:
         parameters:
-            messageName: serverShutdown
+            messagename: serverShutdown
             description: Message for the server shutdown
             data: The server will be shut down shortly
     </pre>
@@ -42,7 +42,7 @@ server:
         <button class="generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button>
         <button class="generateButtons" id="" ng-click="Generate()">testcode</button>
         <button class="generateButtons" id="generatorValidateButton" ng-click="validateCode()">Validate</button>
-        <button ng-disabled="!stemperror && !validated" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
+        <button ng-disabled="!validated" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
         <p ng-hide="!validated" class="triangle-right right">{{validatetext}}</p>
 
 
@@ -84,6 +84,7 @@ server:
             <div class="modal-body">
                 <label for="projectName">Project name: </label>
                 <input ng-model="projectName" type="text" class="form-control" id="projectName">
+                <p class="redText" ng-hide="validated">Your code did not pass the validator (yet), but you can still save.</p>
             </div>
             <div class="modal-footer">
                 <button id="saveButton" type="submit" class="btn btn-primary" ng-click="saveProject(true)" data-dismiss="modal">Save</button>

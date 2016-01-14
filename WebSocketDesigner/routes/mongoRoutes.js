@@ -20,6 +20,7 @@ module.exports = function (app) {
         }
     });
 
+    //Route used to check if a user already has a session on the server
     app.get('/getLoggedIn', function(req, res) {
         var response = {};
         if(req.session.username !== undefined && req.session.username !== null && req.session.username !== "") {
@@ -30,18 +31,21 @@ module.exports = function (app) {
             res.send(response);
         } else {
             response.loggedIn = "Not logged in";
-            res.status(200);
+            res.status(401);
             res.send(response);
         }
     });
 
+    //In here are all the routes that need the database
     mongoose.connect('mongodb://localhost/' + dbName, function () {
-        // Gebruikt om een gebruiker in te loggen
+
+        //Sends the current value of loggedin from the session to the user
         app.get('/login', function(req, res) {
             res.status(200);
             res.send(req.session.loggedin);
         });
 
+        //Used to log a user in
         app.post('/login', function (req, res) {
             User.findOne({
                 username: req.body.username,
@@ -74,6 +78,7 @@ module.exports = function (app) {
             });
         });
 
+        //Used to log a user out
         app.post('/logout', function (req, res) {
             req.session.loggedIn = false;
             req.session.username = "";
@@ -81,7 +86,7 @@ module.exports = function (app) {
             res.send("Uitgelogd");
         });
 
-        //Gebruikt om een account te activeren, gebruikers krijgen na het registreren een mail met een link naar deze route
+        //Used to activate an account
         app.post('/confirm', function (req, res) {
             User.findOne({
                 email: req.body.email,
@@ -118,9 +123,8 @@ module.exports = function (app) {
             });
         });
 
-        //Gebruikt om een gebruiker te registreren, checkt eerst of er al iemand bestaat met hetzelfde email adres of gebruikersnaam
+        //Used to register an user, checks to see if there's already someone with the same email or user name
         app.post('/register', function (req, res) {
-            //TODO Dit moet makkelijker kunnen dan 2 findOne's in elkaar, weet even niet hoe
             User.findOne({
                 email: req.body.email
             }, function (err, user) {
@@ -177,7 +181,7 @@ module.exports = function (app) {
             });
         });
 
-        //TODO Dit is voor het testen van het opslaan van de projecten op de code generator pagina, moet later vervanngen worden met het account systeem
+        //Used to save a project to the database
         app.post('/projects', function (req, res) {                      // toevoegen van een project aan de database
             var datetime = new Date();
             //Voor unit test
@@ -234,6 +238,7 @@ module.exports = function (app) {
             */
         });
 
+        //Used to check if the project name already exists
         app.post('/projects/checkName', function(req,res) {
             Project.find({username: req.session.username, projectName: req.body.projectName}, function(err, projects){
                 if(projects.length === 0) {
@@ -246,18 +251,11 @@ module.exports = function (app) {
             });
         });
 
+        //Used to get all the projects of a user
         app.get('/projects', function (req, res) {                       //Ophalen van alle projecten uit de database
             if(req.session.username === undefined || req.session.username === null || req.session.username === "") {
-                //Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
-                Project.find({}, function (err, projects) {
-                    if (err) {                                                   //Wanneer ophalen faalt geef error
-                        console.log(err);
-                        res.status(500);
-                        res.send("Problem finding projects");
-                    }                                      //Anders stuur het resultaat terug
-                    res.status(200);
-                    res.send(projects);
-                });
+                res.status(400);
+                res.send("No username found")
             } else {
                 Project.find({username: req.session.username}, function (err, projects) {
                     if (err) {                                                   //Wanneer ophalen faalt geef error
@@ -272,6 +270,7 @@ module.exports = function (app) {
             }
         });
 
+        //Used to open a project with a specific ID, cecks to see if the owner of that project is a current user
         app.get('/projects/:id', function (req, res) {
                 Project.findOne({_id: req.params.id}, function (err, project) {
                     if (err) {
@@ -296,6 +295,7 @@ module.exports = function (app) {
                 });
         });
 
+        //Used to get the data for the "My Account" page
         app.get('/myAccount', function(req, res) {
             if(req.session.loggedin !== true) {
                 res.status(400);
@@ -332,6 +332,7 @@ module.exports = function (app) {
             }
         });
 
+        //Used to change the email of a user
         app.post('/confirmEmailChange', function(req, res) {
             var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //Regex voor een goed email adres
             if(req.session.confirmationCode === req.body.confirmation && re.test(req.body.newEmail) === true) {
@@ -361,6 +362,7 @@ module.exports = function (app) {
             }
         });
 
+        //Used to change a password of a user
         app.post('/confirmPasswordChange', function(req, res) {
             if(req.session.confirmationCode === req.body.confirmation && req.body.newPass === req.body.newPassR && req.body.newPass !== "" && req.body.newPassR !== "" && req.body.newPass.length === 32) {
                 User.update({username: req.session.username}, {$set: { password: req.body.newPass } }, function (err, result) {
@@ -380,6 +382,8 @@ module.exports = function (app) {
                 res.send("Data error");
             }
         });
+
+        //Used to change the name of a project
         app.post('/changeName', function(req, res){
             if(req.body.newProjectName.length < 3 || req.body.newProjectName.length > 15){
                 res.status(401);
@@ -398,6 +402,7 @@ module.exports = function (app) {
             }
         });
 
+        //Used to delete a project
         app.post('/deleteProject', function(req, res){
             Project.remove({projectName: req.body.project.projectName, username: req.session.username}, function(err) {
                 if (err) {
