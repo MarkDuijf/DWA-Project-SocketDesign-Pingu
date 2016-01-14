@@ -35,6 +35,7 @@ fi
 echo "INSTALL GIT AND FIREFOX"
 apt-get install git -y
 apt-get install firefox -y
+apt-get install npm -y
 
 which node
 if [ $? -eq 0 ]; then
