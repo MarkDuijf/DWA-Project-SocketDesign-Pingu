@@ -7,16 +7,16 @@ module.exports = function(app){
     var rmdir = require('rimraf');
     var session = require("express-session");
 
-    //TODO downloads map maken als die nog niet bestaat
+    //Puts the generated code and project name in a variable
     app.post('/downloadTest', function(req, res) {
        req.session.clientCode = req.body.clientCode;
         req.session.serverCode = req.body.serverCode;
-        req.session.code = req.body.code;
         req.session.name = req.body.name;
         res.status(200);
         res.send("Succes!");
     });
 
+    //Sends a zipped file of the generated project for download the user
     app.get('/downloadTest', function(req, res) {
         var dir = req.session.name + "_" + req.session.username; //TODO naam genereren, iets van [username]_[projectname]
         var gemaakteBestanden = 0;
@@ -26,7 +26,6 @@ module.exports = function(app){
                 if (err.code == 'EEXIST') {
                     maakBestand("client", req.session.clientCode);
                     maakBestand("server", req.session.serverCode);
-                    //maakBestand("bestand", req.session.code);
                 } else {
                     res.status(500);
                     res.send('Failed to make the folder');
@@ -92,6 +91,7 @@ module.exports = function(app){
         });
     });
 
+    //Route for downloading the demo files
     app.get('/downloadDemo', function(req, res) {
         res.download('downloads/demo.zip', 'demo.zip', function(err){
             if (err) {

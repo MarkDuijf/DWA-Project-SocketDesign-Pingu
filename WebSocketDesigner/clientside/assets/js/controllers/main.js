@@ -82,7 +82,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.showHomeMessage = false;
         $scope.isErrorMessage = false;
 
-        //Gebruikt voor het activeren van een account, kijkt of de benodigde gegevens in de adresbalk staan en voert het daarna uit
+        //Used for activating an account, checks if the required data is in the URL and then executes the functions
         if ($routeParams.email !== undefined && $routeParams.confirmation !== undefined) {
             var confirmData = {
                 email: $routeParams.email,
@@ -104,7 +104,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         }
 
-        //Checkt of de user al ingelogd is door te kijken of er een sessie op de server is, voor het geval dat $scope.loggedIn zonder reden false is
+        //Checks if the user is already logged in by looking if there is a session on the server
         if($scope.loggedIn !== true) {
             $http.get("/getLoggedIn").
             success(function (data) {
@@ -123,7 +123,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         }
 
-        //Gebruikt voor het registreren met de ingevoerde gegevens
+        //Used to register an user with the entered data
         $scope.register = function () {
             var password = CryptoJS.MD5($scope.registerData.password);
             var registerData = {
@@ -157,6 +157,8 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
                 }, 800);
             });
         };
+
+        //Used to send the confirmation email
         $scope.sendConfirmationMail = function () {
             var password = CryptoJS.MD5($scope.registerData.password);
             var emailData = {
@@ -179,7 +181,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         };
 
-        //Gebruikt om een gebruiker in te loggen, kijkt via de server of de ingevoerde gegevens bestaan/kloppen
+        //Used to log in a user, checks via the server if the entered data exists or is correct
         $scope.login = function () {
             var password = CryptoJS.MD5($scope.loginData.password);
             var loginData = {
@@ -211,6 +213,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         };
 
+        //Used for logging out a user
         $scope.logout = function() {
             $http.post("/logout").
                 success(function (data) {
@@ -227,7 +230,7 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             usernameFactory.firstName = "";
         };
 
-        //Gebruikt door het contactformulier
+        //Used for the contact form
         $scope.sendMessage = function () {
             var messageData = {
                 name: $scope.contact.name,
@@ -255,19 +258,21 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             });
         };
 
+        //Opens the login modal
         $scope.openLoginModal = function () {
             $(function () {
                 $('#loginModal').modal('show');
             })
         };
 
+        //Opens the register modal
         $scope.openRegisterModal = function () {
             $(function () {
                 $('#registerModal').modal('show')
             })
         };
 
-        //Verbergt de balk die onder de navigatiebalk verschijnen kan
+        //Hides the message that appears beneath the navigation menu
         $scope.hideMessage = function () {
             $scope.showHomeMessage = false;
         }
@@ -348,6 +353,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.newPassword = "";
     $scope.newPasswordR = "";
 
+    //Refreshes the account data on the account page
     $scope.refreshAccount = function(){
         $http.get("/myAccount").
             success(function (data) {
@@ -373,18 +379,21 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
                 console.log("Account error:", data, status);
                 $location.path("/home");
             });
-    }
+    };
 
+    //Redirects the user if they aren't logged in
     if ($scope.loggedIn === false || $scope.loggedIn === undefined) {
         $location.path("/home");
     } else if ($scope.loggedIn === true) {
      $scope.refreshAccount();
     }
 
+    //Opens a project
     $scope.openProject = function(id) {
         $location.path("/codeGenerator/"+id);
     };
 
+    //Used when renaming a project
     $scope.renameProject = function(project){
         $scope.projectName = project.projectName;
         $scope.newName = project.projectName;
@@ -394,6 +403,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         })
     };
 
+    //Renames a project when the user accepts
     $scope.confirmNameChange = function(){
         var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
         $http.post("/changeName", data).
@@ -410,6 +420,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             });
     };
 
+    //Used to open the delete project modal
     $scope.deleteProject = function(project){
         $scope.project = project;
         $(function () {
@@ -417,6 +428,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         })
     };
 
+    //Deletes a project when the user accepts
     $scope.confirmDeleteProject = function(){
         var data = {project: $scope.project};
         $http.post("/deleteProject", data).
@@ -433,13 +445,14 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             });
     };
 
-
+    //Opens the modal for confirming that a user wants to change their email
     $scope.emailConfirmation = function() {
         $(function () {
             $('#emailConfirmation').modal('show')
         })
     };
 
+    //Changes the email of a user, they need to enter a confirmation code after
     $scope.changeEmail = function() {
         $scope.emailError = "";
         var data = {
@@ -460,6 +473,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         })
     };
 
+    //Confirms the email change if a user enters the correct confirmation code
     $scope.confirmEmail = function() {
         $scope.emailError = "";
         var data = {
@@ -487,12 +501,14 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         })
     };
 
+    //Opens the modal that asks for user confirmation to change a password
     $scope.passwordConfirmation = function() {
         $(function () {
             $('#passwordConfirmation').modal('show')
         })
     };
 
+    //Sends a confirmation code to the user's email, then opens the modal to change the password
     $scope.changePassword = function() {
         $scope.passwordError = "";
         var data = {
@@ -512,6 +528,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         })
     };
 
+    //Confirms the changing of the password when a user enters the confirmation code and their new password twice
     $scope.confirmPassword = function() {
         $scope.emailError = "";
         var password = CryptoJS.MD5($scope.newPassword);
