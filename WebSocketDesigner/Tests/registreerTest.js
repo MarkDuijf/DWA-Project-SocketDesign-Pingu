@@ -37,6 +37,52 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
+    it('een lege voornaam geweigerd worden', function(done){
+        var register = {
+            username: 'SebastiaanVonk',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
+            email: 'SebastiaanVonk@student.han.nl',
+            firstName: '',
+            lastName: 'Vonk',
+            confirmationLink: 'www.han.nl'
+        };
+
+        agent
+            .post('/register')
+            .send(register)
+            .set('Content-Type', 'application/json')
+            .expect(401)
+            .expect('Content-Type', /text\/html/)
+            .end(function(err,res) {
+                expect(err).to.be.null;
+                expect(res.text).to.equal("Error registering, missing/wrong data");
+                done();
+            });
+    });
+
+    it('een lege achternaam geweigerd worden', function(done){
+        var register = {
+            username: 'SebastiaanVonk',
+            password: '2c729497d91709de6bf1ccd875cf28e5',
+            email: 'SebastiaanVonk@student.han.nl',
+            firstName: 'Sebastiaan',
+            lastName: '',
+            confirmationLink: 'www.han.nl'
+        };
+
+        agent
+            .post('/register')
+            .send(register)
+            .set('Content-Type', 'application/json')
+            .expect(401)
+            .expect('Content-Type', /text\/html/)
+            .end(function(err,res) {
+                expect(err).to.be.null;
+                expect(res.text).to.equal("Error registering, missing/wrong data");
+                done();
+            });
+    });
+
     it('een goed e-mailadres geen problemen hebben', function(done){
         var register = {
             username: 'Mark',

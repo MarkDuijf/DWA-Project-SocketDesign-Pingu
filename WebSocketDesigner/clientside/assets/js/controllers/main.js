@@ -414,7 +414,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     //Renames a project when the user accepts
     $scope.confirmNameChange = function(){
         var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
-        $http.post("/changeName", data).
+        $http.post("/changeProjectName", data).
             success(function (data) {
                 console.log("Succes! " + data);
                 $(function () {
