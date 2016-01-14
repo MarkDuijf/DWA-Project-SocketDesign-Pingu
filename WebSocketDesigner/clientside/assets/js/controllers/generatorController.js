@@ -66,8 +66,10 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   editor.on('input', function() {
     if($scope.validated) {
       $scope.validated = false;
+      $scope.validateclass = "disabled";
       $scope.temperror = false;
     }
+    $scope.$apply();
   });
 
       $scope.saveInput = function () {
