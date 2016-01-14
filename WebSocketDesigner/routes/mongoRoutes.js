@@ -270,7 +270,7 @@ module.exports = function (app) {
             }
         });
 
-        //Used to open a project with a specific ID, cecks to see if the owner of that project is a current user
+        //Used to open a project with a specific ID, checks to see if the owner of that project is a current user
         app.get('/projects/:id', function (req, res) {
                 Project.findOne({_id: req.params.id}, function (err, project) {
                     if (err) {
@@ -384,7 +384,7 @@ module.exports = function (app) {
         });
 
         //Used to change the name of a project
-        app.post('/changeName', function(req, res){
+        app.post('/changeProjectName', function(req, res){
             if(req.body.newProjectName.length < 3 || req.body.newProjectName.length > 15){
                 res.status(401);
                 res.send("Your project name is too long or too short");
