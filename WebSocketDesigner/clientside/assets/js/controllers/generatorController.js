@@ -748,6 +748,8 @@ function getArrayindex(array, key, value) {
     return null;
 }
 
+$scope.a = ['a', 'b', 'c'];
+
 $scope.Generate = function () {
   try {
     tempData = [];
