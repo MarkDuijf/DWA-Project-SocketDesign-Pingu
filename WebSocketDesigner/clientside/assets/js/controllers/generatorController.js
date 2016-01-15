@@ -604,12 +604,10 @@ var parseMessageName = function (input, scope, number, serverresponse, tempData)
   if (input == null && serverresponse == false) {
     input = 'message' + number;
     tempData[0].data[scope]['message' + number].parameters.messagename = input;
-    alert('There was no name assigned to \'' + scope + '/message' + number + '\', the used name will be set to \'' + input + '\'.')
   }
   else if (input == null && serverresponse == true) {
     input = 'message' + number;
     tempData[0].data[scope]['message' + number].serverresponse.parameters.messagename = input;
-    alert('There was no name assigned to \'' + scope + '/message' + number + '/serverresponse/parameters/messagename\', so the used name will be set to \'' + input + '\'. It is highly recommended to give it the same name as \'' + scope + '/message' + number + '/parameters/messagename\'.')
   }
   else if (input.length > 25) {
     throw new Error('The messageName used in \'' + scope + '/message' + number + '\' is ' + input.length + ' characters long, which exceeds the maximum of 25 characters.');
