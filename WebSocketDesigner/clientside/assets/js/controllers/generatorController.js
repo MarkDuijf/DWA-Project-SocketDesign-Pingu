@@ -180,7 +180,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         //Server code
         var serverTemp = [];
         var serverCode = '';
-        serverTemp.push(generateServerCode(testing));
+        serverTemp.push(generateServerCode(testing[getArrayindex(testing, 'username', 'petertje')].data.info));
         serverTemp.push(generateCodeServer(testing));
         serverTemp.push(closeServerCode());
         for(var i = 0; i < serverTemp.length; i++){
@@ -192,6 +192,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         var clientTemp = [];
         var clientCode = '';
         $scope.clientCode = generateCodeClient(testing);
+        console.log($scope.serverCode);
       }
       catch(e){
         $scope.temperror = true;
@@ -229,7 +230,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       });
     };
 
-    var generateServerCode = function(input){
+    var generateServerCode = function(input, scope){
       return '//' + input.title + '\n' +
       'var express = require(\'express\');\n' +
       'var app = express();\n' +
