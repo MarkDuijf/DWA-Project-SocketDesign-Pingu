@@ -1,7 +1,3 @@
-/**
- * Created by sebastiaan on 10-12-2015.
- */
-
 var chai = require('chai');
 var expect = chai.expect;
 var supertest = require('supertest');
@@ -28,7 +24,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
                 expect(res.text).to.equal("No project name found");
                 done();
             });
-    })
+    });
 
     it("een te korte projectnaam geweigerd worden", function(done) {
 
@@ -50,7 +46,6 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
                 expect(res.text).to.equal("Projectname is too long or too short");
                 done();
             });
-        console.log(save);
     });
 
     it("een te lange projectnaam geweigerd worden", function(done) {
@@ -117,14 +112,6 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
                 expect(res.text).to.equal("No code found");
                 done();
             });
-    });
-
-    xit("dan moet goede code zonder problemen opgeslagen worden",function(done){
-
-    });
-
-    xit("dan moet ik een melding ontvangen of ik het zeker weet, wanneer de code fouten bevat", function(done){
-
     });
 
 });

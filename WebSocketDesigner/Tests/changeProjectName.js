@@ -1,6 +1,3 @@
-/**
- * Created by sebastiaan on 6-1-2016.
- */
 var chai = require('chai');
 var expect = chai.expect;
 var supertest = require('supertest');

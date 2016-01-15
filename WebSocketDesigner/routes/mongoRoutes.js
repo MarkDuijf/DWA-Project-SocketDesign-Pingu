@@ -110,7 +110,6 @@ module.exports = function (app) {
                                 res.status(500);
                                 res.send("Couldn't set activated to true");
                             } else {
-                                //console.log(result);
                                 res.status(200);
                                 res.send("The account has been activated");
                             }
@@ -165,7 +164,6 @@ module.exports = function (app) {
                                         if (error) {
                                             return console.log(error);
                                         }
-                                        //console.log('Message sent: ' + info.response);
                                     });
                                 }
                             });
@@ -194,7 +192,6 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
-                //console.log(req.body.name);
                 res.status(400);
                 res.send("No project name found");
             } else if(req.body.projectName.length < 3 || req.body.projectName.length > 15){
@@ -216,18 +213,6 @@ module.exports = function (app) {
                     return res.send("Saved the project");
                 });
             }
-
-            /* Werke niet vanwege upsert
-            project.save(function (err) {
-                if (err) {
-                    res.status(401);
-                    res.send("Error saving data, missing/wrong data")
-                    return console.log(err);
-                }
-                res.status(200);
-                res.send("Toegevoegd");
-            });
-            */
         });
 
         //Used to check if the project name already exists
@@ -255,7 +240,7 @@ module.exports = function (app) {
                         res.status(500);
                         res.send("Problem finding projects");
                     }
-                    //console.log(projects);                                      //Anders stuur het resultaat terug
+                                                                                 //Anders stuur het resultaat terug
                     res.status(200);
                     res.send(projects);
                 })
@@ -293,7 +278,6 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("Not logged in");
             } else if(req.session.loggedin === true) {
-                //TODO misschien wachtwoord in de session zetten?
                 User.findOne({username: req.session.username}, function(err, user) {
                     if(err) {
                         console.log(err);

@@ -1,8 +1,5 @@
 <div id="topMessage" ng-class="{errorMessage: isErrorMessage===true, succesMessage: isErrorMessage===false}" ng-show="showHomeMessage">{{homeMessage}} <button class="btn btn-primary btn-xs" ng-click="hideMessage()">Close</button></div>
 <div id="generatepage" class="generatorPage" ng-show="loggedIn">
-    <!--<center><button class="btn btn-validate btn-default generateButtons" ng-click="Generate()">Generate client-side code</button></center>-->
-    <!--TODO: de onderstaande knop heeft nog geen functie. De functie namen moeten misschien wat tactischer worden-->
-    <!--<center><button class="btn btn-validate btn-default generateButtons" ng-click="">Generate server-side code</button></center>-->
 
     <pre id="editor">
 info:
@@ -55,19 +52,8 @@ server:
         <button class="generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button>
         <a href="/#/userDocumentation"><button class="generateButtons" id="">User Guide</button></a>
         <button class="generateButtons" id="generatorValidateButton" ng-click="validateCode()">Validate</button>
-        <button ng-disabled="validated === 0 || validated === 1" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
-        <p ng-hide="validated === 2" class="triangle-right right">{{validatetext}}</p>
-
-
-        <!--
-         De onderstaande code bevat 4 nieuwe knoppen, deze knoppen moeten geimplementeerd worden allen kan dat niet
-         omdat eric op dit moment nog bezig is met getDownload.
-         -->
-
-        <!--&lt;!&ndash;TODO:De onderstaande button heeft nog geen method&ndash;&gt;-->
-        <!--<button class="generateButtons" id="generatorValidateButton">Validate</button>-->
-        <!--&lt;!&ndash;TODO:De onderstaande knop krijgt een ng-disable met een boolean, pas als de code gevalideert is en geen errors geeft mag de download knop ingedrukt worden&ndash;&gt;-->
-        <!--<button class="generateButtons" id="generatorDownloadButton" ng-click="getDownload()">Download</button>-->
+        <button ng-enabled="validationError === 'downloadReady'" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
+        <p ng-show="validationError === 'error' || validationError === 'downloadReady'" class="triangle-right right">{{validatetext}}</p>
     </div>
     <!--<pre id="generated">-->
     <!--</pre>-->

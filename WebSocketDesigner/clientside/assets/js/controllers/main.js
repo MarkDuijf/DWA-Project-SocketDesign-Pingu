@@ -86,13 +86,11 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
             $http.post("/confirm", confirmData).
             success(function (data) {
-                //console.log("Confirmation succes! " + data);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Your account has been activated.";
                 $scope.isErrorMessage = false;
             }).
             error(function (data, status) {
-                //console.log("Confirmation error:", data, status);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Couldn't activate this account.";
                 $scope.isErrorMessage = true;
@@ -103,7 +101,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         if($scope.loggedIn !== true) {
             $http.get("/getLoggedIn").
             success(function (data) {
-                console.log(data.loggedIn);
                     LoginFactory.setLogin(true);
                     usernameFactory.setUsername(data.username);
                     usernameFactory.setfirstName(data.firstName);
@@ -132,7 +129,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
             $http.post("/register", registerData).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Succes, an email with a confirmation link has been sent.";
                 $scope.isErrorMessage = false;
@@ -166,7 +162,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
 
             $http.post("/email", emailData).
             success(function (data) {
-                //console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -185,7 +180,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             };
             $http.post("/login", loginData).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $scope.loggedIn = true;
                 //$scope.showHomeMessage = true;
                 //$scope.homeMessage = "You have been logged in (this is a placeholder)";
@@ -212,7 +206,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
         $scope.logout = function() {
             $http.post("/logout").
                 success(function (data) {
-                    //console.log("Succes! " + data);
                 }).
                 error(function (data, status) {
                     console.log("ERROR:", data, status);
@@ -234,7 +227,6 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             };
             $http.post("/contact", messageData).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $scope.loggedIn = true;
                 $scope.showHomeMessage = true;
                 $scope.homeMessage = "Message has been sent!";
@@ -346,7 +338,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
     $scope.refreshAccount = function(){
         $http.get("/myAccount").
             success(function (data) {
-                //console.log("Account succes!");
                 userData = data;
                 $scope.gotInfo = true;
                 $scope.username = data.username;
@@ -405,7 +396,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
         $http.post("/changeProjectName", data).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $(function () {
                     $('#changeProjectNameModal').modal('hide')
                 });
@@ -430,7 +420,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         var data = {project: $scope.project};
         $http.post("/deleteProject", data).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $(function () {
                     $('#deleteProjectModal').modal('hide');
                 });
@@ -459,7 +448,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         };
         $http.post("/changeEmail", data).
             success(function (data) {
-                //console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -480,7 +468,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         };
         $http.post("/confirmEmailChange", data).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $scope.email = data;
                 $scope.newEmail = "";
                 $scope.confirmationCode = "";
@@ -514,7 +501,6 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         };
         $http.post("/changePassword", data).
             success(function (data) {
-                //console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
@@ -535,10 +521,8 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
             newPassR: passwordR.toString(CryptoJS.enc.Base64),
             confirmation: $scope.confirmationCodePassword
         };
-        console.log(password.toString(CryptoJS.enc.Base64) + " " + passwordR.toString(CryptoJS.enc.Base64));
         $http.post("/confirmPasswordChange", data).
             success(function (data) {
-                //console.log("Succes! " + data);
                 $scope.confirmationCodePassword = "";
                 $(function () {
                     $('#changePasswordModal').modal('hide')
