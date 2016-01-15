@@ -1,0 +1,38 @@
+info:
+    port: 3000
+    title: Hello Chat
+client:
+    message1:
+        parameters:
+            messagename: broadcast/client
+            description: message to send to everyone
+        serverresponse:
+            to: all
+            parameters:
+                messagename: broadcast/server
+                data: message for everyone!
+                description: emit to all
+    message2:
+        parameters:
+            messagename: messageRoom/client
+            description: message to a specific room
+            data: something goes here
+        serverresponse:
+            to: room
+            roomname: testroom1
+            parameters:
+                messagename: messageRoom/server
+                data: something goes here
+                description: message to a specific room
+    message3:
+        parameters:
+            messagename: messageClient/client
+            description: message to specific client
+            data: hi george!
+        serverresponse:
+            to: client
+            clientname: george
+            parameters:
+                messagename: messageClient/server
+                data: hi george!
+                description: message to a specific client

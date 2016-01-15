@@ -7,8 +7,8 @@ module.exports = function(app){
     var rmdir = require('rimraf');
     var session = require("express-session");
 
-    //Puts the generated code and project name in a variable
-    app.post('/downloadTest', function(req, res) {
+    //Puts the generated code and project name in a session variable
+    app.post('/download', function(req, res) {
        req.session.clientCode = req.body.clientCode;
         req.session.serverCode = req.body.serverCode;
         req.session.name = req.body.name;
@@ -17,36 +17,37 @@ module.exports = function(app){
     });
 
     //Sends a zipped file of the generated project for download the user
-    app.get('/downloadTest', function(req, res) {
-        var dir = req.session.name + "_" + req.session.username; //TODO naam genereren, iets van [username]_[projectname]
+    app.get('/download', function(req, res) {
+        var dir = req.session.name + "_" + req.session.username;
         var gemaakteBestanden = 0;
 
         fs.mkdir("downloads/"+dir, function(err) {
             if (err) {
                 if (err.code == 'EEXIST') {
-                    maakBestand("client", req.session.clientCode);
-                    maakBestand("server", req.session.serverCode);
+                    maakBestand("client.js", req.session.clientCode);
+                    maakBestand("server.js", req.session.serverCode);
+                    maakBestand("package.json", '{ \n "name": "'+ req.session.name + '", \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n   "socket.io": "^1.3.7", \n   "express": "^4.13.3" \n } \n}');
                 } else {
                     res.status(500);
                     res.send('Failed to make the folder');
                 }
             } else {
-                maakBestand("client", req.session.clientCode);
-                maakBestand("server", req.session.serverCode);
-                //maakBestand("bestand", req.session.code);
+                maakBestand("client.js", req.session.clientCode);
+                maakBestand("server.js", req.session.serverCode);
+                maakBestand("package.json", '{ \n "name": "'+ req.session.name + '", \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n   "socket.io": "^1.3.7", \n   "express": "^4.13.3" \n } \n}');
             }
 
             function maakBestand(name, data) {
-                fs.writeFile("downloads/"+dir+"/"+name+".js", data, function (err) {
+                fs.writeFile("downloads/"+dir+"/"+name, data, function (err) {
                     if (err) {
                         console.log(err);
                         res.status(500);
                         res.send("Error creating file");
                     } else {
-                        console.log('It\'s saved!');
+                        //console.log('It\'s saved!');
                         gemaakteBestanden++;
-                        //TODO wrtieZip() alleen uitvoeren als alle bestanden geschreven zijn (kan pas nadat we weten wat er allemaal in moet)
-                        if(gemaakteBestanden === 2) {
+
+                        if(gemaakteBestanden === 3) {
                             writeZip();
                         }
                     }
@@ -59,8 +60,8 @@ module.exports = function(app){
 
                 output.on('close', function () {
                     //console.log(archive.pointer() + ' total bytes');
-                    console.log('archiver has been finalized and the output file descriptor has closed.');
-                    //downloadFile();
+                    //console.log('archiver has been finalized and the output file descriptor has closed.');
+                    downloadFile();
                 });
 
                 archive.on('error', function(err){
@@ -70,7 +71,7 @@ module.exports = function(app){
                 });
 
                 archive.pipe(output);
-                archive.glob("downloads/"+dir+'/*.js', { nodir: true }, { date: new Date() });
+                archive.glob("downloads/"+dir+'/**', { date: new Date() });
                 archive.finalize();
             }
 

@@ -1,0 +1,27 @@
+<div class="userDocsPage">
+    <h2>User documentation</h2>
+    <hr>
+    <div class="userDocsText">
+        There are three important tags you should use, the <b>info</b> tag, the <b>client</b> tag and the <b>server</b> tag. <br>
+        <h3>Info</h3>
+        The info tag has two tags, the title tag and the port tag. The title tag is the title of your websocket. <br>
+        The port tag is the port number that you want to use for your server. <br>
+        <h3>Client</h3>
+        The client tag can have up to 10 tags called message1 to message10. <br>
+        Each message tag has a parameters tag and an optional serverresponse tag.  <br>
+        The parameters tag has 3 optional tags called messagename, description and data.<br>
+        The messagename tag is the title of the message. The description tag is the description of the message. <br>
+        The data tag is the data of the message. <br>
+        The serverresponse tag has a to tag, an optional clientname tag, an optional roomname tag and a parameters tag. <br>
+        The to tag is the receiver of the message, which can be all or client. <br>
+        When the to tag has client as the value you’ll need to use the clientname tag to specify to which client the message should be sent. <br>
+        When the to tag has room as the value you'll need to use the roomname tag to specify to which room the message should be sent.<br>
+        The parameters tag of the serverresponse has three optional tags called messagename, description and data. <br>
+        The messagename tag is the title of the message. The description tag is the description of the message. <br>
+        The data tag is the data of the message. <br>
+        <h3>Server</h3>
+        The server tag can have up to 10 tags called message1 to message10 <br>
+        Each message tag has a parameters tag with 3 optional tags called messagename, description and data. <br>
+        The messagename tag is the title of the message. The description tag is the description of the message. The data tag is the data of the message.
+    </div>
+</div>

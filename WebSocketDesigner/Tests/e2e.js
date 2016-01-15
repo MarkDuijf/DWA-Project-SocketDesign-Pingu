@@ -7,6 +7,9 @@ var dbName      = "socketDesignerDB";
 var User = require('./../models/user');
 var Project = require('./../models/project');
 
+//Some of these tests depend on users from the data that gets inserted when starting the servers with an empty database
+//To ensure these tests work properly drop the users and projects from the database, then (re)start the server and then run these tests
+
 describe("Selenium Tests - Login, Register and Contact", function() {
 
     this.timeout(120000);

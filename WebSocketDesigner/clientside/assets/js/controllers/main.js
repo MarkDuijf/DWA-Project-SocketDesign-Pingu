@@ -16,22 +16,17 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/codeGenerator.html',
             controller: 'generatorController'
         }).
-            when('/codeGenerator/:id', {
-                templateUrl: 'partials/codeGenerator.html',
-                controller: 'generatorController'
-            }).
-        when('/chatPage', {
-            templateUrl: 'partials/chatPage.html',
-            controller: 'chatController'
+        when('/codeGenerator/:id', {
+            templateUrl: 'partials/codeGenerator.html',
+            controller: 'generatorController'
         }).
-        when('/helloworld', {
-            templateUrl: 'partials/helloworld.html',
-            controller: ''
+        when('/userDocumentation', {
+            templateUrl: 'partials/userDocumentation.html'
         }).
-            when('/myAccount', {
-                templateUrl: 'partials/myAccount.html',
-                controller: 'accountController'
-            }).
+        when('/myAccount', {
+            templateUrl: 'partials/myAccount.html',
+            controller: 'accountController'
+        }).
         otherwise({
             redirectTo: '/home'
         });
@@ -192,9 +187,9 @@ theApp.controller('homeController', function ($scope, $http, $routeParams, $time
             success(function (data) {
                 //console.log("Succes! " + data);
                 $scope.loggedIn = true;
-                $scope.showHomeMessage = true;
-                $scope.homeMessage = "You have been logged in (this is a placeholder)";
-                $scope.isErrorMessage = false;
+                //$scope.showHomeMessage = true;
+                //$scope.homeMessage = "You have been logged in (this is a placeholder)";
+                //$scope.isErrorMessage = false;
                 usernameFactory.setUsername($scope.loginData.username);  // $scope.loginData.username;
                 usernameFactory.setfirstName(data.firstName);
                 $scope.loggedInUserfirstName = data.firstName;
@@ -324,13 +319,7 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         Title: 'CODE GENERATOR',
         LinkText: '/#/codeGenerator',
         ID: 'code-generator'
-    },
-    //    {
-    //    Title: 'COMMUNITY CHAT',
-    //    LinkText: '/#/chatPage',
-    //    ID: 'community-chat'
-    //}
-    ];
+    }];
 }]);
 
 theApp.controller('accountController', function ($scope, $http, $routeParams, $location, LoginFactory) {
@@ -416,10 +405,10 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         var data = {newProjectName: $scope.newName, oldProjectName: $scope.projectName};
         $http.post("/changeProjectName", data).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $(function () {
                     $('#changeProjectNameModal').modal('hide')
-                })
+                });
                 $scope.refreshAccount();
             }).
             error(function (data, status) {
@@ -441,10 +430,10 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         var data = {project: $scope.project};
         $http.post("/deleteProject", data).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
                 $(function () {
                     $('#deleteProjectModal').modal('hide');
-                })
+                });
                 $scope.refreshAccount();
             }).
             error(function (data, status) {
@@ -470,7 +459,7 @@ theApp.controller('accountController', function ($scope, $http, $routeParams, $l
         };
         $http.post("/changeEmail", data).
             success(function (data) {
-                console.log("Succes! " + data);
+                //console.log("Succes! " + data);
             }).
             error(function (data, status) {
                 console.log("ERROR:", data, status);
