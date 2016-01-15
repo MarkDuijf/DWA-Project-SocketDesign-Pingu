@@ -307,14 +307,13 @@ if(scope == "server"){
 return returndata;
 }
 
-//TODO add room
 var generateServerSocketCode = function(input, scope){
   var returndata;
   if(input.serverresponse !== undefined){
     if(input.parameters.data !== undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
       returndata = '//' + input.serverresponse.parameters.description + '\n' +
       'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-        'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
+        'io.to(\''+ input.serverresponse.clientname +'\').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
 }
 else if(input.parameters.data !== undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
   returndata = '//' + input.serverresponse.parameters.description + '\n' +
@@ -329,7 +328,7 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
 else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
   returndata = '//' + input.serverresponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-    'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+    'io.to(\''+ input.serverresponse.clientname +'\').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
   }
   else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
     returndata = '//' + input.serverresponse.parameters.description + '\n' +
@@ -345,12 +344,12 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
     else if(input.parameters.data !== undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
   returndata = '//' + input.serverresponse.parameters.description + '\n' +
   'socket.on(\'' + input.parameters.messagename + '\', function(data){\n    ' +
-    'io.to('+ input.serverresponse.clientname +').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+    'io.to(\''+ input.serverresponse.clientname +'\').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
   }
     else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
       returndata = '//' + input.serverresponse.parameters.description + '\n' +
       'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-        'io.to('+input.serverresponse.clientname+').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
+        'io.to(\''+input.serverresponse.clientname+'\').emit(\'' + input.serverresponse.parameters.messagename + '\', {data: \'' + input.serverresponse.parameters.data + '\'});\n});\n\n';
       }
 
     else if(input.parameters.data == undefined && input.serverresponse.parameters.data !== undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
@@ -371,12 +370,12 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
         else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname !== undefined && input.serverresponse.roomname == undefined){
           returndata = '//' + input.serverresponse.parameters.description + '\n' +  
           'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-            'io.to('+input.serverresponse.clientname+').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+            'io.to(\''+input.serverresponse.clientname+'\').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
           }
         else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname !== undefined){
           returndata = '//' + input.serverresponse.parameters.description + '\n' +  
           'socket.on(\'' + input.parameters.messagename + '\', function(){\n    ' +
-            'io.to('+input.serverresponse.roomname+').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
+            'io.to(\''+input.serverresponse.roomname+'\').emit(\'' + input.serverresponse.parameters.messagename + '\');\n});\n\n';
           }
           else if(input.parameters.data == undefined && input.serverresponse.parameters.data == undefined && input.serverresponse.clientname == undefined && input.serverresponse.roomname == undefined){
             returndata = '//' + input.serverresponse.parameters.description + '\n' +  
