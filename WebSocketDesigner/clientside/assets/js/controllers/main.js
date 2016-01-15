@@ -16,22 +16,17 @@ theApp.config(['$routeProvider',
             templateUrl: 'partials/codeGenerator.html',
             controller: 'generatorController'
         }).
-            when('/codeGenerator/:id', {
-                templateUrl: 'partials/codeGenerator.html',
-                controller: 'generatorController'
-            }).
-        when('/chatPage', {
-            templateUrl: 'partials/chatPage.html',
-            controller: 'chatController'
+        when('/codeGenerator/:id', {
+            templateUrl: 'partials/codeGenerator.html',
+            controller: 'generatorController'
         }).
-        when('/helloworld', {
-            templateUrl: 'partials/helloworld.html',
-            controller: ''
+        when('/userDocumentation', {
+            templateUrl: 'partials/userDocumentation.html'
         }).
-            when('/myAccount', {
-                templateUrl: 'partials/myAccount.html',
-                controller: 'accountController'
-            }).
+        when('/myAccount', {
+            templateUrl: 'partials/myAccount.html',
+            controller: 'accountController'
+        }).
         otherwise({
             redirectTo: '/home'
         });
@@ -324,13 +319,7 @@ theApp.controller('menuControl', ['$scope', '$location', function ($scope) {
         Title: 'CODE GENERATOR',
         LinkText: '/#/codeGenerator',
         ID: 'code-generator'
-    },
-    //    {
-    //    Title: 'COMMUNITY CHAT',
-    //    LinkText: '/#/chatPage',
-    //    ID: 'community-chat'
-    //}
-    ];
+    }];
 }]);
 
 theApp.controller('accountController', function ($scope, $http, $routeParams, $location, LoginFactory) {
