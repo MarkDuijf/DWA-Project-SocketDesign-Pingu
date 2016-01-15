@@ -15,6 +15,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
   $scope.clientCode = "";
   $scope.serverCode = "";
+  $scope.validationError = "justLoaded";
 
     //Checks when the page loads if the user has a session on the server
     if ($scope.loggedIn !== true) {
@@ -37,8 +38,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.homeMessage = "No message";
     $scope.showHomeMessage = false;
     $scope.isErrorMessage = false;
-
-  $scope.codeTest = "";
 
     $scope.client = {};
     $scope.server = {};
@@ -69,8 +68,10 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       $scope.validated = false;
       $scope.validateclass = "disabled";
       $scope.temperror = false;
+      $scope.validationError = "newInput";
+      $scope.validateText = "";
+      $scope.$apply();
     }
-    $scope.$apply();
   });
 
       //Opens modal for saving the code
@@ -132,21 +133,23 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
     //Downloads the generated code
     $scope.getDownload = function () {
-      $http({
-        url: '/download',
-        method: "GET",
-        headers: {
-          'Content-type': 'application/zip'
-        },
-        responseType: 'arraybuffer'
-      }).
-      success(function (data) {
-        var blob = new Blob([data], {type: "application/zip"});
-        FileSaver.saveAs(blob, $scope.projectName+".zip");
-      }).
-      error(function (data, status) {
-        console.log("ERROR:", data, status);
-      });
+      if($scope.validationError === "downloadReady") {
+        $http({
+          url: '/download',
+          method: "GET",
+          headers: {
+            'Content-type': 'application/zip'
+          },
+          responseType: 'arraybuffer'
+        }).
+            success(function (data) {
+              var blob = new Blob([data], {type: "application/zip"});
+              FileSaver.saveAs(blob, $scope.projectName + ".zip");
+            }).
+            error(function (data, status) {
+              console.log("ERROR:", data, status);
+            });
+      }
     };
 
     //Gets the projects from the database
@@ -167,11 +170,11 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     };
     $scope.validated = false;
     $scope.validateclass = "disabled";
-    $scope.validatetext = "Er is geen error oid dus de download knop wordt enabled";
-    $scope.temperror = false;
 
     $scope.validateCode = function() {
       try{
+        $scope.temperror = false;
+        $scope.validatetext = "";
         var testing = [];
         testing.push({username: 'petertje', data: {}});
         var input = jsyaml.safeLoad(editor.getSession().getValue());
@@ -203,6 +206,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       if ($scope.temperror === true){
         $scope.validateclass = "disabled";
         $scope.validated = false;
+        $scope.validationError = "error";
       }
       else {
         var data = {
@@ -214,7 +218,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
             success(function (data) {
               $scope.validated = true;
               $scope.validateclass = "";
-              $scope.validatetext = "Er is geen error gevonden dus t is prima atm!"
+              $scope.temperror = false;
+              $scope.validatetext = "Your code has been validated is ready to download!";
+              $scope.validationError = "downloadReady";
             }).
             error(function (data, status) {
               console.log("ERROR:", data, status);
@@ -809,7 +815,6 @@ $scope.Generate = function () {
     $scope.clientCode = generateCodeClient(tempData);
     */
 
-    $scope.codeTest = output;
     editor.getSession().setValue(output);
     editor.getSession().setMode("ace/mode/javascript");
     //generated.setValue(output, 1);

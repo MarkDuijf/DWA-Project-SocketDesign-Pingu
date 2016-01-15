@@ -293,7 +293,6 @@ module.exports = function (app) {
                 res.status(400);
                 res.send("Not logged in");
             } else if(req.session.loggedin === true) {
-                //TODO misschien wachtwoord in de session zetten?
                 User.findOne({username: req.session.username}, function(err, user) {
                     if(err) {
                         console.log(err);
