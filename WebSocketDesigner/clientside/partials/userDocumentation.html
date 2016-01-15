@@ -8,19 +8,20 @@
         The port tag is the port number that you want to use for your server. <br>
         <h3>Client</h3>
         The client tag can have up to 10 tags called message1 to message10. <br>
-        Each message tag has a parameters tag and an optional serverResponse tag.  <br>
-        The parameters tag has 3 optional tags called messageName, description and data.<br>
-        The messageName tag is the title of the message. The description tag is the description of the message. <br>
-        The data tag is the datatype of the message. <br>
-        The serverResponse tag has a to tag, an optional clientname tag and a parameters tag. <br>
+        Each message tag has a parameters tag and an optional serverresponse tag.  <br>
+        The parameters tag has 3 optional tags called messagename, description and data.<br>
+        The messagename tag is the title of the message. The description tag is the description of the message. <br>
+        The data tag is the data of the message. <br>
+        The serverresponse tag has a to tag, an optional clientname tag, an optional roomname tag and a parameters tag. <br>
         The to tag is the receiver of the message, which can be all or client. <br>
-        When the to tag has client has the value you’ll need to use the clientname tag to specify to which client the message should be sent. <br>
-        The parameters tag of the serverResponse has three optional tags called messageName, description and data. <br>
-        The messageName tag is the title of the message. The description tag is the description of the message. <br>
-        The data tag is the datatype of the message. <br>
+        When the to tag has client as the value you’ll need to use the clientname tag to specify to which client the message should be sent. <br>
+        When the to tag has room as the value you'll need to use the roomname tag to specify to which room the message should be sent.<br>
+        The parameters tag of the serverresponse has three optional tags called messagename, description and data. <br>
+        The messagename tag is the title of the message. The description tag is the description of the message. <br>
+        The data tag is the data of the message. <br>
         <h3>Server</h3>
-        The server tag can have up to 10 tags called message1 to message10, you should only use a tag if you have a tag with the same name in the client tag. <br>
-        Each message tag has a parameters tag with 3 optional tags called messageName, description and data. <br>
-        The messageName tag is the title of the message. The description tag is the description of the message. The data tag is the datatype of the message.
+        The server tag can have up to 10 tags called message1 to message10 <br>
+        Each message tag has a parameters tag with 3 optional tags called messagename, description and data. <br>
+        The messagename tag is the title of the message. The description tag is the description of the message. The data tag is the data of the message.
     </div>
 </div>

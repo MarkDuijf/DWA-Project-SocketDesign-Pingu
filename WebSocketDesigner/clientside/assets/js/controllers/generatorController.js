@@ -15,7 +15,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
   $scope.clientCode = "";
   $scope.serverCode = "";
-  $scope.validationError = "justLoaded";
 
     //Checks when the page loads if the user has a session on the server
     if ($scope.loggedIn !== true) {
@@ -38,6 +37,8 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.homeMessage = "No message";
     $scope.showHomeMessage = false;
     $scope.isErrorMessage = false;
+
+  $scope.codeTest = "";
 
     $scope.client = {};
     $scope.server = {};
@@ -68,10 +69,8 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       $scope.validated = false;
       $scope.validateclass = "disabled";
       $scope.temperror = false;
-      $scope.validationError = "newInput";
-      $scope.validateText = "";
-      $scope.$apply();
     }
+    $scope.$apply();
   });
 
       //Opens modal for saving the code
@@ -133,23 +132,21 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
     //Downloads the generated code
     $scope.getDownload = function () {
-      if($scope.validationError === "downloadReady") {
-        $http({
-          url: '/download',
-          method: "GET",
-          headers: {
-            'Content-type': 'application/zip'
-          },
-          responseType: 'arraybuffer'
-        }).
-            success(function (data) {
-              var blob = new Blob([data], {type: "application/zip"});
-              FileSaver.saveAs(blob, $scope.projectName + ".zip");
-            }).
-            error(function (data, status) {
-              console.log("ERROR:", data, status);
-            });
-      }
+      $http({
+        url: '/download',
+        method: "GET",
+        headers: {
+          'Content-type': 'application/zip'
+        },
+        responseType: 'arraybuffer'
+      }).
+      success(function (data) {
+        var blob = new Blob([data], {type: "application/zip"});
+        FileSaver.saveAs(blob, $scope.projectName+".zip");
+      }).
+      error(function (data, status) {
+        console.log("ERROR:", data, status);
+      });
     };
 
     //Gets the projects from the database
@@ -170,11 +167,11 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     };
     $scope.validated = false;
     $scope.validateclass = "disabled";
+    $scope.validatetext = "Er is geen error oid dus de download knop wordt enabled";
+    $scope.temperror = false;
 
     $scope.validateCode = function() {
       try{
-        $scope.temperror = false;
-        $scope.validatetext = "";
         var testing = [];
         testing.push({username: 'petertje', data: {}});
         var input = jsyaml.safeLoad(editor.getSession().getValue());
@@ -206,7 +203,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       if ($scope.temperror === true){
         $scope.validateclass = "disabled";
         $scope.validated = false;
-        $scope.validationError = "error";
       }
       else {
         var data = {
@@ -218,9 +214,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
             success(function (data) {
               $scope.validated = true;
               $scope.validateclass = "";
-              $scope.temperror = false;
-              $scope.validatetext = "Your code has been validated is ready to download!";
-              $scope.validationError = "downloadReady";
+              $scope.validatetext = "Er is geen error gevonden dus t is prima atm!"
             }).
             error(function (data, status) {
               console.log("ERROR:", data, status);
@@ -765,65 +759,4 @@ var generateCodeServer = function(tempData){
   }
   return output
 }
-var tempData = [];
-
-function getArrayindex(array, key, value) {
-    for (var i = 0; i < array.length; i++) {
-        if (array[i][key] === value) {
-            return i;
-        }
-    }
-    return null;
-}
-
-$scope.a = ['a', 'b', 'c'];
-
-$scope.Generate = function () {
-  try {
-    tempData = [];
-    var username = "petertje";
-    tempData.push({username: username, data: {}});
-    var temp = [];
-    var output = '';
-    var input = editor.getSession().getValue();
-    input = jsyaml.safeLoad(input);
-    parseMainScope(input, tempData);
-    temp.push(generateServerCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.info));
-    temp.push('//Socket server\n\n');
-    temp.push(generateCodeServer(tempData));
-    temp.push('//Socket client\n\n');
-    temp.push(generateCodeClient(tempData));
-    temp.push(closeServerCode());
-    for(var i = 0; i < temp.length; i++){
-      output += temp[i];
-    }
-
-    /*Server code
-    var serverTemp = [];
-    var serverCode = '';
-    serverTemp.push(generateServerCode(tempData));
-    serverTemp.push(generateCodeServer(tempData));
-    serverTemp.push(closeServerCode());
-    for(var i = 0; i < serverTemp.length; i++){
-      serverCode += serverTemp[i];
-    }
-    $scope.serverCode = serverCode;
-
-    //Client code
-    var clientTemp = [];
-    var clientCode = '';
-    $scope.clientCode = generateCodeClient(tempData);
-    */
-
-    editor.getSession().setValue(output);
-    editor.getSession().setMode("ace/mode/javascript");
-    //generated.setValue(output, 1);
-  }
-  catch
-  (e) {
-    console.log(e);
-    scroll(0, 0);
-      //generated.setValue('', 1);
-    }
-  };
 });
