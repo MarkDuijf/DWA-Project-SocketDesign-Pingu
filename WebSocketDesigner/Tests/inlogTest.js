@@ -2,7 +2,6 @@ var expect = require('chai').expect;
 var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
-//var User = require('../clientside/models/user');
 
 
     describe('Als een gebruiker wil inloggen moet', function () {
@@ -115,7 +114,6 @@ var agent = supertest.agent(app);
                 .expect(200)
                 .expect('Content-Type', 'application/json; charset=utf-8')
                 .end(function (err, res) {
-                    //console.log(res);
                     expect(err).to.be.null;
                     expect(res.body.username).to.equal(login.username);
 

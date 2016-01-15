@@ -1,6 +1,3 @@
-/**
- * Created by developer on 1-12-15.
- */
 // required libraries
 var webdriverio = require('webdriverio');
 var expect      = require('chai').expect;
@@ -34,7 +31,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .click('#logInButtonForm')
             .waitForVisible('#loginError', 60000)
             .getText("#loginError").then( function(result) {
-                console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Error: Wrong username/password');
                 done();
@@ -54,7 +50,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .click('#registerButtonForm')
             .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Succes, an email with a confirmation link has been sent.');
                 done();
@@ -78,7 +73,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .click('#logInButtonForm')
             .waitForVisible('#loginError', 60000)
             .getText("#loginError").then( function(result) {
-                console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Not yet activated');
                 done();
@@ -128,7 +122,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .click('#saveButton')
             .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Your project has been saved.');
                 done();
@@ -159,7 +152,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .click(".codeKiesveld*=E2E Project")
             .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Your project has been loaded!');
                 done();
@@ -214,7 +206,6 @@ describe("Selenium Tests - Login, Register and Contact", function() {
             .click('#contactButton')
             .waitForVisible('#topMessage', 60000)
             .getText("#topMessage").then( function(result) {
-                console.log("Message is: ", result);
                 expect(result).to.be.a("string");
                 expect(result).to.have.string('Message has been sent!');
                 done();

@@ -1,6 +1,3 @@
-/**
- * Created by sebastiaan on 27-11-2015.
- */
 
 var chai = require('chai');
 var expect = chai.expect;
