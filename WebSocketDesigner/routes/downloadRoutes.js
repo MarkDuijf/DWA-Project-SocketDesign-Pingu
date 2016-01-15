@@ -35,8 +35,7 @@ module.exports = function(app){
             } else {
                 maakBestand("client.js", req.session.clientCode);
                 maakBestand("server.js", req.session.serverCode);
-                maakBestand("package.json", '"{ \n "name": "'+ req.session.name + '", \n "main": "server.js", \n "author": ' + req.session.firstName + ', \n "dependencies": { \n "socket.io": "^1.3.7", \n } \n } \n"');
-                //maakBestand("bestand", req.session.code);
+                maakBestand("package.json", '"{ \n "name": '+ req.session.name + ', \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n "socket.io": "^1.3.7", \n } \n }"');
             }
 
             function maakBestand(name, data) {

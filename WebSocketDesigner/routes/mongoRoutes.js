@@ -191,14 +191,6 @@ module.exports = function (app) {
             }
 
             if (req.session.username === undefined || req.session.username === null || req.session.username === "") {
-                /*Deze if is alleen voor het testen, met het account systeem wordt verder gebouwt op de else
-                project = {
-                    username: "test",
-                    projectname: req.body.name,
-                    code: req.body.code,
-                    date: datetime
-                };
-                */
                 res.status(400);
                 res.send("No username found");
             } else if(req.body.projectName === undefined || req.body.projectName === null || req.body.projectName === "") {
