@@ -2,9 +2,9 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/demo_files/.gitignore" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/demo_files/README.md" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/demo_files/express" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/demo_files/package.json" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/demo_files/readme.md" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/demo_files/socket.io" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />
   </component>

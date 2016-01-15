@@ -4,8 +4,8 @@ var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
 
-describe("Als een gebruiker een project wil opslaan moet", function() {
-    it("een lege projectnaam geweigerd worden", function(done){
+describe("If the user wants to save a project", function() {
+    it("an empty project name must be declined", function(done){
         var save = {
             username: "SebastiaanVonk",
             projectName: "",
@@ -26,7 +26,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een te korte projectnaam geweigerd worden", function(done) {
+    it("a too short project name must be declined", function(done) {
 
         var save = {
             username: "SebastiaanVonk",
@@ -48,7 +48,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een te lange projectnaam geweigerd worden", function(done) {
+    it("a too long project name must be declined", function(done) {
 
         var save = {
             username: "SebastiaanVonk",
@@ -70,7 +70,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een projectnaam van minstens 3 en maximaal 15 tekens geaccepteerd worden", function(done){
+    it("a valid project name must be accepted", function(done){
 
         var save = {
             username: "SebastiaanVonk",
@@ -92,7 +92,7 @@ describe("Als een gebruiker een project wil opslaan moet", function() {
             });
     });
 
-    it("een leeg codeblok geweigerd worden", function(done) {
+    it("an empty code input field must be declined", function(done) {
 
         var save = {
             username: "SebastiaanVonk",

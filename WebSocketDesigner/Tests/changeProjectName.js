@@ -4,16 +4,16 @@ var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
 
-describe("Als een gebruiker zijn/haar project een andere naam wil geven", function(){
+describe("If the user wants to change the project name", function(){
 
-    it('moet een te korte projectnaam geweigerd worden', function(done){
+    it('a too short name must be declined', function(done){
         var change = {
             projectname: 'My Project',
             newProjectName: 'jo'
         };
 
         agent
-            .post('/changeName')
+            .post('/changeProjectName')
             .send(change)
             .set('Content-Type', 'application/json')
             .expect(401)
@@ -25,14 +25,14 @@ describe("Als een gebruiker zijn/haar project een andere naam wil geven", functi
             });
     });
 
-    it('moet een te lange projectnaam geweigerd worden', function(done){
+    it('a too long name must be declined', function(done){
         var change = {
             projectname: 'My Project',
             newProjectName: 'dit is een veel te lange projectnaam'
         };
 
         agent
-            .post('/changeName')
+            .post('/changeProjectName')
             .send(change)
             .set('Content-Type', 'application/json')
             .expect(401)
@@ -44,14 +44,14 @@ describe("Als een gebruiker zijn/haar project een andere naam wil geven", functi
             });
     });
 
-    it('moet een geldige projectnaam geaccepteerd worden', function(done){
+    it('a valid name must be accepted', function(done){
         var change = {
             projectname: 'My Project',
             newProjectName: 'testnaam'
         };
 
         agent
-            .post('/changeName')
+            .post('/changeProjectName')
             .send(change)
             .set('Content-Type', 'application/json')
             .expect(200)

@@ -4,9 +4,9 @@ var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
 
-describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
+describe('If the user wants to change the email', function(){
 
-    it('moet een ongeldig emailadres geweigerd worden', function(done){
+    it('an invalid email must be declined', function(done){
         var change = {
             email: 'DWASDEU@gmail.com',
             newEmail: 'asdfg'
@@ -26,7 +26,7 @@ describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
 
     });
 
-    it('moet een leeg emailadresveld geweigerd worden', function(done){
+    it('an empty email input field must be declined', function(done){
         var change = {
             email: 'DWASDEU@gmail.com',
             newEmail: ''
@@ -46,7 +46,7 @@ describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
 
     });
 
-    it('moet een bestaand emailadres geweigerd worden', function(done){
+    it('an already existing email must be declined', function(done){
         var change = {
             email: 'DWASDEU@gmail.com',
             newEmail: 'dwasdeu@gmail.com'
@@ -65,7 +65,7 @@ describe('Als een gebruiker zijn/haar email-adres wil veranderen', function(){
             });
     });
 
-    it('moet een geldig emailadres geaccepteerd worden',function(done){
+    it('a valid email must be accepted',function(done){
         var change = {
             email: 'DWASDEU@gmail.com',
             newEmail: 'testtest@gmail.com'

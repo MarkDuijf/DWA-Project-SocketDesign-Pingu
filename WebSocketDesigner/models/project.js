@@ -1,6 +1,3 @@
-/**
- * Created by sebastiaan on 25-11-2015.
- */
 var mongoose = require("mongoose");
 
 var projectSchema = new mongoose.Schema({
@@ -11,7 +8,7 @@ var projectSchema = new mongoose.Schema({
     projectName: {
         type: String,
         required: true,
-        validate: [     // controle of de projectnaam minimaal 3 en maximaal 15 tekens lang is
+        validate: [     // checks the length of the projectname. It has to be min. 3 and max. 15 characters long.
             function(projectName) {
                 return projectName.length >= 3 && projectName.length <= 15;
             },
@@ -21,7 +18,7 @@ var projectSchema = new mongoose.Schema({
     code: {
         type: String,
         required: true,
-        validate: [     // controle of er wel code ingevoerd wordt
+        validate: [     // checks if there is any code in the input field.
             function(code) {
                 return code.length > 0;
             },

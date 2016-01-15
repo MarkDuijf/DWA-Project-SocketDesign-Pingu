@@ -4,8 +4,8 @@ var supertest = require('supertest');
 var app = require('../app');
 var agent = supertest.agent(app);
 
-describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
-    it('een te lang wachtwoord geweigerd worden', function(done){
+describe('If the user wants to change the password', function(){
+    it('a too long password must be declined', function(done){
 
         var change = {
             username: 'test',
@@ -27,7 +27,7 @@ describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
             });
     });
 
-    it('een te kort wachtwoord geweigerd worden', function(done){
+    it('a too short password must be declined', function(done){
 
         var change = {
             username: 'test',
@@ -49,7 +49,7 @@ describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
             });
     });
 
-    it('een wachtwoord geweigerd worden als de herhaling niet hetzelfde is als het eerste vernieuwde wachtwoord', function(done){
+    it('a different second password must be declined', function(done){
 
         var change = {
             username: 'test',
@@ -71,7 +71,7 @@ describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
             });
     });
 
-    it('een wachtwoord geweigerd worden als de ingevoerde waarde \'\' is', function(done){
+    it('an empty password field must be declined', function(done){
 
         var change = {
             username: 'test',
@@ -93,7 +93,7 @@ describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
             });
     });
 
-    it('een wachtwoord geweigerd worden als de herhaling de waarde \'\' heeft', function(done){
+    it('an empty second password field must be declined', function(done){
 
         var change = {
             username: 'test',
@@ -115,7 +115,7 @@ describe('Als een gebruiker zijn/haar wachtwoord wil veranderen', function(){
             });
     });
 
-    it('moet een geldig wachtwoord geaccepteerd worden', function(done){
+    it('a valid password must be accepted', function(done){
 
         var change = {
             username: 'test',

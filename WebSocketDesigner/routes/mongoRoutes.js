@@ -1,6 +1,3 @@
-/**
- * Created by developer on 8-12-15.
- */
 module.exports = function (app) {
     "use strict";
     require('body-parser');
@@ -213,18 +210,6 @@ module.exports = function (app) {
                     return res.send("Saved the project");
                 });
             }
-
-            /* Werke niet vanwege upsert
-            project.save(function (err) {
-                if (err) {
-                    res.status(401);
-                    res.send("Error saving data, missing/wrong data")
-                    return console.log(err);
-                }
-                res.status(200);
-                res.send("Toegevoegd");
-            });
-            */
         });
 
         //Used to check if the project name already exists

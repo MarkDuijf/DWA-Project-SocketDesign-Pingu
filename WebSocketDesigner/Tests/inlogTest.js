@@ -4,11 +4,11 @@ var app = require('../app');
 var agent = supertest.agent(app);
 
 
-    describe('Als een gebruiker wil inloggen moet', function () {
-        it('een fout wachtwoord geweigerd worden', function (done) {
+    describe('If a user wants to login', function () {
+        it('a wrong password must be declined', function (done) {
             var login = {
                 username: 'test',
-                password: 'ad57484016654da87125db86f4227ea' // Bij het juiste wachtwoord voor de gebruikersnaam 'test' staat er nog een 3 achter.
+                password: 'ad57484016654da87125db86f4227ea' // The right password is ad57484016654da87125db86f4227ea3
             };
 
             agent
@@ -24,7 +24,7 @@ var agent = supertest.agent(app);
                 });
         });
 
-        it('een leeg wachtwoord geweigerd worden', function(done) {
+        it('an empty password must be declined', function(done) {
             var login = {
                 username:'test',
                 password: ''
@@ -43,9 +43,9 @@ var agent = supertest.agent(app);
                 });
         });
 
-        it('een verkeerde gebruikersnaam geweigerd worden', function(done){
+        it('a wrong username must be declined', function(done){
             var login = {
-                username: 'testest', // De juiste gebruikersnaam bij dit wachtwoord is test
+                username: 'testest', // The right username is test
                 password: 'ad57484016654da87125db86f4227ea3'
             };
 
@@ -62,7 +62,7 @@ var agent = supertest.agent(app);
                 });
         });
 
-        it('een lege gebruikersnaam geweigerd worden', function(done){
+        it('an empty username must be declined', function(done){
             var login = {
                 username: '', // De juiste gebruikersnaam bij dit wachtwoord is test
                 password: 'ad57484016654da87125db86f4227ea3'
@@ -82,7 +82,7 @@ var agent = supertest.agent(app);
         });
 
 
-        it('een nog niet geactiveerd account weigeren', function (done) {
+        it('an account which has not been activated yet must be declined ', function (done) {
             var login = {
                 username: 'demo',
                 password: 'ad57484016654da87125db86f4227ea3'
@@ -101,7 +101,7 @@ var agent = supertest.agent(app);
                 });
         });
 
-        it('een juiste combinatie van gebruikersnaam en wachtwoord geaccepteerd worden', function(done){
+        it('a right combination of username and password must be accepted', function(done){
             var login = {
                 username: 'test',
                 password: 'ad57484016654da87125db86f4227ea3'

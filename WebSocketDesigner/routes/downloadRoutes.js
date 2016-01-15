@@ -1,6 +1,3 @@
-/**
- * Created by developer on 16-12-15.
- */
 module.exports = function(app){
     var fs = require('fs');
     var archiver = require('archiver');
@@ -97,8 +94,6 @@ module.exports = function(app){
         res.download('downloads/demo.zip', 'demo.zip', function(err){
             if (err) {
                 console.log(err);
-            } else {
-                //Niks
             }
         });
     });

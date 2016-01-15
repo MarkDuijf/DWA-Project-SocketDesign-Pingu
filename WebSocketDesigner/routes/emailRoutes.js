@@ -1,6 +1,3 @@
-/**
- * Created by developer on 8-12-15.
- */
 module.exports = function(app){
     var nodemailer  = require('nodemailer');
     var bodyParser  = require('body-parser');

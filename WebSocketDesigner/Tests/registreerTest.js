@@ -9,9 +9,9 @@ var mongoose    = require('mongoose');
 var dbName      = "socketDesignerDB";
 var User        = require('../models/user.js');
 
-describe('Als een gebruiker wil registreren moet', function(){
+describe('If a user wants to register', function(){
 
-    it('een fout e-mailadres geweigerd worden', function(done){
+    it('a wrong email must be declined', function(done){
         var register = {
             username: 'SebastiaanVonk',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -34,7 +34,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een lege voornaam geweigerd worden', function(done){
+    it('an empty first name must be declined', function(done){
         var register = {
             username: 'SebastiaanVonk',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -57,7 +57,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een lege achternaam geweigerd worden', function(done){
+    it('an empty last name must be declined', function(done){
         var register = {
             username: 'SebastiaanVonk',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -80,7 +80,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een goed e-mailadres geen problemen hebben', function(done){
+    it('a right email must be accepted', function(done){
         var register = {
             username: 'Mark',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -103,7 +103,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een gebruikt e-mailadres geweigerd worden', function(done){
+    it('an already used email must be declined', function(done){
         var register = {
             username: 'Mark',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -126,7 +126,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een te korte gebruikersnaam geweigerd worden', function(done){
+    it('a too short username must be declined', function(done){
         var register = {
             username: 'jo',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -149,7 +149,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een te lange gebruikersnaam geweigerd worden', function(done){
+    it('a too long username must be declined', function(done){
         var register = {
             username: 'VincentvanRossum',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -172,7 +172,7 @@ describe('Als een gebruiker wil registreren moet', function(){
             });
     });
 
-    it('een gebruiksnaam langer dan 3 en korter dan 15 tekens geaccepteerd worden', function(done){
+    it('a valid username must be accepted', function(done){
         var register  = {
             username: 'SamvanGeijn',
             password: '2c729497d91709de6bf1ccd875cf28e5',
@@ -195,7 +195,7 @@ describe('Als een gebruiker wil registreren moet', function(){
         });
     });
 
-    it('een gebruikersnaam die al gebruikt is geweigerd worden', function(done) {
+    it('an already used usernamer must be declined', function(done) {
         var register  = {
             username: 'SamvanGeijn',
             password: '2c729497d91709de6bf1ccd875cf28e5',
