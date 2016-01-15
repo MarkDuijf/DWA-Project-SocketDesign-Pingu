@@ -3,16 +3,8 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
   editor.$blockScrolling = Infinity;
-
-    //var generated = ace.edit("generated");
-    //generated.setTheme("ace/theme/monokai");
-    //generated.getSession().setMode("ace/mode/javascript");
-    //generated.$blockScrolling = Infinity;
-
-    //TODO uitcommenten
-    //$scope.loggedIn = LoginFactory.loggedIn;
-    $scope.loggedIn = true;
-
+//  $scope.loggedIn = LoginFactory.loggedIn;
+  $scope.loggedIn = true;
   $scope.clientCode = "";
   $scope.serverCode = "";
 
@@ -20,7 +12,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     if ($scope.loggedIn !== true) {
       $http.get("/getLoggedIn").
       success(function (data) {
-            //console.log(data);
             LoginFactory.setLogin(true);
             $scope.loggedIn = true;
           }).
@@ -38,8 +29,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     $scope.showHomeMessage = false;
     $scope.isErrorMessage = false;
 
-  $scope.validationError = "justLoaded";
-
   $scope.codeTest = "";
 
     $scope.client = {};
@@ -52,7 +41,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         editor.getSession().setValue("Trying to fetch the project!");
         $http.get("/projects/" + $routeParams.id).
         success(function (data) {
-            //console.log("Project succes!");
             $scope.setCode(data.code, data.name);
 
             $scope.showHomeMessage = true;
@@ -71,8 +59,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       $scope.validated = false;
       $scope.validateclass = "disabled";
       $scope.temperror = false;
-      $scope.validationError = "newInput";
-      $scope.validateText = "";
     }
     $scope.$apply();
   });
@@ -111,7 +97,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
           function saveIt() {
             $http.post("/projects", data).
             success(function (data) {
-                    //console.log("Succes! " + data);
                     $scope.showHomeMessage = true;
                     $scope.homeMessage = "Your project has been saved.";
                     $scope.isErrorMessage = false;
@@ -136,23 +121,21 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
 
     //Downloads the generated code
     $scope.getDownload = function () {
-      if($scope.validationError === "downloadReady") {
-        $http({
-          url: '/download',
-          method: "GET",
-          headers: {
-            'Content-type': 'application/zip'
-          },
-          responseType: 'arraybuffer'
-        }).
-            success(function (data) {
-              var blob = new Blob([data], {type: "application/zip"});
-              FileSaver.saveAs(blob, $scope.projectName + ".zip");
-            }).
-            error(function (data, status) {
-              console.log("ERROR:", data, status);
-            });
-      }
+      $http({
+        url: '/download',
+        method: "GET",
+        headers: {
+          'Content-type': 'application/zip'
+        },
+        responseType: 'arraybuffer'
+      }).
+      success(function (data) {
+        var blob = new Blob([data], {type: "application/zip"});
+        FileSaver.saveAs(blob, $scope.projectName+".zip");
+      }).
+      error(function (data, status) {
+        console.log("ERROR:", data, status);
+      });
     };
 
     //Gets the projects from the database
@@ -173,22 +156,21 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     };
     $scope.validated = false;
     $scope.validateclass = "disabled";
+    $scope.validatetext = "Er is geen error oid dus de download knop wordt enabled";
+    $scope.temperror = false;
 
     $scope.validateCode = function() {
       try{
-        $scope.validateText = "";
-        $scope.temperror = false;
         var testing = [];
-        testing.push({username: 'petertje', data: {}});
+        testing.push({data: {}});
         var input = jsyaml.safeLoad(editor.getSession().getValue());
         parseMainScope(input, testing);
-
+        
         //Server code
         var serverTemp = [];
         var serverCode = '';
-        serverTemp.push(generateServerCode(testing[getArrayindex(testing, 'username', 'petertje')].data.info));
+        serverTemp.push(generateServerCode(testing[0].data.info));
         serverTemp.push(generateCodeServer(testing));
-        serverTemp.push(closeServerCode());
         for(var i = 0; i < serverTemp.length; i++){
           serverCode += serverTemp[i];
         }
@@ -198,7 +180,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
         var clientTemp = [];
         var clientCode = '';
         $scope.clientCode = generateCodeClient(testing);
-        console.log($scope.serverCode);
       }
       catch(e){
         $scope.temperror = true;
@@ -209,7 +190,6 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       if ($scope.temperror === true){
         $scope.validateclass = "disabled";
         $scope.validated = false;
-        $scope.validationError = "error";
       }
       else {
         var data = {
@@ -221,8 +201,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
             success(function (data) {
               $scope.validated = true;
               $scope.validateclass = "";
-              $scope.validatetext = "Your code has been validated and is available for download!"
-              $scope.validationError = "downloadReady";
+              $scope.validatetext = "Er is geen error gevonden dus t is prima atm!"
             }).
             error(function (data, status) {
               console.log("ERROR:", data, status);
@@ -238,7 +217,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       });
     };
 
-    var generateServerCode = function(input, scope){
+    //Used to generate server code.
+    //input is used for the data which the user has given
+    var generateServerCode = function(input){
       return '//' + input.title + '\n' +
       'var express = require(\'express\');\n' +
       'var app = express();\n' +
@@ -250,10 +231,9 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
       'io.on(\'connection\', function(socket){\n\n';
     };
 
-    var closeServerCode = function(){
-      return '});';
-}
-
+//used to generate the client side socket.io code
+//input is used for the data which the user has given
+//scope refers to whether the client or serverside is generated(on/emit) 
 var generateClientSocketCode = function(input, scope){
   var returndata;
   if(scope == "client"){
@@ -315,6 +295,9 @@ if(scope == "server"){
 return returndata;
 }
 
+//used to generate the server side socket.io code
+//input is used for the data which the user has given
+//scope refers to whether the client or serverside is generated(on/emit) 
 var generateServerSocketCode = function(input, scope){
   var returndata;
   if(input.serverresponse !== undefined){
@@ -416,7 +399,7 @@ else if(input.parameters.data !== undefined && input.serverresponse.parameters.d
 
 //Parsing Functions
 var parseMainScope = function (input, tempData) {
-  tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames = [];
+  tempData[0].data.usedMessageNames = [];
   if (input.client == undefined) {
     throw new Error('the \'client\' tag has not been defined in the scope.');
   }
@@ -424,20 +407,20 @@ var parseMainScope = function (input, tempData) {
     throw new Error('the \'info\' tag has not been defined in the main scope');
   }
   if (input.server == undefined) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data.server = false;
+    tempData[0].data.server = false;
   }
   for (var mainScope = 0; mainScope < Object.keys(input).length; mainScope++) {
     switch (Object.keys(input)[mainScope]) {
       case "client":
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data.client = {};
+      tempData[0].data.client = {};
       parseClient(input.client, tempData);
       break;
       case "server":
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data.server = {};
+      tempData[0].data.server = {};
       parseServer(input.server, tempData);
       break;
       case "info":
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data.info = {};
+      tempData[0].data.info = {};
       parseInfo(input.info, tempData);
       break;
       default:
@@ -445,7 +428,8 @@ var parseMainScope = function (input, tempData) {
     }
   }
 }
-
+//parser for the info tag
+//input is the user data, tempData is an array to save the data in
 var parseInfo = function (input, tempData) {
   var temptags = [];
   for (var infoScope = 0; infoScope < Object.keys(input).length; infoScope++) {
@@ -469,22 +453,26 @@ var parseInfo = function (input, tempData) {
   }
 }
 
+//parser for the title tag in info
+//input is the user data, tempData is an array to save the data in
 var parseTitle = function (input, tempData) {
   if (input == null) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data.info.title = 'Basic server made with ExpressJS';
+    tempData[0].data.info.title = 'Basic server made with ExpressJS';
   }
   else if (input.length <= 50) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data.info.title = input;
+    tempData[0].data.info.title = input;
   }
   else {
     throw new Error('the title length is ' + input.length + ', which is longer than the maximum of 50');
   }
 }
 
+//parser for the port tag in info
+//input is the user data, tempData is an array to save the data in
 var parsePort = function(input, tempData){
   if(typeof input == "number"){
     if(input <= 65535 && input >= 2000){
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data.info.port = input;
+      tempData[0].data.info.port = input;
     }
     else{
       throw new Error('the chosen port, ' + input + ', is not usable. Please use a port between 2000 and 65535');
@@ -495,25 +483,28 @@ var parsePort = function(input, tempData){
   }
 }
 
+//parser for the client tag
+//input is the user data, tempData is an array to save the data in
 var parseClient = function (input, tempData) {
   if (Object.keys(input).length > 10) {
     throw new Error('The number of used tags in \'client\' exceeds the maximum of 10 tags.');
   }
   for (var clientScope = 0; clientScope < Object.keys(input).length; clientScope++) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message' + (clientScope + 1)] = {};
+    tempData[0].data.client['message' + (clientScope + 1)] = {};
     parseMessage(input[Object.keys(input)[clientScope]], 'client', (clientScope + 1), tempData);
     if (Object.keys(input)[clientScope] !== "message" + (clientScope + 1)) {
       throw new Error('The \'' + Object.keys(input)[clientScope] + '\' tag, that is used in \'client\', is not usable at this point. Please use message\'' + (clientScope + 1) + '\'');
     }
   }
 }
-
+//parser for the server tag
+//input is the user data, tempData is an array to save the data in
 var parseServer = function (input, tempData) {
   if (Object.keys(input).length > 10) {
     throw new Error('The number of used tags in \'server\' exceeds the maximum of 10 tags.');
   }
   for (var serverScope = 0; serverScope < Object.keys(input).length; serverScope++) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data.server['message' + (serverScope + 1)] = {};
+    tempData[0].data.server['message' + (serverScope + 1)] = {};
     parseMessage(input[Object.keys(input)[serverScope]], 'server', (serverScope + 1), tempData);
     if (Object.keys(input)[serverScope] !== "message" + (serverScope + 1)) {
       throw new Error('The \'' + Object.keys(input)[serverScope] + '\' tag, that is used in \'server\', is not usable at this point. Please use \'message' + (serverScope + 1) + '\'.');
@@ -521,6 +512,8 @@ var parseServer = function (input, tempData) {
   }
 }
 
+//parser for the message tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path) and number is the message number
 var parseMessage = function(input, scope, number, tempData){
   var tempTags = [];
   for(var messageScope = 0; messageScope < Object.keys(input).length; messageScope++){
@@ -530,7 +523,7 @@ var parseMessage = function(input, scope, number, tempData){
       if(input.parameters == null){
         throw new Error('The \'parameters\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.');
       }
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters = {};
+      tempData[0].data[scope]['message' + number].parameters = {};
       parseParameters(input.parameters, scope, number, false, tempData);
       break;
       case "serverresponse":
@@ -541,7 +534,7 @@ var parseMessage = function(input, scope, number, tempData){
         if(input.serverresponse == null){
           throw new Error('The \'serverresponse\' tag used in \'' + scope + '/message' + number + '\' is empty. Please refer to the userguide for more information.')
         }
-        tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message' + number].serverresponse = {};
+        tempData[0].data.client['message' + number].serverresponse = {};
         parseServerResponse(input.serverresponse, scope, number, tempData);
       }
       break;
@@ -559,10 +552,14 @@ var parseMessage = function(input, scope, number, tempData){
   }
 }
 
+
+//parser for the parameter tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number, serverresponse determines whether the function is called from a serverresponse or not
 var parseParameters = function(input, scope, number, serverresponse, tempData){
   var temptags = [];
   if(serverresponse == false){
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message'+number].parameters = {};
+    tempData[0].data[scope]['message'+number].parameters = {};
   }
   if(input == null){
     throw new Error('The used \'parameter\' tag in \'' + scope + '/message' + number + '\' is empty. Please refer to the guidebook for more information.')
@@ -590,71 +587,83 @@ var parseParameters = function(input, scope, number, serverresponse, tempData){
   }
 }
 
+
+//parser for the messagename tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number, serverresponse determines whether the function is called from a serverresponse or not
 var parseMessageName = function (input, scope, number, serverresponse, tempData) {
-  if(tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames.indexOf(input) !== -1 && serverresponse == false){
-    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/parameters\' already exists. Please use a different name.');
-  }
-  else if(tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames.indexOf(input) !== -1 && serverresponse !== false){
-    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/serverresponse/parameters\' already exists. Please use a different name.');
-  }
-  else{
-  tempData[getArrayindex(tempData, 'username', 'petertje')].data.usedMessageNames.push(input);
-}
   if (input == null && serverresponse == false) {
     input = 'message' + number;
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters.messagename = input;
-    alert('There was no name assigned to \'' + scope + '/message' + number + '\', the used name will be set to \'' + input + '\'.')
+    tempData[0].data[scope]['message' + number].parameters.messagename = input;
   }
   else if (input == null && serverresponse == true) {
-    console.log(tempData);
-    input = 'message' + number;
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.parameters.messagename = input;
-    alert('There was no name assigned to \'' + scope + '/message' + number + '/serverresponse/parameters/messagename\', so the used name will be set to \'' + input + '\'. It is highly recommended to give it the same name as \'' + scope + '/message' + number + '/parameters/messagename\'.')
+    input = 'message' + number + 'response';
+    tempData[0].data[scope]['message' + number].serverresponse.parameters.messagename = input;
   }
   else if (input.length > 25) {
     throw new Error('The messageName used in \'' + scope + '/message' + number + '\' is ' + input.length + ' characters long, which exceeds the maximum of 25 characters.');
   }
 
   if (serverresponse == true && input !== null) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message' + number].serverresponse.parameters.messagename = input;
+    tempData[0].data.client['message' + number].serverresponse.parameters.messagename = input;
   }
   else if (serverresponse == false && input !== null) {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters.messagename = input;
+    tempData[0].data[scope]['message' + number].parameters.messagename = input;
   }
-
+  if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse == false){
+    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/parameters\' already exists. Please use a different name.');
+  }
+  else if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse !== false){
+    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/serverresponse/parameters\' already exists. Please use a different name.');
+  }
+  else{
+  tempData[0].data.usedMessageNames.push(input);
+}
 }
 
+
+//parser for the data tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number, serverresponse determines whether the function is called from a serverresponse or not
 var parseData = function (input, scope, number, serverresponse, tempData) {
   if (input !== null) {
     if (serverresponse == true) {
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.parameters.data = input;
+      tempData[0].data[scope]['message' + number].serverresponse.parameters.data = input;
     }
     else {
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters.data = input;
+      tempData[0].data[scope]['message' + number].parameters.data = input;
     }
   }
 }
 
+
+//parser for the description tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number, serverresponse determines whether the function is called from a serverresponse or not
 var parseDescription = function (input, scope, number, serverresponse, tempData) {
   var description = 'Description of ' + scope + '/message' + number;
   if (input !== null) {
     if (serverresponse == true) {
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.parameters.description = input;
+      tempData[0].data[scope]['message' + number].serverresponse.parameters.description = input;
     }
     else {
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters.description = input;
+      tempData[0].data[scope]['message' + number].parameters.description = input;
     }
   }
   else {
     if (serverresponse == true) {
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.parameters.description = description;
+      tempData[0].data[scope]['message' + number].serverresponse.parameters.description = description;
     }
     else {
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].parameters.description = description;
+      tempData[0].data[scope]['message' + number].parameters.description = description;
     }
   }
 }
 
+
+//parser for the serverresponse tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number
 var parseServerResponse = function(input, scope, number, tempData){
   var tempTags = [];
   var tempTo = '';
@@ -679,7 +688,7 @@ var parseServerResponse = function(input, scope, number, tempData){
       parseRoomName(input.roomname, tempTo, scope, number, tempData);
       break;
       case "parameters":
-      tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message'+number].serverresponse.parameters = {};
+      tempData[0].data[scope]['message'+number].serverresponse.parameters = {};
       parseParameters(input.parameters, scope, number, true, tempData);
       break;
       default: throw new Error('The \''+Object.keys(input)[serverRScope]+'\' tag, which is used in \''+ scope+'/message'+ number + '/serverresponse\', is not usable here. Please refer to the userguide for more information.');
@@ -696,21 +705,29 @@ var parseServerResponse = function(input, scope, number, tempData){
   }
 }
 
+
+//parser for the destination(to) tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number
 var parseDestination = function (input, scope, number, tempData) {
   if (input == "all") {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.to = input;
+    tempData[0].data[scope]['message' + number].serverresponse.to = input;
   }
   else if (input == "client") {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.to = input;
+    tempData[0].data[scope]['message' + number].serverresponse.to = input;
   }
   else if(input == "room"){
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.to = input;
+    tempData[0].data[scope]['message' + number].serverresponse.to = input;
   }
   else {
     throw new Error('The given value for \'to\' in \'' + scope + '/message' + number + '/serverresponse' + '\' is not usable here. Please refer to the userguide for more information.');
   }
 }
 
+
+//parser for the clientname tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number, to is used to check where the message gets send
 var parseClientName = function (input, to, scope, number, tempData) {
   if (to == "all") {
     throw new Error('The \'clientname\' tag can not be used here since the \'to\' tag in \'' + scope + '/message' + number + '/serverresponse' + '\' has been set to \'' + to + '\'.');
@@ -719,30 +736,35 @@ var parseClientName = function (input, to, scope, number, tempData) {
     throw new Error('The used name \'all\' in \'' + scope + '/message' + number + '/serverresponse/clientname' + '\' is not usable. Please refer to the userguide for more information.');
   }
   else {
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message' + number].serverresponse.clientname = input;
+    tempData[0].data[scope]['message' + number].serverresponse.clientname = input;
   }
 }
 
+
+//parser for the roomname tag
+//input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
+//number is the message number, to is used to check where the message gets send
 var parseRoomName = function(input, to, scope, number, tempData){
   if(input == "all"){
     throw new Error('The used roomname \'' + input + '\' in \'' + scope + '/message' + number + '/serverresponse\' is not a valid room name. Please use a different name');
   }
   else{
-    tempData[getArrayindex(tempData, 'username', 'petertje')].data[scope]['message'+number].serverresponse.roomname = input;
+    tempData[0].data[scope]['message'+number].serverresponse.roomname = input;
   }
 }
 
+//Function where the generate functions(clientside) are called(used to group the client socket code)
 var generateCodeClient = function(tempData){
   var temp = [];
   var output = '';
-  for(var client = 1; client < Object.keys(tempData[getArrayindex(tempData, 'username', 'petertje')].data.client).length+1; client++)
+  for(var client = 1; client < Object.keys(tempData[0].data.client).length+1; client++)
   {
-    temp.push(generateClientSocketCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message'+client], 'client'));
+    temp.push(generateClientSocketCode(tempData[0].data.client['message'+client], 'client'));
   }
-  if(tempData[getArrayindex(tempData, 'username', 'petertje')].data.server !== false){
-  for(var server = 1; server < Object.keys(tempData[getArrayindex(tempData, 'username', 'petertje')].data.server).length+1; server++)
+  if(tempData[0].data.server !== false){
+  for(var server = 1; server < Object.keys(tempData[0].data.server).length+1; server++)
   {
-    temp.push(generateClientSocketCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.server['message'+server], 'server'));
+    temp.push(generateClientSocketCode(tempData[0].data.server['message'+server], 'server'));
   }
 }
   for(var x = 0; x < temp.length; x++){
@@ -751,82 +773,22 @@ var generateCodeClient = function(tempData){
   return output;
 }
 
+//Function where the generate functions(serverside) are called(used to group the server socket code together)
 var generateCodeServer = function(tempData){
   var temp = [];
   var output = '';
-  for(var client = 1; client < Object.keys(tempData[getArrayindex(tempData, 'username', 'petertje')].data.client).length+1; client++){
-    temp.push(generateServerSocketCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.client['message'+client], 'client'));
+  for(var client = 1; client < Object.keys(tempData[0].data.client).length+1; client++){
+    temp.push(generateServerSocketCode(tempData[0].data.client['message'+client], 'client'));
   }
-  if(tempData[getArrayindex(tempData, 'username', 'petertje')].data.server !== false){
-  for(var server = 1; server < Object.keys(tempData[getArrayindex(tempData, 'username', 'petertje')].data.server).length+1; server++){
-    temp.push(generateServerSocketCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.server['message'+server], 'server'));
+  if(tempData[0].data.server !== false){
+  for(var server = 1; server < Object.keys(tempData[0].data.server).length+1; server++){
+    temp.push(generateServerSocketCode(tempData[0].data.server['message'+server], 'server'));
   }
 }
   for(var x = 0; x < temp.length; x++){
     output += temp[x];
   }
+  output += '});';
   return output
 }
-var tempData = [];
-
-function getArrayindex(array, key, value) {
-    for (var i = 0; i < array.length; i++) {
-        if (array[i][key] === value) {
-            return i;
-        }
-    }
-    return null;
-}
-
-$scope.a = ['a', 'b', 'c'];
-
-$scope.Generate = function () {
-  try {
-    tempData = [];
-    var username = "petertje";
-    tempData.push({username: username, data: {}});
-    var temp = [];
-    var output = '';
-    var input = editor.getSession().getValue();
-    input = jsyaml.safeLoad(input);
-    parseMainScope(input, tempData);
-    temp.push(generateServerCode(tempData[getArrayindex(tempData, 'username', 'petertje')].data.info));
-    temp.push('//Socket server\n\n');
-    temp.push(generateCodeServer(tempData));
-    temp.push('//Socket client\n\n');
-    temp.push(generateCodeClient(tempData));
-    temp.push(closeServerCode());
-    for(var i = 0; i < temp.length; i++){
-      output += temp[i];
-    }
-
-    /*Server code
-    var serverTemp = [];
-    var serverCode = '';
-    serverTemp.push(generateServerCode(tempData));
-    serverTemp.push(generateCodeServer(tempData));
-    serverTemp.push(closeServerCode());
-    for(var i = 0; i < serverTemp.length; i++){
-      serverCode += serverTemp[i];
-    }
-    $scope.serverCode = serverCode;
-
-    //Client code
-    var clientTemp = [];
-    var clientCode = '';
-    $scope.clientCode = generateCodeClient(tempData);
-    */
-
-    $scope.codeTest = output;
-    editor.getSession().setValue(output);
-    editor.getSession().setMode("ace/mode/javascript");
-    //generated.setValue(output, 1);
-  }
-  catch
-  (e) {
-    console.log(e);
-    scroll(0, 0);
-      //generated.setValue('', 1);
-    }
-  };
 });

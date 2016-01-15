@@ -3,25 +3,43 @@
 
     <pre id="editor">
 info:
-    title: socketIOTest
     port: 3000
+    title: Hello Chat
 client:
     message1:
         parameters:
-            messagename: username
-            description: true
-            data: string
-    message2:
-        parameters:
-            messagename: test1
-            description: pan2
-            data: zevental
+            messagename: broadcast/client
+            description: message to send to everyone
         serverresponse:
             to: all
             parameters:
-                messagename: test
-                description: true
-                data: false
+                messagename: broadcast/server
+                data: message for everyone!
+                description: emit to all
+    message2:
+        parameters:
+            messagename: messageRoom/client
+            description: message to a specific room
+            data: something goes here
+        serverresponse:
+            to: room
+            roomname: testroom1
+            parameters:
+                messagename: messageRoom/server
+                data: something goes here
+                description: message to a specific room
+    message3:
+        parameters:
+            messagename: messageClient/client
+            description: message to specific client
+            data: hi george!
+        serverresponse:
+            to: client
+            clientname: george
+            parameters:
+                messagename: messageClient/server
+                data: hi george!
+                description: message to a specific client
 server:
     message1:
         parameters:
@@ -32,7 +50,7 @@ server:
     <div style="min-width: 770px;border: 10px solid transparent;">
         <button class="generateButtons" id="generatorSaveButton" ng-click="saveInput()">Save Project</button>
         <button class="generateButtons" id="generatorLoadButton" ng-click="getProjects()">Get A Project</button>
-        <a href="/#/userDocumentation"><button class="generateButtons" id="test">User Guide</button></a>
+        <a href="/#/userDocumentation"><button class="generateButtons" id="">User Guide</button></a>
         <button class="generateButtons" id="generatorValidateButton" ng-click="validateCode()">Validate</button>
         <button ng-enabled="validationError === 'downloadReady'" class="generateButtons" ng-class="validateclass" id="generatorDownloadButton" ng-click="getDownload()">Download</button>
         <p ng-show="validationError === 'error' || validationError === 'downloadReady'" class="triangle-right right">{{validatetext}}</p>
