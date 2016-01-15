@@ -7,8 +7,8 @@ module.exports = function(app){
     var rmdir = require('rimraf');
     var session = require("express-session");
 
-    //Puts the generated code and project name in a variable
-    app.post('/downloadTest', function(req, res) {
+    //Puts the generated code and project name in a session variable
+    app.post('/download', function(req, res) {
        req.session.clientCode = req.body.clientCode;
         req.session.serverCode = req.body.serverCode;
         req.session.name = req.body.name;
@@ -17,8 +17,8 @@ module.exports = function(app){
     });
 
     //Sends a zipped file of the generated project for download the user
-    app.get('/downloadTest', function(req, res) {
-        var dir = req.session.name + "_" + req.session.username; //TODO naam genereren, iets van [username]_[projectname]
+    app.get('/download', function(req, res) {
+        var dir = req.session.name + "_" + req.session.username;
         var gemaakteBestanden = 0;
 
         fs.mkdir("downloads/"+dir, function(err) {

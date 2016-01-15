@@ -133,7 +133,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
     //Downloads the generated code
     $scope.getDownload = function () {
       $http({
-        url: '/downloadTest',
+        url: '/download',
         method: "GET",
         headers: {
           'Content-type': 'application/zip'
@@ -210,7 +210,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
           clientCode: $scope.clientCode,
           serverCode: $scope.serverCode
         };
-        $http.post("/downloadTest", data).
+        $http.post("/download", data).
             success(function (data) {
               $scope.validated = true;
               $scope.validateclass = "";
