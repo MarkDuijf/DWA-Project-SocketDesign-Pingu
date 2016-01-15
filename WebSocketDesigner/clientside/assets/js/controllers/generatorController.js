@@ -3,8 +3,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
   editor.$blockScrolling = Infinity;
-//  $scope.loggedIn = LoginFactory.loggedIn;
-  $scope.loggedIn = true;
+  $scope.loggedIn = LoginFactory.loggedIn;
   $scope.clientCode = "";
   $scope.serverCode = "";
   $scope.validationError = "justLoaded";
