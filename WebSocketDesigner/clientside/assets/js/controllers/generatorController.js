@@ -115,7 +115,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
             error(function (data, status) {
               console.log("ERROR:", data, status);
               $scope.showHomeMessage = true;
-              $scope.homeMessage = "There was an error saving your project.";
+              $scope.homeMessage = data;
               $scope.isErrorMessage = true;
             });
           }
