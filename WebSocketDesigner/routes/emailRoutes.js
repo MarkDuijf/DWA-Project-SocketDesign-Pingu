@@ -29,8 +29,6 @@ module.exports = function(app){
                 res.send("Error!" + error);
                 return console.log(error);
             }
-            //console.log('Message sent: ' + info.response);
-
             res.status(200);
             res.send("Succes!");
         });
@@ -53,8 +51,6 @@ module.exports = function(app){
                 res.send("Error!" + error);
                 return console.log(error);
             }
-            //console.log('Message sent: ' + info.response);
-
             res.status(200);
             res.send("Succes!");
 
@@ -78,8 +74,6 @@ module.exports = function(app){
                 res.send("Error!" + error);
                 return console.log(error);
             }
-            //console.log('Message sent: ' + info.response);
-
             res.status(200);
             res.send("Succes!");
 
