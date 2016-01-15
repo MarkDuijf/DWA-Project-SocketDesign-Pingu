@@ -15,7 +15,6 @@ module.exports = function(app){
         req.session.name = req.body.name;
         res.status(200);
         res.send("Succes!");
-        console.log(req.session.clientCode);
     });
 
     //Sends a zipped file of the generated project for download the user
@@ -47,7 +46,7 @@ module.exports = function(app){
                         res.status(500);
                         res.send("Error creating file");
                     } else {
-                        console.log('It\'s saved!');
+                        //console.log('It\'s saved!');
                         gemaakteBestanden++;
 
                         if(gemaakteBestanden === 3) {
@@ -63,7 +62,7 @@ module.exports = function(app){
 
                 output.on('close', function () {
                     //console.log(archive.pointer() + ' total bytes');
-                    console.log('archiver has been finalized and the output file descriptor has closed.');
+                    //console.log('archiver has been finalized and the output file descriptor has closed.');
                     downloadFile();
                 });
 
