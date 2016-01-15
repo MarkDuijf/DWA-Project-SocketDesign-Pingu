@@ -28,9 +28,6 @@ require('./routes/mongoRoutes')(app);
 //All the routes related to downloading, like the downloading of a project
 require('./routes/downloadRoutes')(app);
 
-var User = require('./models/user');
-var Project = require('./models/project');
-
 server.listen(13000, function () {
     "use strict";
     console.log('Server is running on port 13000');

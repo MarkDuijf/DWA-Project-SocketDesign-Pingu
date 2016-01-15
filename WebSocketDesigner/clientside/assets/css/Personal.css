@@ -184,6 +184,7 @@
     -moz-border-radius: 10px;
     border-radius: 10px;
     width: 20%;
+    z-index: 500;
 }
 
 .triangle-right.right:after {

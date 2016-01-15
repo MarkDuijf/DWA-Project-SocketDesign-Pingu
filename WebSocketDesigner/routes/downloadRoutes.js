@@ -7,9 +7,8 @@ module.exports = function(app){
     var rmdir = require('rimraf');
     var session = require("express-session");
 
-    //Puts the generated code and project name in a variable
-    app.post('/downloadTest', function(req, res) {
-        console.log("Hallo?");
+    //Puts the generated code and project name in a session variable
+    app.post('/download', function(req, res) {
        req.session.clientCode = req.body.clientCode;
         req.session.serverCode = req.body.serverCode;
         req.session.name = req.body.name;
@@ -18,8 +17,8 @@ module.exports = function(app){
     });
 
     //Sends a zipped file of the generated project for download the user
-    app.get('/downloadTest', function(req, res) {
-        var dir = req.session.name + "_" + req.session.username; //TODO naam genereren, iets van [username]_[projectname]
+    app.get('/download', function(req, res) {
+        var dir = req.session.name + "_" + req.session.username;
         var gemaakteBestanden = 0;
 
         fs.mkdir("downloads/"+dir, function(err) {
@@ -27,7 +26,7 @@ module.exports = function(app){
                 if (err.code == 'EEXIST') {
                     maakBestand("client.js", req.session.clientCode);
                     maakBestand("server.js", req.session.serverCode);
-                    maakBestand("package.json", '"{ \n "name": '+ req.session.name + ', \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n "socket.io": "^1.3.7", \n } \n }"');
+                    maakBestand("package.json", '{ \n "name": "'+ req.session.name + '", \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n   "socket.io": "^1.3.7", \n   "express": "^4.13.3" \n } \n}');
                 } else {
                     res.status(500);
                     res.send('Failed to make the folder');
@@ -35,7 +34,7 @@ module.exports = function(app){
             } else {
                 maakBestand("client.js", req.session.clientCode);
                 maakBestand("server.js", req.session.serverCode);
-                maakBestand("package.json", '"{ \n "name": '+ req.session.name + ', \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n "socket.io": "^1.3.7", \n } \n }"');
+                maakBestand("package.json", '{ \n "name": "'+ req.session.name + '", \n "main": "server.js", \n "author": "' + req.session.firstName + '", \n "dependencies": { \n   "socket.io": "^1.3.7", \n   "express": "^4.13.3" \n } \n}');
             }
 
             function maakBestand(name, data) {
