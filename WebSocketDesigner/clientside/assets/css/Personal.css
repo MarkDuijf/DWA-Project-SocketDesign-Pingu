@@ -48,6 +48,10 @@
     margin-bottom: 10px;
 }
 
+.noUnderline {
+    text-decoration: none !important;
+}
+
 .disabled {
     background-color: #5B7658;
 }

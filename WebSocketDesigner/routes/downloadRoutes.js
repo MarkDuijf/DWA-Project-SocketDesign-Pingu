@@ -41,7 +41,6 @@ module.exports = function(app){
                         res.status(500);
                         res.send("Error creating file");
                     } else {
-                        //console.log('It\'s saved!');
                         gemaakteBestanden++;
 
                         if(gemaakteBestanden === 3) {
@@ -56,8 +55,6 @@ module.exports = function(app){
                 var archive = archiver('zip');
 
                 output.on('close', function () {
-                    //console.log(archive.pointer() + ' total bytes');
-                    //console.log('archiver has been finalized and the output file descriptor has closed.');
                     downloadFile();
                 });
 
