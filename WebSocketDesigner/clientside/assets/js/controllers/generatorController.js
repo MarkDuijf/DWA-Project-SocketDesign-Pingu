@@ -3,7 +3,7 @@ theApp.controller('generatorController', function ($scope, $http, $location, $ro
   editor.setTheme("ace/theme/monokai");
   editor.getSession().setMode("ace/mode/yaml");
   editor.$blockScrolling = Infinity;
-  //$scope.loggedIn = LoginFactory.loggedIn;
+//  $scope.loggedIn = LoginFactory.loggedIn;
   $scope.loggedIn = true;
   $scope.clientCode = "";
   $scope.serverCode = "";
@@ -592,21 +592,12 @@ var parseParameters = function(input, scope, number, serverresponse, tempData){
 //input is the user data, tempData is an array to save the data in, scope is either client or server(determines path)
 //number is the message number, serverresponse determines whether the function is called from a serverresponse or not
 var parseMessageName = function (input, scope, number, serverresponse, tempData) {
-  if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse == false){
-    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/parameters\' already exists. Please use a different name.');
-  }
-  else if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse !== false){
-    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/serverresponse/parameters\' already exists. Please use a different name.');
-  }
-  else{
-  tempData[0].data.usedMessageNames.push(input);
-}
   if (input == null && serverresponse == false) {
     input = 'message' + number;
     tempData[0].data[scope]['message' + number].parameters.messagename = input;
   }
   else if (input == null && serverresponse == true) {
-    input = 'message' + number;
+    input = 'message' + number + 'response';
     tempData[0].data[scope]['message' + number].serverresponse.parameters.messagename = input;
   }
   else if (input.length > 25) {
@@ -619,7 +610,15 @@ var parseMessageName = function (input, scope, number, serverresponse, tempData)
   else if (serverresponse == false && input !== null) {
     tempData[0].data[scope]['message' + number].parameters.messagename = input;
   }
-
+  if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse == false){
+    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/parameters\' already exists. Please use a different name.');
+  }
+  else if(tempData[0].data.usedMessageNames.indexOf(input) !== -1 && serverresponse !== false){
+    throw new Error('The given name for the \'messagename\' used in \''+ scope + '/message' + number + '/serverresponse/parameters\' already exists. Please use a different name.');
+  }
+  else{
+  tempData[0].data.usedMessageNames.push(input);
+}
 }
 
 
